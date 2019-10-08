@@ -1,12 +1,11 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{handout}[2019/05/20 A document class for Proof School handouts]
-\newcommand{\solutionname}{Solutions}
+\ProvidesClass{handout}[2019/07/18 A document class for Proof School handouts]
+\newcommand{\answerkeyname}{Answer Key}
 \newcommand{\first@page@name@block}{\hfill%
 	\begin{minipage}[t]{\name@width}%
 		\raggedleft
 		Name:~\begin{minipage}[t]{\name@line@width}
-			\blank[\textbf{\solutionname}]{\name@line@width}\\%
-			%\@schoolyear \hfill \squircle \hfill Block \@block%
+			\blank[\textbf{\answerkeyname}]{\name@line@width}\\%
 			\centerline{\@schoolyear \quad \squircle \quad Block \@block}%
 		\end{minipage}
 		%Date:~\blank{\name@line@width}%
@@ -21,20 +20,20 @@
 \DeclareOption{solutions}{\showsolutionstrue}
 \DeclareOption{nosolutions}{\showsolutionsfalse}
 
-\newif\ifcancelspace
-\cancelspacefalse
-\DeclareOption{nospaces}{\cancelspacetrue}
-\DeclareOption{spaces}{\cancelspacefalse}
+\newif\if@cancelspace
+\@cancelspacefalse
+\DeclareOption{nospaces}{\@cancelspacetrue}
+\DeclareOption{spaces}{\@cancelspacefalse}
 
 \newif\if@showtitle
 \@showtitletrue
 \DeclareOption{title}{\@showtitletrue}
 \DeclareOption{notitle}{\@showtitlefalse}
 
-\newif\ifload@parskip
-\load@parskipfalse
-\DeclareOption{parskip}{\load@parskiptrue}
-\DeclareOption{parindent}{\load@parskipfalse}
+\newif\if@loadparskip
+\@loadparskipfalse
+\DeclareOption{parskip}{\@loadparskiptrue}
+\DeclareOption{parindent}{\@loadparskipfalse}
 
 %\newcommand{\section@symbol}{\S}
 %\DeclareOption{noS}{\renewcommand{\section@symbol}{}}
@@ -49,14 +48,24 @@
 \ProcessOptions\relax
 \LoadClass{article}
 
+
+\usepackage{tikz, tcolorbox}
+\usetikzlibrary{calc, shapes.callouts, shapes.geometric}
+\tcbuselibrary{skins}
+
+
+\usepackage{letltxmacro, etoolbox, textcomp, url}
+
+
+
 \RequirePackage{setspace}
 \onehalfspacing
 
-\RequirePackage[margin=.75in, includehead, headsep=.5\baselineskip,headheight=14.5 pt, footskip=\baselineskip]{geometry}
+\RequirePackage[margin=.75in, includehead, headsep=.5\baselineskip, headheight=14.5 pt, footskip=\baselineskip]{geometry}
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 \RequirePackage{mathtools,amsthm,amssymb}
-\ifload@parskip
+\if@loadparskip
 	%\RequirePackage[parfill]{parskip}
 	\RequirePackage{parskip}
 	\def\thm@space@setup{%
@@ -64,14 +73,23 @@
 	}
 \fi
 
-
-
-\usepackage{tikz, tcolorbox}
-\usetikzlibrary{calc}
-\tcbuselibrary{skins}
-
 \newlength{\outsideparskip}
 \setlength{\outsideparskip}{\parskip}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%% Theorems %%%%%%%%%%
 
 \newcommand{\PStcbpath@hook}{%
 	\path[draw, line cap=round, semithick, rounded corners=1mm]%
@@ -178,154 +196,172 @@
 
 
 
-%\usepackage{fourier-orns}
-%\newtheorem{theorem}{Theorem}
-%\newtheorem*{theorem*}{Theorem}
-%\newtheorem{lemma}[theorem]{Lemma}
-%\newtheorem*{lemma*}{Lemma}
-%\newtheorem{corollary}[theorem]{Corollary}
-%\newtheorem*{corollary*}{Corollary}
-%\newtheorem{claim}[theorem]{Claim}
-%\newtheorem*{claim*}{Claim}
-%\newtheorem{proposition}[theorem]{Proposition}
-%\newtheorem*{proposition*}{Proposition}
-%\theoremstyle{definition}
-%\newtheorem{definition}[theorem]{Definition}
-%\newtheorem*{definition*}{Definition}
-%\newtheorem{example}[theorem]{Example}
-%\newtheorem*{example*}{Example}
 
-%\RequirePackage{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%% Problem Environment %%%%%%%%%%
+
 \RequirePackage[shortlabels]{enumitem}
+
 \setlist[enumerate,1]{label={\arabic*.}}
 \setlist[enumerate,2]{label={\alph*)}}
 \setlist[enumerate,3]{label={\roman*)}}
 \setlist[enumerate]{align=left, leftmargin=*, labelindent=0em, labelwidth=0em, labelsep=.5em}
-\SetEnumitemKey{bonus}{format={\makebox[0pt][r]{$\star$\,}}}
-\SetEnumitemKey{surprising}{format={\makebox[0pt][r]{\tikz[baseline=(txt.base)]{\node[inner xsep=0pt, xshift=.6pt] (txt1){\phantom{I}};\clip (txt1.south west) rectangle (txt1.north east);\node[xslant=-.23](txt){\textit{\textinterrobang}};}\,}}}
-
 \setlist[enumerate]{topsep=-\parskip, noitemsep}
 \setlist[itemize]{topsep=-\parskip, noitemsep}
 
-
-
-
-
-
-
-
-% TODO: When you finally update the problem environment, transfer this line into the solution minipages:
-% \setlength{\parskip}{\outsideparskip}
-
-\newlength{\mysep}
-\setlength{\mysep}{0.5cm}
-
-\newlist{probs}{enumerate}{3}
-\setlist[probs,1]{label={\arabic*.}, ref={\arabic*}}
-\setlist[probs,2]{label={\alph*)}, ref={\alph*}}
-\setlist[probs,3]{label={\roman*)}, ref={\alph{probsii}\;\!\roman*)}}
+\newlist{prob}{enumerate}{3}
+\setlist[prob,1]{label={\arabic*.}}
+\setlist[prob,2]{label={\alph*)}}
+\setlist[prob,3]{label={\roman*)}, ref={\alph{probii}\;\!\roman*)}}
 %\setlist[probs]{align=left, leftmargin=*, labelindent=0em, labelwidth=0em, itemindent=0em}
-\setlist[probs]{align=left, leftmargin=!, labelindent=0em, labelsep=.5em, labelwidth=1em}
+\setlist[prob]{align=left, leftmargin=!, labelindent=0em, labelsep=.5em, labelwidth=1em}
 
-%\let\oldprobs\probs
-%\renewcommand{\probs}{hey!\oldprobs\relax\item}
 
-\newif\if@insolution
-\@insolutionfalse
-\newif\iffirstprob
-\firstprobtrue
-\newsavebox{\solutionbox}
+\SetEnumitemKey{bonus}{format={\makebox[0pt][r]{$\star$\hspace{0.5pt}}}}
+\SetEnumitemKey{discuss}{format={\makebox[0pt][r]{\tikz{
+	\node[draw, ellipse callout, callout pointer arc=30, callout relative pointer={(0.3ex, -0.5ex)}, minimum width=1.25ex, minimum height=.8ex, inner sep=0pt, outer sep=2pt] at (.3ex, -.4ex){};
+	\node[draw, fill=white, ellipse callout, callout pointer arc=30, callout relative pointer={(-0.3ex, -0.6ex)}, minimum width=1.25ex, minimum height=.8ex, inner sep=0pt, outer sep=2pt] {};
+}\hspace{0.5pt}}}}
+\SetEnumitemKey{stop}{format={\makebox[0pt][r]{\tikz[baseline=(sign.south)]{\node[draw, regular polygon, regular polygon sides=8, minimum width=.8em, inner sep=0pt] (sign){\makebox[0pt][c]{\resizebox{.65em}{.25em}{\textsf{STOP}}}};}\hspace{0.5pt}}}}
+\SetEnumitemKey{exciting}{format={\makebox[0pt][r]{\textit{\makebox[2pt][l]{\raisebox{0.5pt}{\small!}}!}\hspace{0.5pt}}}}
+\SetEnumitemKey{surprising}{format={\makebox[0pt][r]{\textit{\textinterrobang}\hspace{0.5pt}}}}
+\SetEnumitemKey{play}{format={\makebox[0pt][r]{\raisebox{-2pt}[0pt][0pt]{\tikz[scale=.18]{
+	\draw (0,0) circle (1);
+	\draw[fill=gray, rotate=25] (0,1) arc (90:-90:0.75 and 1) arc (-90:90:0.15 and 1);
+	\draw[fill=lightgray, rotate=25] (0,1) arc (90:270:0.6 and 1) arc (270:90:1);
+}}\hspace{0.5pt}}}}
+\SetEnumitemKey{calculator}{format={\makebox[0pt][r]{\raisebox{-1.5pt}[0pt][0pt]{\resizebox{.9em}{!}{\tikz{\node[draw,rounded corners=3pt, inner sep=1pt]{$\kern-.2em\begin{smallmatrix}+-\\\times\div\end{smallmatrix}\kern-.2em$}}}}\hspace{0.5pt}}}}
+%\SetEnumitemKey{surprising}{format={\makebox[0pt][r]{\tikz[baseline=(txt.base)]{\node[inner xsep=0pt, xshift=.6pt] (txt1){\phantom{?}};\clip (txt1.south west) rectangle (txt1.north east);\node[xslant=-.23](txt){\textit{\textinterrobang}};}\hspace{0.5pt}}}}
+
+
+\newif\if@showpoints        \@showpointsfalse
+\newif\if@usedefaultspace   \@usedefaultspacetrue
+\newif\if@probsincolumns    \@probsincolumnsfalse
+\newif\if@inacolumn         \@inacolumnfalse
+\newif\if@usenaturalheight
+\newif\if@insolution        \@insolutionfalse
+\newif\if@firstprob         \@firstprobtrue
+
+\newcommand{\ProbsInColumns}[1]{\ifnum#1=0 \@probsincolumnsfalse\else\@probsincolumnstrue\def\@numcolumns{#1}\fi}
+\newcommand{\ProbsNotInColumns}{\ProbsInColumns{0}}
+
+\enitkv@key{}{points}{\@showpointstrue\def\v{#1}}
+\enitkv@key{}{space}[1]{\set@solution@space{#1}\@usedefaultspacefalse}
+\SetEnumitemKey{nospace}{space=0pt}
+\enitkv@key{}{columns}[3]{\ProbsInColumns{#1}}
+
+\newlength{\probcolsep}     \setlength{\probcolsep}{0.5cm}
 
 \newcommand{\ifsoln}[2][]{\ifshowsolutions{#2}\else{#1}\fi}
 
+\newcommand{\pointssymbol}{$^\text{p\!\underline{\,ts}}$}
+\newcommand{\pointsymbol}{$^\text{p\!\underline{\,t}}$}
+
+\newsavebox{\solutionbox}
+\newcommand{\solutiontitle}{\textbf{SOLUTION:\ }}
+
 \newcommand{\allow@solution}{%
-	\def\solution%
+	\def\solution{\@ifstar\solution@star\solution@nostar}%
+	\def\solution@star%
+	{%
+		\@usenaturalheighttrue%
+		\solution@nostar%
+	}%
+	\def\solution@nostar%
 	{%
 		\@insolutiontrue%
-		\begingroup\lrbox{\solutionbox}%
-		\ifcancelspace%
-			\minipage[t]{\linewidth}%
-		\else%
-			\minipage[t][0pt]{\linewidth}%
-		\fi%
-		\setlength{\parskip}{\outsideparskip}%
-		\textbf{SOLUTION:}\ %
+		\begingroup\lrbox{\solutionbox}\minipage[t]{\linewidth}%
+			\setlength{\parskip}{\outsideparskip}%
+			\solutiontitle%
+			\ignorespaces%
 	}%
 }
 
 \newcommand{\set@solution@space}[1]{%
-	\ifcancelspace%
-		\def\solution@space{0pt}%
+	\pgfmathparse{#1}%
+	\ifpgfmathunitsdeclared%
+		\def\solution@space{#1}%
 	\else%
-		\pgfmathparse{#1}%
-		\ifpgfmathunitsdeclared%
-			\def\solution@space{#1}%
-		\else%
-			\def\solution@space{\stretch{#1}}%
-		\fi%
+		\def\solution@space{\stretch{#1}}%
 	\fi%
 }
 
-\newenvironment{@prob}[1]{%
+\LetLtxMacro{\old@prob}{\prob}
+\LetLtxMacro{\old@endprob}{\endprob}
+
+\renewcommand{\prob}[1][]{%
+	\if@probsincolumns%
+		\@inacolumntrue%
+		\pgfmathparse{(\linewidth-((\@numcolumns)-1)*\probcolsep)/(\@numcolumns)}%
+		\minipage[t]{\pgfmathresult pt}%
+	\fi%
+	\@probsincolumnsfalse%
+	\@usenaturalheightfalse%
+	\def\solution@space{0pt}%
+	\@showpointsfalse%
+	\@usedefaultspacetrue%
 	\allow@solution%
-	\iffirstprob%
-		\probs[series=pro, #1]%
-	\else%
-		\probs[resume=pro, #1]%
+	\if@firstprob%
+		\old@prob[series=pro, #1]%
+	\else%	
+		\old@prob[resume=pro, #1]%
 	\fi%
-	\firstprobtrue%
-	\item%
-}%
-{%
+	\@firstprobtrue%
+	\item \if@showpoints(\v\if\v1\relax\:\!\pointsymbol\else\,\pointssymbol\fi)\fi%
+}
+
+\renewcommand{\endprob}{%
 	\if@insolution%
-		\endminipage%
-		\endlrbox\endgroup%
+		\endminipage\endlrbox\endgroup%
+		\par%
 		\ifshowsolutions%
-			\par\usebox{\solutionbox}%
-			\vspace*{\dimexpr -\baselineskip-\parskip}%
+			\if@cancelspace%
+				\@usenaturalheighttrue%
+			\fi%
+			\if@usenaturalheight%
+				% I used to have \vspace*{2\lineskip} before the \par, but now I'm not sure why that was needed...
+				\usebox{\solutionbox}{}\par% show solution, natural space
+				\@usedefaultspacefalse%
+				\def\solution@space{0pt}%
+			\else%
+				\raisebox{0pt}[0pt][0pt]{\usebox{\solutionbox}}\par\vspace*{\dimexpr -\baselineskip-\parskip}% show solutions, fixed space
+			\fi%
+		\fi%
+	\else%
+		\par%
+	\fi%
+	\if@usedefaultspace%
+		\def\solution@space{0pt}%
+		\if@firstprob%
+			\def\solution@space{\stretch{1}}%
 		\fi%
 	\fi%
-	\endprobs%
-	\global\firstprobfalse%
+	\old@endprob%
+	\if@cancelspace%
+		\def\solution@space{0pt}%
+	\fi%
+	\if@inacolumn%
+		\global\let\tmp@solution@space\solution@space%
+		\endminipage%
+		\vspace*{\tmp@solution@space}%
+		\global\let\tmp@solution@space\undefined%	
+		\hfill%
+	\else%
+		\vspace*{\solution@space}%
+	\fi%
 }
-
-\newenvironment{prob}[1][0pt]%
-{\set@solution@space{#1}\@prob{}}%
-{\end@prob\vspace*{\solution@space}}
-
-\newenvironment{prob*}[1][0pt]%
-{\set@solution@space{#1}\@prob{format={\makebox[0pt][r]{$\star$\,}}}}%
-{\end@prob\vspace*{\solution@space}}
-
-\newenvironment{hprob}[2][0pt]%
-{%
-	\set@solution@space{#1}%
-	\pgfmathparse{1/(#2)*\linewidth-((#2)-1)/(#2)*\mysep}%
-	\begin{minipage}[t]{\pgfmathresult pt}%
-	\@prob{}%
-}%
-{%
-	\end@prob%
-	\end{minipage}%
-	\hspace{\mysep}%
-	\vspace{\solution@space}%
-	\ignorespaces%
-}
-
-\newenvironment{hprob*}[2][0pt]%
-{%
-	\set@solution@space{#1}%
-	\pgfmathparse{1/(#2)*\linewidth-((#2)-1)/(#2)*\mysep}%
-	\begin{minipage}[t]{\pgfmathresult pt}%
-	\@prob{format={\makebox[0pt][r]{$\star$\,}}}%
-}%
-{%
-	\end@prob%
-	\end{minipage}%
-	\hspace{\mysep}%
-	\vspace{\solution@space}%
-	\ignorespaces%
-}
+\AfterEndEnvironment{prob}{\@firstprobfalse\ignorespaces}
 
 
 
@@ -339,10 +375,6 @@
 
 
 
-\RequirePackage{url}
-
-%\usepackage{aurical}
-%\usepackage[T1]{fontenc}
 
 \fancypagestyle{firstpage}{%
 	\fancyhead{}
@@ -357,7 +389,7 @@
 \fancyfoot[C]{Page \thepage\ of \pageref{LastPage}}
 \fancyfoot[R]{{\spoilerfont\spoilertext}}
 \if@showname
-	\fancyhead[RO]{Name:~\blank[\solutionname]{\name@line@width}}
+	\fancyhead[RO]{Name:~\blank[\answerkeyname]{\name@line@width}}
 \fi
 %\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5ex}{\decofourleft}~\raisebox{-0.7975 ex}{\squircle}~\raisebox{-.5ex}{\decofourright}\quad\hrulefill}
 \renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-0.7975 ex}{\squircle}\quad\hrulefill}
@@ -467,3 +499,5 @@
 	\belowdisplayskip=7pt plus 3pt minus 4pt%
 	\belowdisplayshortskip=7pt plus 3pt minus 4pt%
 }{}{}
+
+\newcommand{\intersentencespace}{\spacefactor\sfcode`. \space}
