@@ -1,19 +1,10 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{handout}[2019/07/18 A document class for Proof School handouts]
+\ProvidesClass{handout}[2019/10/08 A document class for Proof School handouts]
 \newcommand{\answerkeyname}{Answer Key}
-\newcommand{\first@page@name@block}{\hfill%
-	\begin{minipage}[t]{\name@width}%
-		\raggedleft
-		Name:~\begin{minipage}[t]{\name@line@width}
-			\blank[\textbf{\answerkeyname}]{\name@line@width}\\%
-			\centerline{\@schoolyear \quad \squircle \quad Block \@block}%
-		\end{minipage}
-		%Date:~\blank{\name@line@width}%
-	\end{minipage}}
 
 \newif\if@showname
 \@shownametrue
-\DeclareOption{noname}{\@shownamefalse\renewcommand{\first@page@name@block}{}}
+\DeclareOption{noname}{\@shownamefalse}
 
 \newif\ifshowsolutions
 \showsolutionsfalse
@@ -49,19 +40,19 @@
 \LoadClass{article}
 
 
-\usepackage{tikz, tcolorbox}
+\RequirePackage{tikz, tcolorbox}
 \usetikzlibrary{calc, shapes.callouts, shapes.geometric}
 \tcbuselibrary{skins}
 
 
-\usepackage{letltxmacro, etoolbox, textcomp, url}
+\RequirePackage{letltxmacro, etoolbox, textcomp, url}
 
 
 
 \RequirePackage{setspace}
 \onehalfspacing
 
-\RequirePackage[margin=.75in, includehead, headsep=.5\baselineskip, headheight=14.5 pt, footskip=\baselineskip]{geometry}
+\RequirePackage[margin=.75in, headsep=.5\baselineskip, headheight=14.5 pt, footskip=\baselineskip]{geometry}
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 \RequirePackage{mathtools,amsthm,amssymb}
@@ -93,7 +84,7 @@
 
 \newcommand{\PStcbpath@hook}{%
 	\path[draw, line cap=round, semithick, rounded corners=1mm]%
-		(frame.south east) --% %([xshift=1.5mm, yshift=3mm]frame.south east) |-%
+		([xshift=1.5in] frame.south west) --%(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		(title.south east);%
 	\path[draw, line cap=round, semithick]%
@@ -106,7 +97,7 @@
 }
 \newcommand{\PStcbpath@toploop}{%
 	\path[draw, line cap=round, semithick, rounded corners=1mm]%
-		(frame.south east) --% %([xshift=1.5mm, yshift=3mm]frame.south east) |-%
+		(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		(title.south east);%
 	\path[draw, line cap=round, semithick]%
@@ -116,7 +107,7 @@
 }
 \newcommand{\PStcbpath@doublein}{%
 	\path[draw, line cap=round, semithick, rounded corners=1mm]%
-		(frame.south east) --% %([xshift=1.5mm, yshift=3mm]frame.south east) |-%
+		(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		([xshift = 1mm]title.south east);%
 	\path[draw, line cap=round, semithick]%
@@ -126,7 +117,7 @@
 }
 \newcommand{\PStcbpath@doubleout}{%
 	\path[draw, line cap=round, thick, rounded corners=1mm]%
-		(frame.south east) --% %([xshift=1.5mm, yshift=3mm]frame.south east) |-%
+		(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		([yshift=-1mm]title.south east);%
 	\path[draw, line cap=round, thick]%
@@ -221,8 +212,8 @@
 \setlist[itemize]{topsep=-\parskip, noitemsep}
 
 \newlist{prob}{enumerate}{3}
-\setlist[prob,1]{label={\arabic*.}}
-\setlist[prob,2]{label={\alph*)}}
+\setlist[prob,1]{label={\arabic*.}, ref={\arabic*}}
+\setlist[prob,2]{label={\alph*)}, ref={\arabic{probi}\alph*}}
 \setlist[prob,3]{label={\roman*)}, ref={\alph{probii}\;\!\roman*)}}
 %\setlist[probs]{align=left, leftmargin=*, labelindent=0em, labelwidth=0em, itemindent=0em}
 \setlist[prob]{align=left, leftmargin=!, labelindent=0em, labelsep=.5em, labelwidth=1em}
@@ -361,7 +352,7 @@
 		\vspace*{\solution@space}%
 	\fi%
 }
-\AfterEndEnvironment{prob}{\@firstprobfalse\ignorespaces}
+\AfterEndEnvironment{prob}{\global\@firstprobfalse\ignorespaces}
 
 
 
@@ -381,19 +372,29 @@
 	\renewcommand{\headrule}{}
 }
 
-\newcommand{\squircle}{\resizebox{1.595ex}{!}{\tikz{\draw[join=round,very thick] (0, 0) rectangle (.4, .4) (.2,.2) circle (.1);}}}
+\newcommand{\squircle}{\settoheight{\dimen255}{I}\resizebox{\dimen255}{!}{\tikz{\draw[join=round,very thick] (0, 0) rectangle (.4, .4) (.2,.2) circle (.1);}}}
 \renewcommand{\qedsymbol}{\squircle}
 
 \pagestyle{fancy}
 \fancyhf{}% clear default for head and foot
-\fancyfoot[C]{Page \thepage\ of \pageref{LastPage}}
-\fancyfoot[R]{{\spoilerfont\spoilertext}}
+\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
+\fancyfoot[L]{{\spoilerfont\spoilertext}}
+\fancyhead[L]{\make@sheet@number\@shorttitle}
 \if@showname
-	\fancyhead[RO]{Name:~\blank[\answerkeyname]{\name@line@width}}
+	\fancyhead[RO]{\nametext~\blank[\answerkeyname]{\name@line@width}}
 \fi
 %\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5ex}{\decofourleft}~\raisebox{-0.7975 ex}{\squircle}~\raisebox{-.5ex}{\decofourright}\quad\hrulefill}
-\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-0.7975 ex}{\squircle}\quad\hrulefill}
-\fancyhead[L]{\make@sheet@title}
+\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5\height}{\squircle}\quad\hrulefill}
+
+\def\@title{}
+\def\@shorttitle{}
+\renewcommand{\title}[2][\@nil]{
+	\def\@shorttitle{#1}
+	\ifx\@shorttitle\@nnil
+		\def\@shorttitle{#2}
+	\fi
+	\def\@title{#2}
+}
 
 \def\@block{}
 \newcommand{\block}[1]{\def\@block{#1}}
@@ -417,7 +418,7 @@
 \newcommand{\sheetnumber}[1]{\def\@sheetnumber{#1}}
 
 \let\author\undefined
-\let\date\undefined
+\let\date\undefined % TODO: you should be able to specify the date!
 
 %\newcommand{\blank}[1]{\rule[-2pt]{#1}{.4pt}}
 \newcommand{\blank}{\@ifstar\blank@starred\blank@unstarred}
@@ -427,7 +428,7 @@
 \let\oldS\S
 \def\S{{\fontfamily{cmr}\selectfont\oldS}} % I really don't like the bold section symbol that Latin Modern uses with T1 encoding... although their normal weight version is pretty decent.  The Computer Modern with T1 is my favorite combo, I think.
 
-\newcommand{\make@sheet@title}{%
+\newcommand{\make@sheet@number}{%
 	\ifx\@sheetnumber\empty\else%
 		{\S}%
 		\ifx\@unitnumber\empty\else%
@@ -435,31 +436,23 @@
 		\fi%
 		\@sheetnumber\ %
 	\fi%
-	\@title%
 }
 
+\newcommand{\nametext}{Name:}
 \newlength{\name@line@width}
 \setlength{\name@line@width}{1.75in}
 
-\renewcommand{\maketitle}{%
-	\thispagestyle{firstpage}%
+\newcommand{\headerZG}{%
 	\newlength{\name@width}%
-	\settowidth{\name@width}{Name:~}%
-	\addtolength{\name@width}{\name@line@width}%
-	\newlength{\title@width}%
-	\setlength{\title@width}{\textwidth}%
-	\addtolength{\title@width}{-\name@width}%
-	\addtolength{\title@width}{-1em}%
-	\null
-	
-	\vspace{-\baselineskip}%
-	\vspace{-\headheight}%
-	\vspace{-\headsep}%
-	\vspace{-\parskip}%
-	\noindent%
-	\begin{minipage}[t]{\title@width}%
+	\if@showname%
+		\settowidth{\name@width}{\nametext~}%
+		\addtolength{\name@width}{\dimexpr \name@line@width+1em}%
+	\else%
+		\setlength{\name@width}{0pt}%
+	\fi%
+	\begin{minipage}[t]{\dimexpr \linewidth-\name@width}%
 		{\large\bfseries\boldmath%
-		\strut\make@sheet@title\\}%
+		\strut\make@sheet@number\@title\\}%
 		{\large%\Fontauri%
 			\@course%
 			\ifx\@unit\empty\else%
@@ -467,9 +460,65 @@
 			\fi%
 		}%
 	\end{minipage}%
-	\first@page@name@block\\\par%
+	\begin{minipage}[t]{\name@width}%
+		\raggedleft
+		\nametext~\begin{minipage}[t]{\name@line@width}
+			\blank[\textbf{\answerkeyname}]{\name@line@width}\\%
+			\centerline{\@schoolyear \quad \squircle \quad Block \@block}%
+		\end{minipage}
+		%Date:~\blank{\name@line@width}%
+	\end{minipage}\par%
 	\bigskip%
 	\vspace{-\parskip}%
+}
+\newcommand{\headerZGpic}[1]{%
+	\newsavebox{\headerZG@pic}%
+	\savebox{\headerZG@pic}{\raisebox{\depth}{#1}}%
+	\newlength{\name@width}%
+	\if@showname%
+		\settowidth{\name@width}{\nametext~}%
+		\addtolength{\name@width}{\dimexpr \name@line@width+1em}%
+	\else%
+		\setlength{\name@width}{0pt}%
+	\fi%
+	\noindent%
+	\usebox\headerZG@pic%
+	\hfill%
+	\begin{minipage}[b][\ht\headerZG@pic][c]{\dimexpr \linewidth-\wd\headerZG@pic-1em-\name@width}%
+		\centering%
+		{\large\bfseries\boldmath%
+		\strut\make@sheet@number\@title\\}%
+		{\large%\Fontauri%
+			\@course%
+			\ifx\@unit\empty\else%
+				: \@unit%
+			\fi%
+		}%
+	\end{minipage}%
+	\if@showname%
+		\begin{minipage}[b][\ht\headerZG@pic][t]{\name@width}%
+			\raggedleft%
+			\nametext~\begin{minipage}[t]{\name@line@width}%
+			\blank[\textbf{\answerkeyname}]{\name@line@width}\\[-4pt]%
+			\centering \@schoolyear \quad \squircle \quad Block \@block%
+			\end{minipage}%
+		\end{minipage}%
+	\fi%
+	\par%
+	\bigskip%
+	\vspace{-\parskip}%
+}
+\newcommand{\firstpageheader}{\headerZG}
+
+\RequirePackage{afterpage}
+\renewcommand{\maketitle}{%
+	%\newgeometry{margin=.75in, footskip=\baselineskip}% :/ I don't like that this makes it harder to change the geometry from the handout itself...
+	%\afterpage{\aftergroup\restoregeometry}%
+	\thispagestyle{firstpage}%
+	%\null%
+	%\vspace{\dimexpr -\baselineskip-\headheight-\headsep-\parskip}%
+	\noindent%
+	\firstpageheader%
 	\let\maketitle\undefined%
 	% FIX ME: \noindent for first line of text after heading?
 }
@@ -480,15 +529,10 @@
 \newcommand{\spoilerfont}{\itshape}
 \newcommand{\spoilertext}{}
 \newcommand{\spoilerbreak}[1][Spoilers ahead! Proceed with caution\ldots]{\renewcommand{\spoilertext}{#1}\newpage\renewcommand{\spoilertext}{}}
-%\newcommand{\spoilerbreak}[1][Spoilers ahead! Proceed with caution\ldots]{\renewcommand{\spoilertext}{\parbox[b]{\dimexpr .5\textwidth-1.5cm}{\raggedleft #1}}\newpage\renewcommand{\spoilertext}{}}
 
-\usepackage{miama}
-%\usepackage{aurical}
-\usepackage[OT1,T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{microtype}
-\newcommand{\students}[1]{{\fmmfamily\huge #1}}
-
+\RequirePackage[OT1,T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage{microtype}
 
 \newcommand{\bonus}{{\Large{$\star$}}}
 
@@ -499,5 +543,33 @@
 	\belowdisplayskip=7pt plus 3pt minus 4pt%
 	\belowdisplayshortskip=7pt plus 3pt minus 4pt%
 }{}{}
+
+\RequirePackage{xstring}
+%\newcommand{\smartoverline}[2][\@nil]{%
+%	{\def\tmp{#1}%
+%	\ifx\tmp\@nnil%
+%		\StrChar{#2}{1}[\tmp]%
+%		\IfSubStr{Uacehikqtxy}{\tmp}{\def\tmp{0.04em}}{%
+%		\IfSubStr{CGIOQdgjosz}{\tmp}{\def\tmp{0.1em}}{%
+%		\IfSubStr{BDEFHJKLMNPRXZSf}{\tmp}{\def\tmp{0.16em}}{%
+%		\IfSubStr{A}{\tmp}{\def\tmp{0.2em}}{\def\tmp{0em}}}}}%
+%	\fi%
+%	\mathmakebox[0pt][l]{\hspace*{\tmp}\overline{\mathmakebox[\dimexpr \width-\tmp]{\phantom{#2}}}}}#2%
+%}
+% The optional argument, if present, is used in place of the required argument for the purpose of computing the initial offset.
+% useful if you want to put an overline over something set in \mathit, for example.
+\newcommand{\smartoverline}[2][\@nil]{%
+	{\def\tmp{#1}%
+	\ifx\tmp\@nnil%
+		\StrChar{#2}{1}[\tmp]%
+	\else%
+		\StrChar{#1}{1}[\tmp]%
+	\fi%
+	\IfSubStr{Uacehikqtxy}{\tmp}{\def\tmp{0.04em}}{%
+	\IfSubStr{CGIOQdgjosz}{\tmp}{\def\tmp{0.1em}}{%
+	\IfSubStr{BDEFHJKLMNPRXZSf}{\tmp}{\def\tmp{0.16em}}{%
+	\IfSubStr{A}{\tmp}{\def\tmp{0.2em}}{\def\tmp{0em}}}}}%
+	\mathmakebox[0pt][l]{\hspace*{\tmp}\overline{\mathmakebox[\dimexpr \width-\tmp]{\phantom{#2}}}}}#2%
+}
 
 \newcommand{\intersentencespace}{\spacefactor\sfcode`. \space}
