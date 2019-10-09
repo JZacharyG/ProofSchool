@@ -2,6 +2,15 @@
 
  A document class for typesetting Proof School handouts.
 
+## Key Features
+
+- It looks pretty good, IMHO.  Page numbers are written as "Page X of Y", the handout's title is printed in the header of subsequent pages, and a little squircle replaces the QED symbol in proofs.  Theorems and definitions and such are typeset in a nice little partial frame to visually set them off from the rest of the text, (hopefully) without being too ostentatious.
+- Each problem, optionally along with its solution, is contained in its own environment.  This makes it easy to reorder the problems, and means that you can intersperse other content between problems (or between parts of problems) without throwing off the numbering.
+- You can typeset a problem set and its answer key from the same file with no changes to the body of the document (by passing the option `solutions` to the document class).
+- It is very easy to specify either an absolute or relative amount of space to leave below each problem, and absent explicit instructions, a sensible default is used.
+- When typeset, solutions do not effect the amount of space left below a problem, so the overall layout is (approximately) identical between the problem set and the answer key.
+- Problems can easily be set in a grid (with a specified number of columns), with problems numbered across the rows.  You do not need to specify explicit line breaks, so it is easy to change the number of columns or reorder the problems at any point.
+
 ## Usage
 
 ### Installation
@@ -45,52 +54,58 @@ You can add problem using the `prob` environment:
 \end{prob}
 ```
 
-- You can add parts/subproblems by nesting these environments.  They can be nested up to three levels deep.  The first level is labeled with Arabic numerals, the second with lowercase letters, the third with lowercase roman numerals.
+You can add parts/subproblems by nesting these environments.  They can be nested up to three levels deep.  The first level is labeled with Arabic numerals, the second with lowercase letters, the third with lowercase roman numerals.
+#### Solutions
+If `\solution` or `\solution*` appears inside a problem environment, then everything that follows will only by typeset if solutions are shown (with the option `solutions`).
+
+Importantly, the solution is placed in the space below the problem, but (if using `\solution`) it does not add any additional space, so the layout of the handout will be identical whether or not you show solutions.  This unfortunately means that the solution can spill over into the next problem, or off the end of the page, if you are not careful.  The starred version instead has the solution replace the space that would otherwise have been left.
+
+If typeset, the solution will be prepended with the contents of `\solutiontitle`, which defaults to ’’**SOLUTION:** ”, but you can renew this command if you’d like.
+#### Problems in Columns/Grids
+Problems can be placed in a grid (numbered across the row, instead of down the column).  This can be achieved with the option described below, or by issuing the command `\ProbsInColumns{n}`, where $n$ is the desired number of columns. `\ProbsNotInColumns` is equivalent to `\ProbsInColumns{0}`, and causes subsequent problems to be typeset in the usual way.  This command is useful (in comparison to corresponding option to the `prob` environment) if you want to change the number of columns part way through a grid, or if you want to use columns for the top level of problems instead of just for subproblems.
+
+You do not need to add explicit linebreaks, but any linebreaks that you do add will be respected.  The first problem in a grid should be preceeded by a blank line.
+
+**Be forewarned:** the spaces below all problems in a row stack, which can lead to some unexpected results.
+
+```latex
+\begin{prob}[columns=2]
+    Differentiate each of the following with respect to x:
+    
+    \begin{prob}
+        $e^x$
+    \end{prob}
+    \begin{prob}
+        $x^\pi$
+    \end{prob}
+    \begin{prob}
+        $e^\pi$
+    \end{prob}
+    \begin{prob}
+        $x^x$
+    \end{prob}
+    \ProbsInColumns{3}
+    \begin{prob}
+        $\sin(x)$
+    \end{prob}
+    \begin{prob}
+        $\cos(x)$
+    \end{prob}
+    \begin{prob}
+        $\sec^3(x)$
+    \end{prob}
+\end{prob}
+```
+
+#### Optional Options
+
+The problem environment recognizes the following options (in square brackets after the `\begin{prob}`):
+
 - `space`/`nospace` will determine how much space is left after a problem.  `space` can be passed a length (e.g., `space=2in`), which will leave that much space below the problem for students to write their solution, or it may be passed a number (e.g., `space=2`), which will fill the available space on the page, in proportion to the numbers given (so if one problem is given `space=1` and another `space=2`, then the latter will be given twice as much space as the former).  `space` is equivalent to `space=1`, `nospace` is equivalent to `space=0pt`, and if neither is present, then a sensible default is used (equivalent to `nospace` if this problem contains subparts and `space` if not).
 - `points=n` displays the number of points that the question is worth at the beginning of the problem.
-- `\solution` and `\solution*`: If this appears inside a problem environment, then everything that follows will only by typeset if solutions are shown (with the option `solutions`).
-
-  Importantly, the solution is placed in the space below the problem, but it does not add any additional space, so the layout of the handout will be otherwise identical whether or not you include solutions.  This means that the solution can spill over into the next problem, or off the end of the page, if you are not careful.  The starred version instead has the solution replace the space that would otherwise have been left.
-
-  If typeset, the solution will be prepended with the contents of `\solutiontitle`, which defaults to ''**SOLUTION:**", but you can renew this command if you'd like.
-
-- Problems can be typeset in placed in rows (numbered across the row, instead of down the column).  This can be achieved in two ways:
-  - If you give the `columns=n` option to a problem, then its subproblems will be typeset in $n$ columns
-  - If at any point you issue the command`\ProbsInColumns{n}`, then any following problems will be typeset in $n$ columns. `\ProbsNotInColumns` is equivalent to `\ProbsInColumns{0}`, and typesets subsequent problems in the usual way.
-  
-    This command is useful (compared to the option to the `prob` environment) if you want to change the number of columns at any point, or if you want to use columns for the top level of problems instead of just for subproblems.
-  - Be forewarned: the space given to each problem stacks with the space from the other problems in that row, which can lead to some unexpected results!
-  - I worked really hard to make these easy to use, so I hope you like 'em!
-  
-    ```latex
-    \begin{prob}[columns=2]
-        Differentiate each of the following with respect to x:
-        
-        \begin{prob}
-            $e^x$
-        \end{prob}
-        \begin{prob}
-            $x^\pi$
-        \end{prob}
-        \begin{prob}
-            $e^\pi$
-        \end{prob}
-        \begin{prob}
-            $x^x$
-        \end{prob}
-        \ProbsInColumns{3}
-        \begin{prob}
-            $\sin(x)$
-        \end{prob}
-        \begin{prob}
-            $\cos(x)$
-        \end{prob}
-        \begin{prob}
-            $\sec^3(x)$
-        \end{prob}
-    \end{prob}
-    ```
+- `columns=n`: typesets any subproblems of this problem in $n$ columns.
 - `bonus`/`exciting`/`surprising`/`play`/`stop`/`discuss`/`calculator`: displays a little picture to the left of the problem number, to communicate in some way with the student.  This picture is, respectively: a star, a pair of exclamation marks, an interrobang, a beach ball, a stop sign, a pair of speech bubbles, and an array of arithmetic operations.  I'd love to add more, or give them more helpful names, if it would be helpful to you.
+
 - This environment is implemented as a enumerate-like environment using the `enumitem` package; any other options are just passed along to the underlying list (so for example, you can pass in  `start=23` to begin counting at 23).
 
 ### Headings
