@@ -4,6 +4,7 @@
 
 \newif\if@showname
 \@shownametrue
+\DeclareOption{name}{\@shownametrue}
 \DeclareOption{noname}{\@shownamefalse}
 
 \newif\ifshowsolutions
