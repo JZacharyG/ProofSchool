@@ -5,10 +5,10 @@
 ## Key Features
 
 - It looks pretty good, IMHO.  Page numbers are written as "Page X of Y", the handout's title is printed in the header of subsequent pages, and a little squircle replaces the QED symbol in proofs.  Theorems and definitions and such are typeset in a nice little partial frame to visually set them off from the rest of the text, (hopefully) without being too ostentatious.
-- Each problem, optionally along with its solution, is contained in its own environment.  This makes it easy to reorder the problems, and means that you can intersperse other content between problems (or between parts of problems) without throwing off the numbering.
+- Each problem, optionally along with its solution, is contained in a separate environment.  This makes it easy to reorder the problems, and means that you can intersperse other content between problems (or between parts of problems) without throwing off the numbering.
 - You can typeset a problem set and its answer key from the same file with no changes to the body of the document (by passing the option `solutions` to the document class).
 - It is very easy to specify either an absolute or relative amount of space to leave below each problem, and absent explicit instructions, a sensible default is used.
-- When typeset, solutions do not effect the amount of space left below a problem, so the overall layout is (approximately) identical between the problem set and the answer key.
+- When typeset, the solutions do not effect the amount of space left below a problem, so the overall layout is (approximately) identical between the problem set and the answer key.
 - Problems can easily be set in a grid (with a specified number of columns), with problems numbered across the rows.  You do not need to specify explicit line breaks, so it is easy to change the number of columns or reorder the problems at any point.
 
 ## Usage
@@ -16,10 +16,14 @@
 ### Installation
 
 - For a quick and dirty solution, you can just put `handout.cls` in the same directory as the handout that you are making.  Done!
-- texlive (or MacTeX): add `handout.cls` to the local distribution.  If your LaTeX installation is in the default location, move the file to`/usr/local/texlive/texmf-local/tex/latex/ProofSchool`
 
-  You then need to tell LaTeX to update its list of available things by running `sudo texhash` in Terminal
-- Overleaf: [This might be helpful](https://www.overleaf.com/learn/latex/Questions/I_have_a_lot_of_.cls,_.sty,_.bst_files,_and_I_want_to_put_them_in_a_folder_to_keep_my_project_uncluttered._But_my_project_is_not_finding_them_to_compile_correctly).
+- For a LaTeX distribution based on texlive (including MacTeX), add `handout.cls` to the "local" section (so that it is not overwritten when you next update LaTeX).  If your LaTeX installation is in the default location, I think you'll need to move the file to`/usr/local/texlive/texmf-local/tex/latex/ProofSchool`, or whatever folder name you want at the end.
+
+  You then need to tell LaTeX to update its list of available things by running `sudo texhash` in Terminal.
+  
+- For MiKTeX, I don't really know, but it's probably easy!
+
+- Overleaf: [This might be helpful](https://www.overleaf.com/learn/latex/Questions/I_have_a_lot_of_.cls,_.sty,_.bst_files,_and_I_want_to_put_them_in_a_folder_to_keep_my_project_uncluttered._But_my_project_is_not_finding_them_to_compile_correctly)?
 
 ### Document Class Options
 
@@ -27,27 +31,28 @@ To begin, use the document class `handout`.  My typical usage looks like this:
 ```latex
 \documentclass[12pt,twoside,parskip]{handout}
 ```
-or
+... or, when I want an answer key:
 ```latex
 \documentclass[12pt,twoside,parskip,solutions]{handout}
 ```
 The following options are recognized:
 
 -  `solutions`/`nosolutions` (default): set whether or not to typeset the solutions to problems.  (It basically just sets `\showsolutiontrue`, if you are familiar with TeX's ifs.)
-- `spaces` (default)/`nospaces`: whether or not to leave the specified space after problems.  The `nospaces` option is useful for answer keys if you don't care about preserving formatting and for drafting problem sets, when you want to see as many problems at a time as possible.  Honestly, I don't use this all that often. 
+- `spaces` (default)/`nospaces`: whether or not to leave the specified space after problems.  The `nospaces` option is useful for answer keys if you don't care about preserving formatting and for drafting problem sets, when you want to see as many problems at a time as possible.  Honestly, I don't use this it that often. 
 - `parskip`/`parindent` (default): parskip loads the parskip library, which I think looks great.
 - `name`( default)/`noname`: whether or not to leave a space for the students' names.
-- `title` (default)/`notitle`: whether or not to automatically call `\maketitle` at the start of the document, which typesets the heading for the first page
+- `title` (default)/`notitle`: whether or not to automatically call `\maketitle` at the start of the document, which typesets the heading for the first page.
 - Anything that you can do for the `article` document class.  Notably,
   - `10pt`/`11pt`/`12pt`
   - `oneside`/`twoside`
+  - `letterpaper`/`a4paper`/...
 
 ### Problem Environment
 
 You can add problem using the `prob` environment:
 
 ``` latex
-\begin{prob}
+\begin{prob}[points=5]
     What shall we do with a drunken sailor?
     \solution
     Shave his belly with a rusty razor.
@@ -62,7 +67,7 @@ Importantly, the solution is placed in the space below the problem, but (if usin
 
 If typeset, the solution will be prepended with the contents of `\solutiontitle`, which defaults to ’’**SOLUTION:** ”, but you can renew this command if you’d like.
 #### Problems in Columns/Grids
-Problems can be placed in a grid (numbered across the row, instead of down the column).  This can be achieved with the option described below, or by issuing the command `\ProbsInColumns{n}`, where $n$ is the desired number of columns. `\ProbsNotInColumns` is equivalent to `\ProbsInColumns{0}`, and causes subsequent problems to be typeset in the usual way.  This command is useful (in comparison to corresponding option to the `prob` environment) if you want to change the number of columns part way through a grid, or if you want to use columns for the top level of problems instead of just for subproblems.
+Problems can be placed in a grid (numbered across the row, instead of down the column).  This can be achieved with the option described below, or by issuing the command `\ProbsInColumns{n}`, where n is the desired number of columns. `\ProbsNotInColumns` is equivalent to `\ProbsInColumns{0}`, and causes subsequent problems to be typeset in the usual way.  This command is useful (in comparison to corresponding option to the `prob` environment) if you want to change the number of columns part way through a grid, or if you want to use columns for the top level of problems instead of just for subproblems.
 
 You do not need to add explicit linebreaks, but any linebreaks that you do add will be respected.  The first problem in a grid should be preceeded by a blank line.
 
@@ -103,7 +108,7 @@ The problem environment recognizes the following options (in square brackets aft
 
 - `space`/`nospace` will determine how much space is left after a problem.  `space` can be passed a length (e.g., `space=2in`), which will leave that much space below the problem for students to write their solution, or it may be passed a number (e.g., `space=2`), which will fill the available space on the page, in proportion to the numbers given (so if one problem is given `space=1` and another `space=2`, then the latter will be given twice as much space as the former).  `space` is equivalent to `space=1`, `nospace` is equivalent to `space=0pt`, and if neither is present, then a sensible default is used (equivalent to `nospace` if this problem contains subparts and `space` if not).
 - `points=n` displays the number of points that the question is worth at the beginning of the problem.
-- `columns=n`: typesets any subproblems of this problem in $n$ columns.
+- `columns=n`: typesets any subproblems of this problem in a grid with n columns.
 - `bonus`/`exciting`/`surprising`/`play`/`stop`/`discuss`/`calculator`: displays a little picture to the left of the problem number, to communicate in some way with the student.  This picture is, respectively: a star, a pair of exclamation marks, an interrobang, a beach ball, a stop sign, a pair of speech bubbles, and an array of arithmetic operations.  I'd love to add more, or give them more helpful names, if it would be helpful to you.
 
 - This environment is implemented as a enumerate-like environment using the `enumitem` package; any other options are just passed along to the underlying list (so for example, you can pass in  `start=23` to begin counting at 23).
