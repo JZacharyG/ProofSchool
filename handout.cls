@@ -421,10 +421,36 @@
 \let\author\undefined
 \let\date\undefined % TODO: you should be able to specify the date!
 
-%\newcommand{\blank}[1]{\rule[-2pt]{#1}{.4pt}}
+\newcommand{\fancysetlength}[2]{%
+	\pgfmathparse{#2}%
+	\ifpgfmathunitsdeclared%
+		\setlength{#1}{#2}%
+	\else%
+		\setlength{#1}{\stretch{#2}}%
+	\fi%
+}
+
+\newlength{\@blanklength}
+\newbox{\@blanktext}
+
 \newcommand{\blank}{\@ifstar\blank@starred\blank@unstarred}
-\newcommand{\blank@starred}[2][]{\underline{\makebox[#2][c]{\ifshowsolutions{#1}\fi}}}
-\newcommand{\blank@unstarred}[2][]{\blank@starred[\smash{#1}]{#2}}
+\newcommand{\blank@unstarred}[2][]{\filledblank@unstarred[#1]{}{#2}}
+\newcommand{\blank@starred}[2][]{\filledblank@starred[#1]{}{#2}}
+
+\newcommand{\filledblank}{\@ifstar\filledblank@starred\filledblank@unstarred}
+\newcommand{\filledblank@unstarred}[3][]{\filledblank@starred[\smash{#1}]{\smash{#2}}{#3}}
+\newcommand{\filledblank@starred}[3][]{%
+	\leavevmode%
+	\begingroup%
+		\savebox{\@blanktext}{\ifsoln[#2]{#1}}%
+		\fancysetlength{\@blanklength}{#3}%
+		\hspace*{\glueexpr \@blanklength/2}%
+		\makebox[0pt][c]{\usebox{\@blanktext}}%
+		\hspace*{\glueexpr \@blanklength/-2}%
+		\leaders\hrule height \dimexpr -\dp\@blanktext-1.2pt depth \dimexpr \dp\@blanktext+1.6pt\hskip \@blanklength\kern\z@%
+	\endgroup%
+}
+
 
 \let\oldS\S
 \def\S{{\fontfamily{cmr}\selectfont\oldS}} % I really don't like the bold section symbol that Latin Modern uses with T1 encoding... although their normal weight version is pretty decent.  The Computer Modern with T1 is my favorite combo, I think.
