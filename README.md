@@ -122,12 +122,14 @@ The problem environment recognizes the following options (in square brackets aft
   - `\block`
   - `\unit`
   - `\unitnumber`
+  - `\weeknumber`
   - `\sheetnumber`
   - `\title`
+  - `\studentname`
   
-  I would suggest making a file named `CourseInfo.tex`, and then `input`ing it in the preamble of every handout.  It would contain the first four (for math classes) or three (for morning classes) of these commands, which would be common to all handouts for a given class.  You can also include any custom macros or other definitions that you want for this class, and all of your handouts will automatically see them!
+  I would suggest making a file named `CourseInfo.tex`, and then `\input`ing it in the preamble of every handout.  It would contain the first four (for math classes) or three (for morning classes) of these commands, which would be common to all handouts for a given class.  You can also include any custom macros or other definitions that you want for this class, and all of your handouts will automatically see them!
   
-- You can customize the heading placed at the top of the first page, although it isn't quite as easy as I'd like yet.
+- A heading is automatically placed at the top of the first page (unless the `notitle` option is given to the document class).  There are a few that are pre-defined, and you can fairly easily make your own!
 
   - You can use `\renewcommand{\firstpageheader}{[...]}` to use a different header.  This is *also* the sort of thing that I'd recommend putting in `CourseInfo.tex`.
 
@@ -135,15 +137,36 @@ The problem environment recognizes the following options (in square brackets aft
 
     Currently, the only other predefined header is `\headerZGpic`, which takes one mandatory argument.  This argument should produce an image (perhaps an `\includegraphics`, code for a Ti*k*Z picture, et cetera).
 
-    You can define your own custom header, which should use `\@course`, `\@instructor`, `\@schoolyear`, `\@block`, `\@unit`, `\@unitnumber`, `\@sheetnumber`, and `\@title` to access the information that has been specified for a particular handout.
+  - You may `\renewcommand` any of the following to customize the look of your heading:
+    - `\SheetNumberPrefix`: text prepended to the `\SheetNumber`, if it exists. By default, this is `\S`, but maybe you'd like `Handout~` or similar.
+    - `\SheetNumberPostfix`: test that is appended to the `\SheetNumber`, it if exists, to separate it from the `\Title`.  By default, this is just a space, but maybe you'd want a colon or some such
+    - `\NameText`: the text prepended to the line where students will write their name.  By default, `Name:`.
+    - `\NameLineWidth`: is the length of the line where they'd write their name.  If there is a date line, it is likely of the same length.  This is a length, so you should set it with `\setlength`, not `\renewcommand`.
+    - `\TitleFont`: the font used for the `\Title` of the handout.  By default, `\large\bfseries\boldmath`
+    - `\SchoolFont`: the font used for the school name.  By default, `\scshape`
+    - `\CourseNameFont`: the font used for the `\CourseName`.  By default, `\large`
+  - If you define your own custom header, the following macros are available to you:
 
-  - If you have a header that you like, let me know and we can make sure that it is implemented and easily choose-able!
+    - `\CourseName`
+    - `\InstructorName`
+    - `\SchoolYear`
+    - `\Block`
+    - `\UnitName`
+    - `\UnitNumber`
+    - `\WeekNumber`
+    - `\SheetNumber`
+    - `\Title`
+    - `\FancyTitle`, which contains the title, prepended with the unit number and sheet number (if present)
+
+- If you have a header that you like, let me know and we can make sure that it is implemented and easily choose-able!
 
 ### Odds and Ends
 
 - `\blank`, `\blank*`: the mandatory argument is the length of the blank, the optional argument is typeset if solutions are displayed.  Normally that solution is `\smash`ed so that the blank will have same vertical position whether or not solutions are displayed (even if the solution is tall, or has descenders); the starred variant does not `\smash` the solution, which is useful sometimes!
-- `\smartoverline`: I think that overlines look bad for some letters, because it is computed based on the bounding box.  This tries to fix that by starting the overline a little further to the left than in normally would be (based on what the first letter is).
-- `\spoilerbreak`: displays the message: "*Spoilers ahead! Proceed with caution...*" in the bottom left corner of the page, then inserts a page break.  An optional argument lets you use a different message.
+- `\smartoverline`: I think that `\overline`s look bad for some letters, because it is computed based on the bounding box and so can extend far from the top of the letter.  This tries to fix that by starting the overline a little further to the left than in normally would be (based on what the first letter is).
+- `\spoilerbreak`: displays the message: "*Spoilers ahead! Proceed with caution...*" in the bottom left corner of the page, then inserts a page break.  An optional argument lets you use a different message.  You can also `\renewcommand` the following:
+  - `\SpoilerFont`: the font used, by default `\itshape`.
+  - `\DefaultSpoilerText`: the default text used.  By default, as stated above, `Spoilers ahead! Proceed with caution\ldots`.
 - Fancy theorems!  Puts your theorems and definitions and such in fancy boxes!  Currently the following are defined, but you can make more if you want.
   - `theorem`/`theorem*`
   - `lemma`/`lemma*`
@@ -154,4 +177,5 @@ The problem environment recognizes the following options (in square brackets aft
   - `definition`/`definition*`
   - `example`/`example*`
 - `\squircle` makes a small squircle!  The qed symbol at the end of a proof has been replaced by a squircle.
+- `\ifsoln` typesets its mandatory argument if solutions are displayed, and its optional argument otherwise.
 

@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{handout}[2019/10/08 A document class for Proof School handouts]
-\newcommand{\answerkeyname}{Answer Key}
+\ProvidesClass{handout}[2019/10/15 A document class for Proof School handouts]
+\newcommand{\AnswerKeyName}{Answer Key}
 
 \newif\if@showname
 \@shownametrue
@@ -65,6 +65,10 @@
 	}
 \fi
 
+\RequirePackage[OT1,T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage{microtype}
+
 \newlength{\outsideparskip}
 \setlength{\outsideparskip}{\parskip}
 
@@ -117,11 +121,11 @@
 		([yshift=-1mm, xshift=-0.5mm]title.south west);%
 }
 \newcommand{\PStcbpath@doubleout}{%
-	\path[draw, line cap=round, thick, rounded corners=1mm]%
+	\path[draw, line cap=round, semithick, rounded corners=1mm]%
 		(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		([yshift=-1mm]title.south east);%
-	\path[draw, line cap=round, thick]%
+	\path[draw, line cap=round, semithick]%
 		([yshift=-1mm] title.south east)%
 		arc (-90:90:.5mm) --%
 		([xshift=-1.5mm]title.south west);%
@@ -249,7 +253,7 @@
 \newcommand{\ProbsNotInColumns}{\ProbsInColumns{0}}
 
 \enitkv@key{}{points}{\@showpointstrue\def\v{#1}}
-\enitkv@key{}{space}[1]{\set@solution@space{#1}\@usedefaultspacefalse}
+\enitkv@key{}{space}[1]{\set@solutionspace{#1}\@usedefaultspacefalse}
 \SetEnumitemKey{nospace}{space=0pt}
 \enitkv@key{}{columns}[3]{\ProbsInColumns{#1}}
 
@@ -261,7 +265,8 @@
 \newcommand{\pointsymbol}{$^\text{p\!\underline{\,t}}$}
 
 \newsavebox{\solutionbox}
-\newcommand{\solutiontitle}{\textbf{SOLUTION:\ }}
+\newcommand{\SolutionPrefixFont}{\bfseries}
+\newcommand{\SolutionPrefix}{SOLUTION:\ }
 
 \newcommand{\allow@solution}{%
 	\def\solution{\@ifstar\solution@star\solution@nostar}%
@@ -275,17 +280,17 @@
 		\@insolutiontrue%
 		\begingroup\lrbox{\solutionbox}\minipage[t]{\linewidth}%
 			\setlength{\parskip}{\outsideparskip}%
-			\solutiontitle%
+			{\SolutionPrefixFont\SolutionPrefix}%
 			\ignorespaces%
 	}%
 }
 
-\newcommand{\set@solution@space}[1]{%
+\newcommand{\set@solutionspace}[1]{%
 	\pgfmathparse{#1}%
 	\ifpgfmathunitsdeclared%
-		\def\solution@space{#1}%
+		\def\@solutionspace{#1}%
 	\else%
-		\def\solution@space{\stretch{#1}}%
+		\def\@solutionspace{\stretch{#1}}%
 	\fi%
 }
 
@@ -300,7 +305,7 @@
 	\fi%
 	\@probsincolumnsfalse%
 	\@usenaturalheightfalse%
-	\def\solution@space{0pt}%
+	\def\@solutionspace{0pt}%
 	\@showpointsfalse%
 	\@usedefaultspacetrue%
 	\allow@solution%
@@ -325,7 +330,7 @@
 				% I used to have \vspace*{2\lineskip} before the \par, but now I'm not sure why that was needed...
 				\usebox{\solutionbox}{}\par% show solution, natural space
 				\@usedefaultspacefalse%
-				\def\solution@space{0pt}%
+				\def\@solutionspace{0pt}%
 			\else%
 				\raisebox{0pt}[0pt][0pt]{\usebox{\solutionbox}}\par\vspace*{\dimexpr -\baselineskip-\parskip}% show solutions, fixed space
 			\fi%
@@ -334,23 +339,23 @@
 		\par%
 	\fi%
 	\if@usedefaultspace%
-		\def\solution@space{0pt}%
+		\def\@solutionspace{0pt}%
 		\if@firstprob%
-			\def\solution@space{\stretch{1}}%
+			\def\@solutionspace{\stretch{1}}%
 		\fi%
 	\fi%
 	\old@endprob%
 	\if@cancelspace%
-		\def\solution@space{0pt}%
+		\def\@solutionspace{0pt}%
 	\fi%
 	\if@inacolumn%
-		\global\let\tmp@solution@space\solution@space%
+		\global\let\tmp@solutionspace\@solutionspace%
 		\endminipage%
-		\vspace*{\tmp@solution@space}%
-		\global\let\tmp@solution@space\undefined%	
+		\vspace*{\tmp@solutionspace}%
+		\global\let\tmp@solutionspace\undefined%	
 		\hfill%
 	\else%
-		\vspace*{\solution@space}%
+		\vspace*{\@solutionspace}%
 	\fi%
 }
 \AfterEndEnvironment{prob}{\global\@firstprobfalse\ignorespaces}
@@ -365,61 +370,71 @@
 
 
 
-
-
+%%%%%%%%%% Headers and Footers %%%%%%%%%%
 
 \fancypagestyle{firstpage}{%
 	\fancyhead{}
 	\renewcommand{\headrule}{}
 }
 
-\newcommand{\squircle}{\settoheight{\dimen255}{I}\resizebox{\dimen255}{!}{\tikz{\draw[join=round,very thick] (0, 0) rectangle (.4, .4) (.2,.2) circle (.1);}}}
-\renewcommand{\qedsymbol}{\squircle}
-
 \pagestyle{fancy}
 \fancyhf{}% clear default for head and foot
 \fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
-\fancyfoot[L]{{\spoilerfont\spoilertext}}
-\fancyhead[L]{\make@sheet@number\@shorttitle}
+\fancyfoot[L]{{\SpoilerFont\@spoilertext}}
+\fancyhead[L]{\FancyShortTitle}
 \if@showname
-	\fancyhead[RO]{\nametext~\blank[\answerkeyname]{\name@line@width}}
+	\fancyhead[RO]{\NameText~\blank[\AnswerKeyName]{\NameLineWidth}}
 \fi
 %\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5ex}{\decofourleft}~\raisebox{-0.7975 ex}{\squircle}~\raisebox{-.5ex}{\decofourright}\quad\hrulefill}
 \renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5\height}{\squircle}\quad\hrulefill}
 
-\def\@title{}
-\def\@shorttitle{}
+\def\Title{}
+\def\ShortTitle{}
 \renewcommand{\title}[2][\@nil]{
-	\def\@shorttitle{#1}
-	\ifx\@shorttitle\@nnil
-		\def\@shorttitle{#2}
+	\def\ShortTitle{#1}
+	\ifx\ShortTitle\@nnil
+		\def\ShortTitle{#2}
 	\fi
-	\def\@title{#2}
+	\def\Title{#2}
 }
 
-\def\@block{}
-\newcommand{\block}[1]{\def\@block{#1}}
+\def\Block{}
+\newcommand{\block}[1]{\def\Block{#1}}
 
-\def\@schoolyear{YYYY-YY}
-\newcommand{\schoolyear}[1]{\def\@schoolyear{#1}}
+\def\SchoolYear{YYYY--YY}
+\newcommand{\schoolyear}[1]{\def\SchoolYear{#1}}
 
-\def\@course{}
-\newcommand{\course}[1]{\def\@course{#1}}
+\def\CourseName{}
+\newcommand{\course}[1]{\def\CourseName{#1}}
 
-\def\@instructor{}
-\newcommand{\instructor}[1]{\def\@instructor{#1}}
+\def\InstructorName{}
+\def\InstructorFullName{}
+\newcommand{\instructor}[2][\@nil]{
+	\def\InstructorFullName{#1}
+	\ifx\InstructorFullName\@nnil
+		\def\InstructorFullName{#2}
+	\fi
+	\def\InstructorName{#2}
+}
 
-\def\@unit{}
-\newcommand{\unit}[1]{\def\@unit{#1}}
+\def\UnitName{}
+\newcommand{\unit}[1]{\def\UnitName{#1}}
 
-\def\@unitnumber{}
-\newcommand{\unitnumber}[1]{\def\@unitnumber{#1}}
+\def\UnitNumber{}
+\newcommand{\unitnumber}[1]{\def\UnitNumber{#1}}
 
-\def\@sheetnumber{}
-\newcommand{\sheetnumber}[1]{\def\@sheetnumber{#1}}
+\def\WeekNumber{}
+\newcommand{\weeknumber}[1]{\def\WeekNumber{#1}}
+
+\def\SheetNumber{}
+\newcommand{\sheetnumber}[1]{\def\SheetNumber{#1}}
+
 
 \let\author\undefined
 \let\date\undefined % TODO: you should be able to specify the date!
+
+\def\StudentName{}
+\newcommand{\studentname}[1]{\def\StudentName{#1}}
 
 \newcommand{\fancysetlength}[2]{%
 	\pgfmathparse{#2}%
@@ -454,112 +469,139 @@
 
 \let\oldS\S
 \def\S{{\fontfamily{cmr}\selectfont\oldS}} % I really don't like the bold section symbol that Latin Modern uses with T1 encoding... although their normal weight version is pretty decent.  The Computer Modern with T1 is my favorite combo, I think.
-
-\newcommand{\make@sheet@number}{%
-	\ifx\@sheetnumber\empty\else%
-		{\S}%
-		\ifx\@unitnumber\empty\else%
-			\@unitnumber.%
+\newcommand{\SheetNumberPrefix}{\S}
+\newcommand{\SheetNumberPostfix}{\ }
+\newcommand{\FancySheetNumber}{%
+	\ifx\SheetNumber\empty\else%
+		\SheetNumberPrefix%
+		\ifx\UnitNumber\empty\else%
+			\UnitNumber.%
 		\fi%
-		\@sheetnumber\ %
+		\SheetNumber%
+		\SheetNumberPostfix%
 	\fi%
 }
+\newcommand{\FancyTitle}{\FancySheetNumber\Title}
+\newcommand{\FancyShortTitle}{\FancySheetNumber\ShortTitle}
 
-\newcommand{\nametext}{Name:}
-\newlength{\name@line@width}
-\setlength{\name@line@width}{1.75in}
+\newcommand{\NameText}{Name:}
+\newlength{\NameLineWidth}
+\setlength{\NameLineWidth}{1.75in}
 
+\newcommand{\TitleFont}{\large\bfseries\boldmath}
+\newcommand{\CourseNameFont}{\large}
+\newcommand{\SchoolFont}{\scshape}
 \newcommand{\headerZG}{%
 	\newlength{\name@width}%
 	\if@showname%
-		\settowidth{\name@width}{\nametext~}%
-		\addtolength{\name@width}{\dimexpr \name@line@width+1em}%
+		\settowidth{\name@width}{\NameText~}%
+		\addtolength{\name@width}{\dimexpr \NameLineWidth+1em}%
 	\else%
 		\setlength{\name@width}{0pt}%
 	\fi%
 	\begin{minipage}[t]{\dimexpr \linewidth-\name@width}%
-		{\large\bfseries\boldmath%
-		\strut\make@sheet@number\@title\\}%
-		{\large%\Fontauri%
-			\@course%
-			\ifx\@unit\empty\else%
-				: \@unit%
+		{\TitleFont%
+		\strut\FancyTitle\\}%
+		{\CourseNameFont%
+			\CourseName%
+			\ifx\UnitName\empty\else%
+				: \UnitName%
 			\fi%
 		}%
 	\end{minipage}%
 	\begin{minipage}[t]{\name@width}%
-		\raggedleft
-		\nametext~\begin{minipage}[t]{\name@line@width}
-			\blank[\textbf{\answerkeyname}]{\name@line@width}\\%
-			\centerline{\@schoolyear \quad \squircle \quad Block \@block}%
-		\end{minipage}
-		%Date:~\blank{\name@line@width}%
-	\end{minipage}\par%
-	\bigskip%
-	\vspace{-\parskip}%
+		\raggedleft%
+		\NameText~\begin{minipage}[t]{\NameLineWidth}%
+			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineWidth}\\%
+			\centerline{\SchoolYear \quad \squircle \quad Block \Block}%
+		\end{minipage}%
+		%Date:~\blank{\NameLineWidth}%
+	\end{minipage}%
 }
 \newcommand{\headerZGpic}[1]{%
 	\newsavebox{\headerZG@pic}%
 	\savebox{\headerZG@pic}{\raisebox{\depth}{#1}}%
 	\newlength{\name@width}%
 	\if@showname%
-		\settowidth{\name@width}{\nametext~}%
-		\addtolength{\name@width}{\dimexpr \name@line@width+1em}%
+		\settowidth{\name@width}{\NameText~}%
+		\addtolength{\name@width}{\dimexpr \NameLineWidth+.25em}%
 	\else%
 		\setlength{\name@width}{0pt}%
 	\fi%
 	\noindent%
 	\usebox\headerZG@pic%
 	\hfill%
-	\begin{minipage}[b][\ht\headerZG@pic][c]{\dimexpr \linewidth-\wd\headerZG@pic-1em-\name@width}%
+	\begin{minipage}[b][\ht\headerZG@pic][c]{\dimexpr \linewidth-\wd\headerZG@pic-.25em-\name@width}%
 		\centering%
-		{\large\bfseries\boldmath%
-		\strut\make@sheet@number\@title\\}%
-		{\large%\Fontauri%
-			\@course%
-			\ifx\@unit\empty\else%
-				: \@unit%
+		{\TitleFont%
+		\strut\FancyTitle\\}%
+		{\CourseNameFont%
+			\CourseName%
+			\ifx\UnitName\empty\else%
+				: \UnitName%
 			\fi%
 		}%
 	\end{minipage}%
 	\if@showname%
 		\begin{minipage}[b][\ht\headerZG@pic][t]{\name@width}%
 			\raggedleft%
-			\nametext~\begin{minipage}[t]{\name@line@width}%
-			\blank[\textbf{\answerkeyname}]{\name@line@width}\\[-4pt]%
-			\centering \@schoolyear \quad \squircle \quad Block \@block%
+			\NameText~\begin{minipage}[t]{\NameLineWidth}%
+			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineWidth}\\[-4pt]%
+			\centering \SchoolYear \quad \squircle \quad Block \Block%
 			\end{minipage}%
 		\end{minipage}%
 	\fi%
+}
+
+\newcommand{\boxedheader}[4]{%
+	\fbox{%
+		\setlength{\dimen255}{\dimexpr \textwidth-2\fboxrule-2\fboxsep}%
+		\makebox[0pt][l]{\parbox[c][1in][t]{\dimen255}{%
+			\raggedright #1}}%
+		\makebox[0pt][l]{\parbox[c][1in][t]{\dimen255}{%
+			\raggedleft #2}}%
+		\makebox[0pt][l]{\parbox[c][1in][b]{\dimen255}{%
+			\raggedright #3}}%
+		\makebox[0pt][l]{\parbox[c][1in][b]{\dimen255}{%
+			\raggedleft #4}}%
+		\parbox[c][1in][c]{\dimen255}{%
+			\centering\TitleFont\FancyTitle\strut}%
+	}%
+}
+
+\newcommand{\FirstPageHeader}{\headerZG}
+
+\renewcommand{\maketitle}{%
+	\thispagestyle{firstpage}%
+	\noindent%
+	\FirstPageHeader%
+	\let\maketitle\undefined%
 	\par%
 	\bigskip%
 	\vspace{-\parskip}%
-}
-\newcommand{\firstpageheader}{\headerZG}
-
-\RequirePackage{afterpage}
-\renewcommand{\maketitle}{%
-	%\newgeometry{margin=.75in, footskip=\baselineskip}% :/ I don't like that this makes it harder to change the geometry from the handout itself...
-	%\afterpage{\aftergroup\restoregeometry}%
-	\thispagestyle{firstpage}%
-	%\null%
-	%\vspace{\dimexpr -\baselineskip-\headheight-\headsep-\parskip}%
-	\noindent%
-	\firstpageheader%
-	\let\maketitle\undefined%
 	% FIX ME: \noindent for first line of text after heading?
 }
 \if@showtitle
 	\AtBeginDocument{\maketitle}
 \fi
 
-\newcommand{\spoilerfont}{\itshape}
-\newcommand{\spoilertext}{}
-\newcommand{\spoilerbreak}[1][Spoilers ahead! Proceed with caution\ldots]{\renewcommand{\spoilertext}{#1}\newpage\renewcommand{\spoilertext}{}}
 
-\RequirePackage[OT1,T1]{fontenc}
-\RequirePackage{lmodern}
-\RequirePackage{microtype}
+
+
+
+
+
+
+
+%%%%%%%%%% Assorted %%%%%%%%%%
+
+\newcommand{\squircle}{\settoheight{\dimen255}{I}\resizebox{\dimen255}{!}{\tikz{\draw[join=round,very thick] (0, 0) rectangle (.4, .4) (.2,.2) circle (.1);}}}
+\renewcommand{\qedsymbol}{\squircle}
+
+\newcommand{\SpoilerFont}{\itshape}
+\newcommand{\@spoilertext}{}
+\newcommand{\DefaultSpoilerText}{Spoilers ahead! Proceed with caution\ldots}
+\newcommand{\spoilerbreak}[1][\DefaultSpoilerText]{\renewcommand{\@spoilertext}{#1}\newpage\renewcommand{\@spoilertext}{}}
 
 \newcommand{\bonus}{{\Large{$\star$}}}
 
