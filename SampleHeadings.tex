@@ -1,0 +1,94 @@
+\documentclass[12pt,twoside,parskip,notitle]{handout}
+
+\course{Algebra 1A}
+\instructor{Zach}
+\schoolyear{2019--20}
+\block{2}
+\unit{Quadratics}
+\unitnumber{3}
+\weeknumber{2}
+\sheetnumber{7}
+\title{A Sample Handout}
+
+\begin{document}
+\begingroup
+\maketitle
+\verb|\renewcommand{\FirstPageHeader}{\headerZG}| (default)
+\endgroup
+
+\vfill
+On this and subsequent pages, you'll find examples of headings that can go at the top of your handouts, along with the code that was used to generate them.
+
+They are all drawing their content from the commands:
+\begingroup
+\singlespacing
+\begin{verbatim}
+\course{Algebra 1A}
+\instructor{Zach}
+\schoolyear{2019--20}
+\block{2}
+\unit{Quadratics}
+\unitnumber{3}
+\weeknumber{2}
+\sheetnumber{7}
+\title{A Sample Handout}
+\end{verbatim}
+\endgroup
+\newpage
+
+\begingroup
+\renewcommand{\FirstPageHeader}{\headerZGpic{\resizebox{1in}{!}{\squircle[cyan]}}}
+\maketitle
+\verb|\renewcommand{\FirstPageHeader}{\headerZGpic{\resizebox{1in}{!}{\squircle[cyan]}}}|
+\endgroup
+
+\newpage
+
+\begingroup
+\renewcommand{\CourseNameFont}{}
+\renewcommand{\SheetNumberPrefix}{Section~}
+\renewcommand{\SheetNumberPostfix}{:\ }
+\renewcommand{\TitleFont}{\LARGE\itshape}
+\setlength{\NameLineWidth}{1.5in}
+\renewcommand{\FirstPageHeader}{\tcboxedheader{\CourseNameFont\CourseName}{}{Unit~\UnitNumber:\ \UnitName}{\SchoolNameFont\SchoolName}{\SchoolYear, Block~\Block}{\NameLine}}
+\maketitle
+\singlespacing
+\begin{verbatim}
+\renewcommand{\CourseNameFont}{}
+\renewcommand{\SheetNumberPrefix}{Section~}
+\renewcommand{\SheetNumberPostfix}{:\ }
+\renewcommand{\TitleFont}{\LARGE\itshape}
+\setlength{\NameLineWidth}{1.5in}
+\renewcommand{\FirstPageHeader}{\tcboxedheader{\CourseNameFont\CourseName}{}
+  {Unit~\UnitNumber:\ \UnitName}{\SchoolNameFont\SchoolName}{\SchoolYear, 
+  Block~\Block}{\NameLine}}
+\end{verbatim}
+\endgroup
+
+\newpage
+
+\begingroup
+\renewcommand{\TitleFont}{\Huge}
+\renewcommand{\SheetNumberPrefix}{}
+\renewcommand{\FirstPageHeader}{%
+	\begin{center}%
+		{\TitleFont\FancyTitle}\\%
+		{\CourseNameFont\CourseName}%
+		\quad\squircle\quad%
+		\SchoolYear%
+	\end{center}}
+\maketitle
+\begin{verbatim}
+\renewcommand{\TitleFont}{\Huge}
+\renewcommand{\SheetNumberPrefix}{}
+\renewcommand{\FirstPageHeader}{%
+    \begin{center}%
+        {\TitleFont\FancyTitle}\\%
+        {\CourseNameFont\CourseName}%
+        \quad\squircle\quad%
+        \SchoolYear%
+    \end{center}}
+\end{verbatim}
+\endgroup
+
+\end{document}
