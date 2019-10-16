@@ -88,11 +88,11 @@
 %%%%%%%%%% Theorems %%%%%%%%%%
 
 \newcommand{\PStcbpath@hook}{%
-	\path[draw, line cap=round, semithick, rounded corners=1mm]%
+	\path[draw, line cap=round, rounded corners=1mm]%
 		([xshift=1.5in] frame.south west) --%(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		(title.south east);%
-	\path[draw, line cap=round, semithick]%
+	\path[draw, line cap=round]%
 		(title.south east)%
 			arc (-90:-40:.85mm)%
 			arc (140:-130:.6mm);%
@@ -101,31 +101,31 @@
 		%	arc (-50:220:.6mm);}
 }
 \newcommand{\PStcbpath@toploop}{%
-	\path[draw, line cap=round, semithick, rounded corners=1mm]%
+	\path[draw, line cap=round, rounded corners=1mm]%
 		(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		(title.south east);%
-	\path[draw, line cap=round, semithick]%
+	\path[draw, line cap=round]%
 		(title.south east)%
 			arc (-90:-20:1.1mm)%
 			arc (160:-120:.55mm);%
 }
 \newcommand{\PStcbpath@doublein}{%
-	\path[draw, line cap=round, semithick, rounded corners=1mm]%
+	\path[draw, line cap=round, rounded corners=1mm]%
 		(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		([xshift = 1mm]title.south east);%
-	\path[draw, line cap=round, semithick]%
+	\path[draw, line cap=round]%
 		([xshift = 1mm]title.south east)%
 		arc (90:-90:.5mm) --%
 		([yshift=-1mm, xshift=-0.5mm]title.south west);%
 }
 \newcommand{\PStcbpath@doubleout}{%
-	\path[draw, line cap=round, semithick, rounded corners=1mm]%
+	\path[draw, line cap=round, rounded corners=1mm]%
 		(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		([yshift=-1mm]title.south east);%
-	\path[draw, line cap=round, semithick]%
+	\path[draw, line cap=roundf]%
 		([yshift=-1mm] title.south east)%
 		arc (-90:90:.5mm) --%
 		([xshift=-1.5mm]title.south west);%
