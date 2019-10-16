@@ -2,10 +2,10 @@
 \ProvidesClass{handout}[2019/10/15 A document class for Proof School handouts]
 \newcommand{\AnswerKeyName}{Answer Key}
 
-\newif\if@showname
-\@shownametrue
-\DeclareOption{name}{\@shownametrue}
-\DeclareOption{noname}{\@shownamefalse}
+\newif\ifshowname
+\shownametrue
+\DeclareOption{name}{\shownametrue}
+\DeclareOption{noname}{\shownamefalse}
 
 \newif\ifshowsolutions
 \showsolutionsfalse
@@ -383,8 +383,8 @@
 \fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
 \fancyfoot[L]{{\SpoilerFont\@spoilertext}}
 \fancyhead[L]{\FancyShortTitle}
-\if@showname
-	\fancyhead[RO]{\NameText~\blank[\AnswerKeyName]{\NameLineWidth}}
+\ifshowname
+	\fancyhead[RO]{\NameLine}
 \fi
 %\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5ex}{\decofourleft}~\raisebox{-0.7975 ex}{\squircle}~\raisebox{-.5ex}{\decofourright}\quad\hrulefill}
 \renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5\height}{\squircle}\quad\hrulefill}
@@ -488,26 +488,27 @@
 		\SheetNumberPostfix%
 	\fi%
 }
-\newcommand{\FancyTitle}{\FancySheetNumber\Title}
-\newcommand{\FancyShortTitle}{\FancySheetNumber\ShortTitle}
+\newcommand{\FancyTitle}{\FancySheetNumber\Title\mbox{}}
+\newcommand{\FancyShortTitle}{\FancySheetNumber\ShortTitle\mbox{}}
 
-\newcommand{\NameLine}{\NameText~\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineWidth}}
+\newcommand{\NameLine}{\ifshowname\NameLineText\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineLength}\fi}
 
-\newcommand{\NameText}{Name:}
-\newlength{\NameLineWidth}
-\setlength{\NameLineWidth}{1.75in}
+\newcommand{\NameLineText}{Name:~}
+\newlength{\NameLineLength}
+\setlength{\NameLineLength}{1.75in}
 
 \newlength{\@namewidth}
+% This is soon to be deprecated
 \newcommand{\headerZG}{%
-	\if@showname%
-		\settowidth{\@namewidth}{\NameText~}%
-		\addtolength{\@namewidth}{\dimexpr \NameLineWidth+1em}%
+	\ifshowname%
+		\settowidth{\@namewidth}{\NameLineText}%
+		\addtolength{\@namewidth}{\dimexpr \NameLineLength+1em}%
 	\else%
 		\setlength{\@namewidth}{0pt}%
 	\fi%
 	\begin{minipage}[t]{\dimexpr \linewidth-\@namewidth}%
 		{\TitleFont%
-		\strut\FancyTitle\\}%
+		\FancyTitle\\}%
 		{\CourseNameFont%
 			\CourseName%
 			\ifx\UnitName\empty\else%
@@ -517,19 +518,20 @@
 	\end{minipage}%
 	\begin{minipage}[t]{\@namewidth}%
 		\raggedleft%
-		\NameText~\begin{minipage}[t]{\NameLineWidth}%
-			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineWidth}\\%
+		\NameLineText\begin{minipage}[t]{\NameLineLength}%
+			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineLength}\\%
 			\centerline{\SchoolYear \quad \squircle \quad Block \Block}%
 		\end{minipage}%
-		%Date:~\blank{\NameLineWidth}%
+		%Date:~\blank{\NameLineLength}%
 	\end{minipage}%
 }
+% This is soon to be deprecated
 \newcommand{\headerZGpic}[1]{%
 	\newsavebox{\headerZG@pic}%
 	\savebox{\headerZG@pic}{\raisebox{\depth}{#1}}%
-	\if@showname%
-		\settowidth{\@namewidth}{\NameText~}%
-		\addtolength{\@namewidth}{\dimexpr \NameLineWidth+.25em}%
+	\ifshowname%
+		\settowidth{\@namewidth}{\NameLineText}%
+		\addtolength{\@namewidth}{\dimexpr \NameLineLength+.25em}%
 	\else%
 		\setlength{\@namewidth}{0pt}%
 	\fi%
@@ -547,36 +549,36 @@
 			\fi%
 		}%
 	\end{minipage}%
-	\if@showname%
+	\ifshowname%
 		\begin{minipage}[b][\ht\headerZG@pic][t]{\@namewidth}%
 			\raggedleft%
-			\NameText~\begin{minipage}[t]{\NameLineWidth}%
-			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineWidth}\\[-4pt]%
+			\NameLineText\begin{minipage}[t]{\NameLineLength}%
+			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineLength}\\[-4pt]%
 			\centering \SchoolYear \quad \squircle \quad Block \Block%
 			\end{minipage}%
 		\end{minipage}%
 	\fi%
 }
 
-\newlength{\BoxedHeaderHeight}
-\setlength{\BoxedHeaderHeight}{1in}
+\newlength{\HeaderHeight}
+\setlength{\HeaderHeight}{1in}
 \newcommand{\boxedheader}[6]{%
 	\fbox{%
 		\setlength{\dimen255}{\dimexpr \textwidth-2\fboxrule-2\fboxsep}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\dimen255}{%
-			\raggedright #1}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\dimen255}{%
-			\centering #2}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\dimen255}{%
-			\raggedleft #3}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\dimen255}{%
-			\raggedright #4}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\dimen255}{%
-			\centering #5}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\dimen255}{%
-			\raggedleft #6}}%
-		\parbox[c][\BoxedHeaderHeight][c]{\dimen255}{%
-			\centering \TitleFont\strut\FancyTitle\strut}%
+		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\dimen255}{%
+			\raggedright #1\vfill}}%
+		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\dimen255}{%
+			\centering #2\vfill}}%
+		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\dimen255}{%
+			\raggedleft #3\vfill}}%
+		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\dimen255}{%
+			\raggedright\vspace*{\fill}#4}}}%
+		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\dimen255}{%
+			\centering\vspace*{\fill}#5}}}%
+		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\dimen255}{%
+			\raggedleft\vspace*{\fill}#6}}}%
+		\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\dimen255}{%
+			\centering\vspace*{\fill}\TitleFont\strut\FancyTitle\strut\vspace*{\fill}}}%
 	}%
 }
 
@@ -587,20 +589,20 @@
 		left=0pt, right=0pt, top=0pt, bottom=0pt,
 		% rounded corners=1mm if you want to match the theorems?
 		frame code={\draw[rounded corners] ([shift={(-1.5mm,-1.5mm)}]frame.south west) rectangle ([shift={(1.5mm,1.5mm)}]frame.north east);}]
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\textwidth}{%
-			\raggedright #1}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\textwidth}{%
-			\centering #2}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\textwidth}{%
-			\raggedleft #3}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\textwidth}{%
-			\raggedright #4}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\textwidth}{%
-			\centering #5}}%
-		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\textwidth}{%
-			\raggedleft #6}}%
-		\parbox[c][1in][c]{\textwidth}{%
-			\centering\TitleFont\strut\FancyTitle\strut}%
+		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\textwidth}{%
+			\raggedright #1\vfill}}%
+		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\textwidth}{%
+			\centering #2\vfill}}%
+		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\textwidth}{%
+			\raggedleft #3\vfill}}%
+		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\textwidth}{%
+			\raggedright\vspace*{\fill}#4}}}%
+		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\textwidth}{%
+			\centering\vspace*{\fill}#5}}}%
+		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\textwidth}{%
+			\raggedleft\vspace*{\fill}#6}}}%
+		\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\textwidth}{%
+			\centering\vspace*{\fill}\TitleFont\strut\FancyTitle\strut\vspace*{\fill}}}%
 	\end{tcolorbox}
 }
 

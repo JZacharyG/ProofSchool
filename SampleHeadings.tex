@@ -37,9 +37,13 @@ They are all drawing their content from the commands:
 \newpage
 
 \begingroup
-\renewcommand{\FirstPageHeader}{\headerZGpic{\resizebox{1in}{!}{\squircle[cyan]}}}
+\renewcommand{\FirstPageHeader}{\headerZGpic{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}}
 \maketitle
-\verb|\renewcommand{\FirstPageHeader}{\headerZGpic{\resizebox{1in}{!}{\squircle[cyan]}}}|
+\singlespacing
+\begin{verbatim}
+\renewcommand{\FirstPageHeader}{%
+    \headerZGpic{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}}
+\end{verbatim}
 \endgroup
 
 \newpage
@@ -49,7 +53,7 @@ They are all drawing their content from the commands:
 \renewcommand{\SheetNumberPrefix}{Section~}
 \renewcommand{\SheetNumberPostfix}{:\ }
 \renewcommand{\TitleFont}{\LARGE\itshape}
-\setlength{\NameLineWidth}{1.5in}
+\setlength{\NameLineLength}{1.4in}
 \renewcommand{\FirstPageHeader}{\tcboxedheader{\CourseNameFont\CourseName}{}{Unit~\UnitNumber:\ \UnitName}{\SchoolNameFont\SchoolName}{\SchoolYear, Block~\Block}{\NameLine}}
 \maketitle
 \singlespacing
@@ -58,7 +62,7 @@ They are all drawing their content from the commands:
 \renewcommand{\SheetNumberPrefix}{Section~}
 \renewcommand{\SheetNumberPostfix}{:\ }
 \renewcommand{\TitleFont}{\LARGE\itshape}
-\setlength{\NameLineWidth}{1.5in}
+\setlength{\NameLineLength}{1.4in}
 \renewcommand{\FirstPageHeader}{\tcboxedheader{\CourseNameFont\CourseName}{}
   {Unit~\UnitNumber:\ \UnitName}{\SchoolNameFont\SchoolName}{\SchoolYear, 
   Block~\Block}{\NameLine}}

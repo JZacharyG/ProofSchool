@@ -144,8 +144,8 @@ The problem environment recognizes the following options (in square brackets aft
   - You may `\renewcommand` any of the following to customize the look of your heading:
     - `\SheetNumberPrefix`: text prepended to the `\SheetNumber`, if it exists. By default, this is `\S`, but maybe you'd like `Handout~` or similar.
     - `\SheetNumberPostfix`: test that is appended to the `\SheetNumber`, it if exists, to separate it from the `\Title`.  By default, this is just a space, but maybe you'd want a colon or some such
-    - `\NameText`: the text prepended to the line where students will write their name.  By default, `Name:`.
-    - `\NameLineWidth`: is the length of the line where they'd write their name.  If there is a date line, it is likely of the same length.  This is a length, so you should set it with `\setlength`, not `\renewcommand`.
+    - `\NameLineText`: the text prepended to the line where students will write their name.  By default, `Name:~`.
+    - `\NameLineLength`: is the length of the line where they'd write their name.  If there is a date line, it is likely of the same length.  This is a length, so you should set it with `\setlength`, not `\renewcommand`.
     - `\TitleFont`: the font used for the `\Title` of the handout.  By default, `\large\bfseries\boldmath`
     - `\SchoolNameFont`: the font used for the school name.  By default, `\scshape`.
     - `\CourseNameFont`: the font used for the `\CourseName`.  By default, `\large`.
