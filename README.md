@@ -138,8 +138,15 @@ The problem environment recognizes the following options (in square brackets aft
 
     - `\headerZG` (default)
     - `\headerZGpic`, which takes one mandatory argument.  This argument should produce an image (perhaps an `\includegraphics`, code for a Ti*k*Z picture, et cetera).
+      - These two commands are probably going to be replaced and renamed soon, so be careful!
     - `\boxedheader`, which takes 6 mandatory arguments which populate, respectively, upper left corner, upper center, upper right corner, lower left corner, lower center, and lower right corner.  The center is always the title of the handout.
     - `\tcboxedheader`, which has the same interface as `\boxedheader` but a slightly more fun appearance (rounded corners, box extends slightly into the margin).
+    - `\twopartheaderpic`, which puts a picture on the left, then divides the remainder of the space into two sections.  The rightmost is sized to its natural size, and the center one takes up the remaining space.  All of them have the height of the image in the leftmost part.  It takes 5 mandatory arguments:
+      1. the image
+      2. the vertical alignment of the middle section (`t`, `b`, or `c`)
+      3. the content of the middle section
+      4. the vertical alignment of the rightmost section
+      5. the content of the rightmost section
 
   - You may `\renewcommand` any of the following to customize the look of your heading:
     - `\SheetNumberPrefix`: text prepended to the `\SheetNumber`, if it exists. By default, this is `\S`, but maybe you'd like `Handout~` or similar.
@@ -165,6 +172,18 @@ The problem environment recognizes the following options (in square brackets aft
     - `\FancyTitle`, which contains the title, prepended with the unit number and sheet number (if present)
     - `NameLine`
     
+  - For example, Mia's boxed headings can be achieved by placing the following in the preamble (or, preferably, in a shared `CourseInfo.tex` file).
+
+    ```latex
+    \renewcommand{\CourseNameFont}{}
+    \renewcommand{\SheetNumberPrefix}{Handout~}
+    \renewcommand{\SheetNumberPostfix}{:\ }
+    \renewcommand{\SchoolNameFont}{}
+    \renewcommand{\TitleFont}{\Large}
+    \renewcommand{\FirstPageHeader}{\boxedheader{\CourseNameFont\CourseName}{}{Teacher: \InstructorName}{Week \WeekNumber}{}{{\SchoolNameFont\SchoolName} \SchoolYear}}
+    ```
+
+    Or, if you like shortcuts, this is all bundled into the macro `\HeaderStyleMS`.
 
 - If you have a header that you like, let me know and we can make sure that it is implemented and easily choose-able!
 

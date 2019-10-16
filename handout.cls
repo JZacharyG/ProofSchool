@@ -560,6 +560,21 @@
 	\fi%
 }
 
+\RequirePackage{pbox}
+\newcommand{\protrude}[4][0pt]{\raisebox{\depth-#1}[\totalheight-#2-#1][0pt]{\makebox[\width-#3][r]{#4}}} % useful for making the picture extend into the margins
+\newsavebox{\@headerpic}%
+\newcommand{\twopartheaderpic}[5]{%
+	\savebox{\@headerpic}{#1}%
+	\setlength{\fboxsep}{0pt}%
+	\settominwidth{\dimen255}{#5}%
+	\noindent%
+	\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic]{\wd\@headerpic}{\usebox\@headerpic}}%
+	\hfill%
+	\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic][#2]{\dimexpr \linewidth-\dimen255-\wd\@headerpic-.5em}{#3}}%
+	\hfill%
+	\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic][#4]{\dimen255}{\raggedleft{#5}}}%
+}
+
 \newlength{\HeaderHeight}
 \setlength{\HeaderHeight}{1in}
 \newcommand{\boxedheader}[6]{%
@@ -604,6 +619,15 @@
 		\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\textwidth}{%
 			\centering\vspace*{\fill}\TitleFont\strut\FancyTitle\strut\vspace*{\fill}}}%
 	\end{tcolorbox}
+}
+
+\newcommand{\HeaderStyleMS}{
+	\renewcommand{\CourseNameFont}{}
+	\renewcommand{\SheetNumberPrefix}{Handout~}
+	\renewcommand{\SheetNumberPostfix}{:\ }
+	\renewcommand{\SchoolNameFont}{}
+	\renewcommand{\TitleFont}{\Large}
+	\renewcommand{\FirstPageHeader}{\boxedheader{\CourseNameFont\CourseName}{}{Teacher: \InstructorName}{Week \WeekNumber}{}{{\SchoolNameFont\SchoolName} \SchoolYear}}
 }
 
 \newcommand{\FirstPageHeader}{\headerZG}
