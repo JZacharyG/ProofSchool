@@ -2,3 +2,9 @@
 .DS_Store
 *.png
 *.pdf
+*.log
+*.pdf
+*.gz
+*.aux
+*.fdb_latexmk
+*.fls
