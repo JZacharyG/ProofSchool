@@ -302,6 +302,7 @@
 		\@inacolumntrue%
 		\pgfmathparse{(\linewidth-((\@numcolumns)-1)*\probcolsep)/(\@numcolumns)}%
 		\minipage[t]{\pgfmathresult pt}%
+		\setlength{\parskip}{\outsideparskip}%
 	\fi%
 	\@probsincolumnsfalse%
 	\@usenaturalheightfalse%
