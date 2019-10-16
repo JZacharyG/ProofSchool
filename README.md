@@ -126,28 +126,35 @@ The problem environment recognizes the following options (in square brackets aft
   - `\sheetnumber`
   - `\title`
   - `\studentname`
+  - `\school`, which defaults to `Proof School`, and so will generally not be needed.  But hey, maybe you teach elsewhere as well?
   
   I would suggest making a file named `CourseInfo.tex`, and then `\input`ing it in the preamble of every handout.  It would contain the first four (for math classes) or three (for morning classes) of these commands, which would be common to all handouts for a given class.  You can also include any custom macros or other definitions that you want for this class, and all of your handouts will automatically see them!
   
 - A heading is automatically placed at the top of the first page (unless the `notitle` option is given to the document class).  There are a few that are pre-defined, and you can fairly easily make your own!
 
   - You can use `\renewcommand{\FirstPageHeader}{[...]}` to use a different header.  This is *also* the sort of thing that I'd recommend putting in `CourseInfo.tex`.
+
   - So far, the predefined headers are
-  - `\headerZG` (default)
+
+    - `\headerZG` (default)
     - `\headerZGpic`, which takes one mandatory argument.  This argument should produce an image (perhaps an `\includegraphics`, code for a Ti*k*Z picture, et cetera).
-  - `\boxedheader`, which takes 4 mandatory arguments one for each corner of the box.
+    - `\boxedheader`, which takes 6 mandatory arguments which populate, respectively, upper left corner, upper center, upper right corner, lower left corner, lower center, and lower right corner.  The center is always the title of the handout.
+    - `\tcboxedheader`, which has the same interface as `\boxedheader` but a slightly more fun appearance (rounded corners, box extends slightly into the margin).
+
   - You may `\renewcommand` any of the following to customize the look of your heading:
     - `\SheetNumberPrefix`: text prepended to the `\SheetNumber`, if it exists. By default, this is `\S`, but maybe you'd like `Handout~` or similar.
     - `\SheetNumberPostfix`: test that is appended to the `\SheetNumber`, it if exists, to separate it from the `\Title`.  By default, this is just a space, but maybe you'd want a colon or some such
     - `\NameText`: the text prepended to the line where students will write their name.  By default, `Name:`.
     - `\NameLineWidth`: is the length of the line where they'd write their name.  If there is a date line, it is likely of the same length.  This is a length, so you should set it with `\setlength`, not `\renewcommand`.
     - `\TitleFont`: the font used for the `\Title` of the handout.  By default, `\large\bfseries\boldmath`
-    - `\SchoolFont`: the font used for the school name.  By default, `\scshape`
-    - `\CourseNameFont`: the font used for the `\CourseName`.  By default, `\large`
+    - `\SchoolNameFont`: the font used for the school name.  By default, `\scshape`.
+    - `\CourseNameFont`: the font used for the `\CourseName`.  By default, `\large`.
+
   - If you define your own custom header, the following macros are available to you:
 
     - `\CourseName`
     - `\InstructorName`
+    - `\SchoolName`
     - `\SchoolYear`
     - `\Block`
     - `\UnitName`
@@ -156,6 +163,8 @@ The problem environment recognizes the following options (in square brackets aft
     - `\SheetNumber`
     - `\Title`
     - `\FancyTitle`, which contains the title, prepended with the unit number and sheet number (if present)
+    - `NameLine`
+    
 
 - If you have a header that you like, let me know and we can make sure that it is implemented and easily choose-able!
 

@@ -388,6 +388,7 @@
 %\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5ex}{\decofourleft}~\raisebox{-0.7975 ex}{\squircle}~\raisebox{-.5ex}{\decofourright}\quad\hrulefill}
 \renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5\height}{\squircle}\quad\hrulefill}
 
+\newcommand{\TitleFont}{\large\bfseries\boldmath}
 \def\Title{}
 \def\ShortTitle{}
 \renewcommand{\title}[2][\@nil]{
@@ -401,9 +402,14 @@
 \def\Block{}
 \newcommand{\block}[1]{\def\Block{#1}}
 
+\newcommand{\SchoolNameFont}{\scshape}
+\def\SchoolName{Proof School}
+\newcommand{\school}[1]{\def\SchoolName{#1}}
+
 \def\SchoolYear{YYYY--YY}
 \newcommand{\schoolyear}[1]{\def\SchoolYear{#1}}
 
+\newcommand{\CourseNameFont}{\large}
 \def\CourseName{}
 \newcommand{\course}[1]{\def\CourseName{#1}}
 
@@ -484,22 +490,21 @@
 \newcommand{\FancyTitle}{\FancySheetNumber\Title}
 \newcommand{\FancyShortTitle}{\FancySheetNumber\ShortTitle}
 
+\newcommand{\NameLine}{\NameText~\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineWidth}}
+
 \newcommand{\NameText}{Name:}
 \newlength{\NameLineWidth}
 \setlength{\NameLineWidth}{1.75in}
 
-\newcommand{\TitleFont}{\large\bfseries\boldmath}
-\newcommand{\CourseNameFont}{\large}
-\newcommand{\SchoolFont}{\scshape}
+\newlength{\@namewidth}
 \newcommand{\headerZG}{%
-	\newlength{\name@width}%
 	\if@showname%
-		\settowidth{\name@width}{\NameText~}%
-		\addtolength{\name@width}{\dimexpr \NameLineWidth+1em}%
+		\settowidth{\@namewidth}{\NameText~}%
+		\addtolength{\@namewidth}{\dimexpr \NameLineWidth+1em}%
 	\else%
-		\setlength{\name@width}{0pt}%
+		\setlength{\@namewidth}{0pt}%
 	\fi%
-	\begin{minipage}[t]{\dimexpr \linewidth-\name@width}%
+	\begin{minipage}[t]{\dimexpr \linewidth-\@namewidth}%
 		{\TitleFont%
 		\strut\FancyTitle\\}%
 		{\CourseNameFont%
@@ -509,7 +514,7 @@
 			\fi%
 		}%
 	\end{minipage}%
-	\begin{minipage}[t]{\name@width}%
+	\begin{minipage}[t]{\@namewidth}%
 		\raggedleft%
 		\NameText~\begin{minipage}[t]{\NameLineWidth}%
 			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineWidth}\\%
@@ -521,17 +526,16 @@
 \newcommand{\headerZGpic}[1]{%
 	\newsavebox{\headerZG@pic}%
 	\savebox{\headerZG@pic}{\raisebox{\depth}{#1}}%
-	\newlength{\name@width}%
 	\if@showname%
-		\settowidth{\name@width}{\NameText~}%
-		\addtolength{\name@width}{\dimexpr \NameLineWidth+.25em}%
+		\settowidth{\@namewidth}{\NameText~}%
+		\addtolength{\@namewidth}{\dimexpr \NameLineWidth+.25em}%
 	\else%
-		\setlength{\name@width}{0pt}%
+		\setlength{\@namewidth}{0pt}%
 	\fi%
 	\noindent%
 	\usebox\headerZG@pic%
 	\hfill%
-	\begin{minipage}[b][\ht\headerZG@pic][c]{\dimexpr \linewidth-\wd\headerZG@pic-.25em-\name@width}%
+	\begin{minipage}[b][\ht\headerZG@pic][c]{\dimexpr \linewidth-\wd\headerZG@pic-.25em-\@namewidth}%
 		\centering%
 		{\TitleFont%
 		\strut\FancyTitle\\}%
@@ -543,7 +547,7 @@
 		}%
 	\end{minipage}%
 	\if@showname%
-		\begin{minipage}[b][\ht\headerZG@pic][t]{\name@width}%
+		\begin{minipage}[b][\ht\headerZG@pic][t]{\@namewidth}%
 			\raggedleft%
 			\NameText~\begin{minipage}[t]{\NameLineWidth}%
 			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineWidth}\\[-4pt]%
@@ -553,20 +557,50 @@
 	\fi%
 }
 
-\newcommand{\boxedheader}[4]{%
+\newlength{\BoxedHeaderHeight}
+\setlength{\BoxedHeaderHeight}{1in}
+\newcommand{\boxedheader}[6]{%
 	\fbox{%
 		\setlength{\dimen255}{\dimexpr \textwidth-2\fboxrule-2\fboxsep}%
-		\makebox[0pt][l]{\parbox[c][1in][t]{\dimen255}{%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\dimen255}{%
 			\raggedright #1}}%
-		\makebox[0pt][l]{\parbox[c][1in][t]{\dimen255}{%
-			\raggedleft #2}}%
-		\makebox[0pt][l]{\parbox[c][1in][b]{\dimen255}{%
-			\raggedright #3}}%
-		\makebox[0pt][l]{\parbox[c][1in][b]{\dimen255}{%
-			\raggedleft #4}}%
-		\parbox[c][1in][c]{\dimen255}{%
-			\centering\TitleFont\FancyTitle\strut}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\dimen255}{%
+			\centering #2}}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\dimen255}{%
+			\raggedleft #3}}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\dimen255}{%
+			\raggedright #4}}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\dimen255}{%
+			\centering #5}}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\dimen255}{%
+			\raggedleft #6}}%
+		\parbox[c][\BoxedHeaderHeight][c]{\dimen255}{%
+			\centering \TitleFont\strut\FancyTitle\strut}%
 	}%
+}
+
+\newcommand{\tcboxedheader}[6]{%
+	\begin{tcolorbox}[
+		enhanced, empty,
+		boxrule=0pt, boxsep=0pt,
+		left=0pt, right=0pt, top=0pt, bottom=0pt,
+		% rounded corners=1mm if you want to match the theorems?
+		frame code={\draw[rounded corners] ([shift={(-1.5mm,-1.5mm)}]frame.south west) rectangle ([shift={(1.5mm,1.5mm)}]frame.north east);}]
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\textwidth}{%
+			\raggedright #1}}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\textwidth}{%
+			\centering #2}}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][t]{\textwidth}{%
+			\raggedleft #3}}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\textwidth}{%
+			\raggedright #4}}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\textwidth}{%
+			\centering #5}}%
+		\makebox[0pt][l]{\parbox[c][\BoxedHeaderHeight][b]{\textwidth}{%
+			\raggedleft #6}}%
+		\parbox[c][1in][c]{\textwidth}{%
+			\centering\TitleFont\strut\FancyTitle\strut}%
+	\end{tcolorbox}
 }
 
 \newcommand{\FirstPageHeader}{\headerZG}
@@ -575,7 +609,7 @@
 	\thispagestyle{firstpage}%
 	\noindent%
 	\FirstPageHeader%
-	\let\maketitle\undefined%
+	%\let\maketitle\undefined%
 	\par%
 	\bigskip%
 	\vspace{-\parskip}%
@@ -595,7 +629,7 @@
 
 %%%%%%%%%% Assorted %%%%%%%%%%
 
-\newcommand{\squircle}{\settoheight{\dimen255}{I}\resizebox{\dimen255}{!}{\tikz{\draw[join=round,very thick] (0, 0) rectangle (.4, .4) (.2,.2) circle (.1);}}}
+\newcommand{\squircle}[1][]{\settoheight{\dimen255}{I}\resizebox{\dimen255}{!}{\tikz{\draw[very thick,#1] (0, 0) rectangle (.4, .4) (.2,.2) circle (.1);}}}
 \renewcommand{\qedsymbol}{\squircle}
 
 \newcommand{\SpoilerFont}{\itshape}
