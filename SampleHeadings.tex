@@ -37,18 +37,8 @@ They are all drawing their content from the commands:
 \newpage
 
 \begingroup
-\renewcommand{\FirstPageHeader}{\headerZGpic{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}}
-\maketitle
-\singlespacing
-\begin{verbatim}
-\renewcommand{\FirstPageHeader}{%
-    \headerZGpic{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}}
-\end{verbatim}
-\endgroup
-
-\newpage
-
-\begingroup
+\setlength{\NameLineLength}{1.6in}
+\renewcommand{\TitleFont}{\Large\bfseries\boldmath}
 \renewcommand{\FirstPageHeader}{%
 	\twopartheaderpic%
 	{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}%
@@ -57,6 +47,7 @@ They are all drawing their content from the commands:
 \maketitle
 \singlespacing
 \begin{verbatim}
+\setlength{\NameLineLength}{1.6in}
 \renewcommand{\FirstPageHeader}{%
     \twopartheaderpic%
         {\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}%
@@ -69,7 +60,6 @@ They are all drawing their content from the commands:
 \newpage
 
 \begingroup
-%\renewcommand{\CourseNameFont}{}
 \renewcommand{\SheetNumberPrefix}{Section~}
 \renewcommand{\SheetNumberPostfix}{:\ }
 \renewcommand{\TitleFont}{\LARGE\itshape}
@@ -78,7 +68,6 @@ They are all drawing their content from the commands:
 \maketitle
 \singlespacing
 \begin{verbatim}
-\renewcommand{\CourseNameFont}{}
 \renewcommand{\SheetNumberPrefix}{Section~}
 \renewcommand{\SheetNumberPostfix}{:\ }
 \renewcommand{\TitleFont}{\LARGE\itshape}
@@ -121,6 +110,20 @@ They are all drawing their content from the commands:
 \HeaderStyleMS
 \maketitle
 \verb|\HeaderStyleMS|
+
+or equivalently
+
+\begin{verbatim}
+\renewcommand{\CourseNameFont}{}
+\renewcommand{\SheetNumberPrefix}{Handout~}
+\renewcommand{\SheetNumberPostfix}{:\ }
+\renewcommand{\SchoolNameFont}{}
+\renewcommand{\TitleFont}{\Large}
+\renewcommand{\FirstPageHeader}{%
+    \boxedheader%
+        {\CourseNameFont\CourseName}{}{Teacher: \InstructorName}%
+        {Week \WeekNumber}{}{{\SchoolNameFont\SchoolName} \SchoolYear}}
+\end{verbatim}
 \endgroup
 
 \end{document}
