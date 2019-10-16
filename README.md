@@ -131,12 +131,11 @@ The problem environment recognizes the following options (in square brackets aft
   
 - A heading is automatically placed at the top of the first page (unless the `notitle` option is given to the document class).  There are a few that are pre-defined, and you can fairly easily make your own!
 
-  - You can use `\renewcommand{\firstpageheader}{[...]}` to use a different header.  This is *also* the sort of thing that I'd recommend putting in `CourseInfo.tex`.
-
-  - The default header is stored in `\headerZG`.
-
-    Currently, the only other predefined header is `\headerZGpic`, which takes one mandatory argument.  This argument should produce an image (perhaps an `\includegraphics`, code for a Ti*k*Z picture, et cetera).
-
+  - You can use `\renewcommand{\FirstPageHeader}{[...]}` to use a different header.  This is *also* the sort of thing that I'd recommend putting in `CourseInfo.tex`.
+  - So far, the predefined headers are
+  - `\headerZG` (default)
+    - `\headerZGpic`, which takes one mandatory argument.  This argument should produce an image (perhaps an `\includegraphics`, code for a Ti*k*Z picture, et cetera).
+  - `\boxedheader`, which takes 4 mandatory arguments one for each corner of the box.
   - You may `\renewcommand` any of the following to customize the look of your heading:
     - `\SheetNumberPrefix`: text prepended to the `\SheetNumber`, if it exists. By default, this is `\S`, but maybe you'd like `Handout~` or similar.
     - `\SheetNumberPostfix`: test that is appended to the `\SheetNumber`, it if exists, to separate it from the `\Title`.  By default, this is just a space, but maybe you'd want a colon or some such
