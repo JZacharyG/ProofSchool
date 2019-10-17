@@ -1,4 +1,4 @@
-\documentclass[12pt,twoside,parskip,notitle]{handout}
+\documentclass[12pt,twoside,parskip,notitle,showframe]{handout}
 
 \course{Algebra 1A}
 \instructor{Zach}
@@ -12,8 +12,9 @@
 
 \begin{document}
 \begingroup
+\HeaderStyleZG
 \maketitle
-\verb|\renewcommand{\FirstPageHeader}{\headerZG}| (default)
+\verb|\HeaderStyleZG| (default)
 \endgroup
 
 \vfill
@@ -34,29 +35,66 @@ They are all drawing their content from the commands:
 \title{A Sample Handout}
 \end{verbatim}
 \endgroup
+
 \newpage
 
 \begingroup
-\setlength{\NameLineLength}{1.6in}
-\renewcommand{\TitleFont}{\Large\bfseries\boldmath}
+\HeaderStyleZGpic{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}
+\maketitle
+\verb|\HeaderStyleZGpic{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}|
+\endgroup
+
+\newpage
+
+\begingroup
+\setlength{\NameLineLength}{1.7in}
+\renewcommand{\TitleFont}{\LARGE\sf}
+\renewcommand{\SheetNumberPrefix}{}
+\renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{%
 	\twopartheaderpic%
-	{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}%
-	{c}{\centering{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName}}%
-	{t}{\NameLine\ifshowname\\[-1.5mm]\fi\makebox[\NameLineLength]{\SchoolYear\hfill\squircle\hfill Block \Block}}}
+	{\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
+	{b}{{\TitleFont\FancyTitle}}%
+	{t}{\NameLine\ifshowname\\[-1.5mm]\fi\makebox[\NameLineLength]{{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}
 \maketitle
 \singlespacing
 \begin{verbatim}
-\setlength{\NameLineLength}{1.6in}
+\setlength{\NameLineLength}{1.7in}
+\renewcommand{\TitleFont}{\LARGE\sf}
+\renewcommand{\SheetNumberPrefix}{}
+\renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{%
     \twopartheaderpic%
-        {\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}%
-        {c}{\centering{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName}}%
-        {t}{\NameLine\ifshowname\\[-1.5mm]\fi\makebox[\NameLineLength]{\SchoolYear
-          \hfill\squircle\hfill Block \Block}}}
+    {\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
+    {b}{{\TitleFont\FancyTitle}}%
+    {t}{\NameLine\ifshowname\\[-1.5mm]\fi\makebox[\NameLineLength]
+      {{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}
 \end{verbatim}
 \endgroup
 
+\newpage
+
+\begingroup
+\renewcommand{\TitleFont}{\LARGE\bfseries\boldmath}
+\renewcommand{\SheetNumberPrefix}{}
+\renewcommand{\CourseNameFont}{}
+\renewcommand{\FirstPageHeader}{%
+	\twopartheader%
+	{{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName}~$\circ$~{\SchoolNameFont\SchoolName}~$\circ$~\SchoolYear}%
+	{\NameLine}}
+\maketitle
+\singlespacing
+\begin{verbatim}
+\renewcommand{\TitleFont}{\LARGE\bfseries\boldmath}
+\renewcommand{\SheetNumberPrefix}{}
+\renewcommand{\CourseNameFont}{}
+\renewcommand{\FirstPageHeader}{%
+    \twopartheader%
+    {{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName}~$\circ$~
+      {\SchoolNameFont\SchoolName}~$\circ$~\SchoolYear}%
+    {\NameLine}}
+\end{verbatim}
+\endgroup
 \newpage
 
 \begingroup

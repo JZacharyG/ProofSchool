@@ -498,82 +498,58 @@
 \setlength{\NameLineLength}{1.75in}
 
 \newlength{\@namewidth}
-% This is soon to be deprecated
+
 \newcommand{\headerZG}{%
-	\ifshowname%
-		\settowidth{\@namewidth}{\NameLineText}%
-		\addtolength{\@namewidth}{\dimexpr \NameLineLength+1em}%
-	\else%
-		\setlength{\@namewidth}{0pt}%
-	\fi%
-	\begin{minipage}[t]{\dimexpr \linewidth-\@namewidth}%
-		{\TitleFont%
-		\FancyTitle\\}%
-		{\CourseNameFont%
-			\CourseName%
-			\ifx\UnitName\empty\else%
-				: \UnitName%
-			\fi%
-		}%
-	\end{minipage}%
-	\begin{minipage}[t]{\@namewidth}%
-		\raggedleft%
-		\NameLineText\begin{minipage}[t]{\NameLineLength}%
-			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineLength}\\%
-			\centerline{\SchoolYear \quad \squircle \quad Block \Block}%
-		\end{minipage}%
-		%Date:~\blank{\NameLineLength}%
-	\end{minipage}%
+	\twopartheader%
+		{{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
+		{\NameLine\ifshowname\\[-1.5mm]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}
 }
-% This is soon to be deprecated
+
 \newcommand{\headerZGpic}[1]{%
-	\newsavebox{\headerZG@pic}%
-	\savebox{\headerZG@pic}{\raisebox{\depth}{#1}}%
-	\ifshowname%
-		\settowidth{\@namewidth}{\NameLineText}%
-		\addtolength{\@namewidth}{\dimexpr \NameLineLength+.25em}%
-	\else%
-		\setlength{\@namewidth}{0pt}%
-	\fi%
-	\noindent%
-	\usebox\headerZG@pic%
+	\twopartheaderpic%
+		{#1}%
+		{c}{\centering{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
+		{t}{\NameLine\ifshowname\\[-1.5mm]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}
+}
+
+\RequirePackage{varwidth}
+
+% useful for making the picture extend into the margins
+% #1: bottom
+% #2: top
+% #3: left/right
+% #4: image
+\newcommand{\lprotrude}[4][0pt]{\raisebox{\depth-#1}[\totalheight-#2-#1]{\makebox[\width-#3][r]{#4}}}
+\newcommand{\rprotrude}[4][0pt]{\raisebox{\depth-#1}[\totalheight-#2-#1]{\makebox[\width-#3][l]{#4}}}
+\newcommand{\protrude}{\lprotrude}
+
+\newsavebox{\@headerpic}
+\newsavebox{\@headerrightsection}
+\newcommand{\twopartheaderpic}[5]{%
+	\savebox{\@headerpic}{#1}%
+	\savebox{\@headerrightsection}{\raisebox{0pt}[\height][0pt]{\begin{varwidth}[b][\ht\@headerpic][#4]{\textwidth}\raggedleft #5\end{varwidth}}}%
+	\parbox[b][\ht\@headerpic]{\wd\@headerpic}{\usebox\@headerpic}%
 	\hfill%
-	\begin{minipage}[b][\ht\headerZG@pic][c]{\dimexpr \linewidth-\wd\headerZG@pic-.25em-\@namewidth}%
-		\centering%
-		{\TitleFont%
-		\strut\FancyTitle\\}%
-		{\CourseNameFont%
-			\CourseName%
-			\ifx\UnitName\empty\else%
-				: \UnitName%
-			\fi%
-		}%
-	\end{minipage}%
-	\ifshowname%
-		\begin{minipage}[b][\ht\headerZG@pic][t]{\@namewidth}%
-			\raggedleft%
-			\NameLineText\begin{minipage}[t]{\NameLineLength}%
-			\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineLength}\\[-4pt]%
-			\centering \SchoolYear \quad \squircle \quad Block \Block%
-			\end{minipage}%
-		\end{minipage}%
+	\ifdim\wd\@headerrightsection=0pt%
+		\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic][#2]{\dimexpr \linewidth-\wd\@headerpic-.25em}{#3}}%
+	\else%
+		\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic][#2]{\dimexpr \linewidth-\wd\@headerrightsection-\wd\@headerpic-.5em}{#3}}%
+		\hfill%
+		\usebox{\@headerrightsection}%
 	\fi%
 }
 
-\RequirePackage{pbox}
-\newcommand{\protrude}[4][0pt]{\raisebox{\depth-#1}[\totalheight-#2-#1][0pt]{\makebox[\width-#3][r]{#4}}} % useful for making the picture extend into the margins
-\newsavebox{\@headerpic}%
-\newcommand{\twopartheaderpic}[5]{%
-	\savebox{\@headerpic}{#1}%
-	\setlength{\fboxsep}{0pt}%
-	\settominwidth{\dimen255}{#5}%
-	\noindent%
-	\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic]{\wd\@headerpic}{\usebox\@headerpic}}%
-	\hfill%
-	\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic][#2]{\dimexpr \linewidth-\dimen255-\wd\@headerpic-.5em}{#3}}%
-	\hfill%
-	\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic][#4]{\dimen255}{\raggedleft{#5}}}%
+\newcommand{\twopartheader}[2]{%
+	\savebox{\@headerrightsection}{\begin{varwidth}[t]{\textwidth}\raggedleft #2\end{varwidth}}%
+	\ifdim\wd\@headerrightsection=0pt%
+		\parbox[t]{\dimexpr \linewidth}{#1}%
+	\else%
+		\parbox[t]{\dimexpr \linewidth-\wd\@headerrightsection-.25em}{#1}%
+		\hfill%
+		\usebox{\@headerrightsection}%
+	\fi%
 }
+
 
 \newlength{\HeaderHeight}
 \setlength{\HeaderHeight}{1in}
@@ -627,10 +603,22 @@
 	\renewcommand{\SheetNumberPostfix}{:\ }
 	\renewcommand{\SchoolNameFont}{}
 	\renewcommand{\TitleFont}{\Large}
-	\renewcommand{\FirstPageHeader}{\boxedheader{\CourseNameFont\CourseName}{}{Teacher: \InstructorName}{Week \WeekNumber}{}{{\SchoolNameFont\SchoolName} \SchoolYear}}
+	\renewcommand{\FirstPageHeader}{%
+		\boxedheader%
+			{\CourseNameFont\CourseName}{}{Teacher: \InstructorName}%
+			{Week \WeekNumber}{}{{\SchoolNameFont\SchoolName} \SchoolYear}}
 }
 
-\newcommand{\FirstPageHeader}{\headerZG}
+\newcommand{\HeaderStyleZG}{
+	\renewcommand{\FirstPageHeader}{\headerZG}
+}
+
+\newcommand{\HeaderStyleZGpic}[1]{
+	\renewcommand{\FirstPageHeader}{\headerZGpic{#1}}
+}
+
+\newcommand{\FirstPageHeader}{}
+\HeaderStyleZG
 
 \renewcommand{\maketitle}{%
 	\thispagestyle{firstpage}%
