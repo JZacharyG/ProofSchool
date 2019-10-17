@@ -223,22 +223,22 @@
 %\setlist[probs]{align=left, leftmargin=*, labelindent=0em, labelwidth=0em, itemindent=0em}
 \setlist[prob]{align=left, leftmargin=!, labelindent=0em, labelsep=.5em, labelwidth=1em}
 
-
-\SetEnumitemKey{bonus}{format={\makebox[0pt][r]{$\star$\hspace{0.5pt}}}}
-\SetEnumitemKey{discuss}{format={\makebox[0pt][r]{\tikz{
+\newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\hspace{0.5pt}}}
+\SetEnumitemKey{bonus}{format={\placepic{$\star$}}}
+\SetEnumitemKey{discuss}{format={\placeprobpic{\tikz{
 	\node[draw, ellipse callout, callout pointer arc=30, callout relative pointer={(0.3ex, -0.5ex)}, minimum width=1.25ex, minimum height=.8ex, inner sep=0pt, outer sep=2pt] at (.3ex, -.4ex){};
 	\node[draw, fill=white, ellipse callout, callout pointer arc=30, callout relative pointer={(-0.3ex, -0.6ex)}, minimum width=1.25ex, minimum height=.8ex, inner sep=0pt, outer sep=2pt] {};
-}\hspace{0.5pt}}}}
-\SetEnumitemKey{stop}{format={\makebox[0pt][r]{\tikz[baseline=(sign.south)]{\node[draw, regular polygon, regular polygon sides=8, minimum width=.8em, inner sep=0pt] (sign){\makebox[0pt][c]{\resizebox{.65em}{.25em}{\textsf{STOP}}}};}\hspace{0.5pt}}}}
-\SetEnumitemKey{exciting}{format={\makebox[0pt][r]{\textit{\makebox[2pt][l]{\raisebox{0.5pt}{\small!}}!}\hspace{0.5pt}}}}
-\SetEnumitemKey{surprising}{format={\makebox[0pt][r]{\textit{\textinterrobang}\hspace{0.5pt}}}}
-\SetEnumitemKey{play}{format={\makebox[0pt][r]{\raisebox{-2pt}[0pt][0pt]{\tikz[scale=.18]{
+}}}}
+\SetEnumitemKey{stop}{format={\placeprobpic{\tikz[baseline=(sign.south)]{\node[draw, regular polygon, regular polygon sides=8, minimum width=.8em, inner sep=0pt] (sign){\makebox[0pt][c]{\resizebox{.65em}{.25em}{\textsf{STOP}}}};}}}}
+\SetEnumitemKey{exciting}{format={\placeprobpic{\textit{\makebox[2pt][l]{\raisebox{0.5pt}{\small!}}!}}}}
+\SetEnumitemKey{surprising}{format={\placeprobpic{\textit{\textinterrobang}}}}
+\SetEnumitemKey{play}{format={\placeprobpic{\raisebox{-2pt}[0pt][0pt]{\tikz[scale=.18]{
 	\draw (0,0) circle (1);
 	\draw[fill=gray, rotate=25] (0,1) arc (90:-90:0.75 and 1) arc (-90:90:0.15 and 1);
 	\draw[fill=lightgray, rotate=25] (0,1) arc (90:270:0.6 and 1) arc (270:90:1);
-}}\hspace{0.5pt}}}}
-\SetEnumitemKey{calculator}{format={\makebox[0pt][r]{\raisebox{-1.5pt}[0pt][0pt]{\resizebox{.9em}{!}{\tikz{\node[draw,rounded corners=3pt, inner sep=1pt]{$\kern-.2em\begin{smallmatrix}+-\\\times\div\end{smallmatrix}\kern-.2em$}}}}\hspace{0.5pt}}}}
-%\SetEnumitemKey{surprising}{format={\makebox[0pt][r]{\tikz[baseline=(txt.base)]{\node[inner xsep=0pt, xshift=.6pt] (txt1){\phantom{?}};\clip (txt1.south west) rectangle (txt1.north east);\node[xslant=-.23](txt){\textit{\textinterrobang}};}\hspace{0.5pt}}}}
+}}}}}
+\SetEnumitemKey{calculator}{format={\placeprobpic{\raisebox{-1.5pt}[0pt][0pt]{\resizebox{.9em}{!}{\tikz{\node[draw,rounded corners=3pt, inner sep=1pt]{$\kern-.2em\begin{smallmatrix}+-\\\times\div\end{smallmatrix}\kern-.2em$}}}}}}}
+%\SetEnumitemKey{surprising}{format={\placeprobpic{\tikz[baseline=(txt.base)]{\node[inner xsep=0pt, xshift=.6pt] (txt1){\phantom{?}};\clip (txt1.south west) rectangle (txt1.north east);\node[xslant=-.23](txt){\textit{\textinterrobang}};}}}}
 
 
 \newif\if@showpoints        \@showpointsfalse
