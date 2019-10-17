@@ -125,7 +125,7 @@
 		(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		([yshift=-1mm]title.south east);%
-	\path[draw, line cap=roundf]%
+	\path[draw, line cap=round]%
 		([yshift=-1mm] title.south east)%
 		arc (-90:90:.5mm) --%
 		([xshift=-1.5mm]title.south west);%

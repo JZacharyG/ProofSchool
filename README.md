@@ -65,7 +65,7 @@ If `\solution` or `\solution*` appears inside a problem environment, then everyt
 
 Importantly, the solution is placed in the space below the problem, but (if using `\solution`) it does not add any additional space, so the layout of the handout will be identical whether or not you show solutions.  This unfortunately means that the solution can spill over into the next problem, or off the end of the page, if you are not careful.  The starred version instead has the solution replace the space that would otherwise have been left.
 
-If typeset, the solution will be prepended with the contents of `\solutiontitle`, which defaults to ’’**SOLUTION:** ”, but you can renew this command if you’d like.
+If typeset, the solution will be prepended with the contents of `\SolutionPrefixFont\SolutionPrefix`, which default to `\bfseries` and `SOLUTION:` respectively , but you can `\renewcommand` either of them, if you’d like.
 #### Problems in Columns/Grids
 Problems can be placed in a grid (numbered across the row, instead of down the column).  This can be achieved with the option described below, or by issuing the command `\ProbsInColumns{n}`, where n is the desired number of columns. `\ProbsNotInColumns` is equivalent to `\ProbsInColumns{0}`, and causes subsequent problems to be typeset in the usual way.  This command is useful (in comparison to corresponding option to the `prob` environment) if you want to change the number of columns part way through a grid, or if you want to use columns for the top level of problems instead of just for subproblems.
 
