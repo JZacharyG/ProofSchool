@@ -11,6 +11,12 @@
 - When typeset, the solutions do not effect the amount of space left below a problem, so the overall layout is (approximately) identical between the problem set and the answer key.
 - Problems can easily be set in a grid (with a specified number of columns), with problems numbered across the rows.  You do not need to specify explicit line breaks, so it is easy to change the number of columns or reorder the problems at any point.
 
+## Requirements
+
+- This document class requires a fairly recent version of the package `enumitem`, so if you haven't updated it (or your entire LaTeX distribution) in the past few months, you may have problems!  This would manifest as certain options to the `prob` environment not working, namely `space`, `columns`, and `points`.
+
+  You should probably update your whole distribution, technically, but if you understandably don't want to take the time, you can download the latest version [here](https://ctan.org/pkg/enumitem) and then move `enumitem.sty` to `/usr/local/texlive/2018/texmf-dist/tex/latex/enumitem` (or similar, your year might be different, and if you aren't using texlive then I'm not sure...).
+
 ## Usage
 
 ### Installation
