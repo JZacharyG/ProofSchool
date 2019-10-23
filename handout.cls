@@ -383,10 +383,8 @@
 \fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
 \fancyfoot[L]{{\SpoilerFont\@spoilertext}}
 \fancyhead[L]{\FancyShortTitle}
-\ifshowname
-	\fancyhead[RO]{\NameLine}
-\fi
-%\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5ex}{\decofourleft}~\raisebox{-0.7975 ex}{\squircle}~\raisebox{-.5ex}{\decofourright}\quad\hrulefill}
+\fancyhead[RO]{\NameLine}
+
 \renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5\height}{\squircle}\quad\hrulefill}
 
 \newcommand{\TitleFont}{\large\bfseries\boldmath}
@@ -436,9 +434,10 @@
 \def\SheetNumber{}
 \newcommand{\sheetnumber}[1]{\def\SheetNumber{#1}}
 
+\def\Date{}
+\renewcommand{\date}[1]{\def\Date{#1}}
 
 \let\author\undefined
-\let\date\undefined % TODO: you should be able to specify the date!
 
 \def\StudentName{}
 \newcommand{\studentname}[1]{\def\StudentName{#1}}
@@ -502,14 +501,14 @@
 \newcommand{\headerZG}{%
 	\twopartheader%
 		{{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
-		{\NameLine\ifshowname\\[-1.5mm]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}
+		{\ifshowname\NameLine\\[-1pt]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}
 }
 
 \newcommand{\headerZGpic}[1]{%
 	\twopartheaderpic%
 		{#1}%
 		{c}{\centering{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
-		{t}{\NameLine\ifshowname\\[-1.5mm]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}
+		{t}{\NameLine\ifshowname\\[-1pt]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}
 }
 
 \RequirePackage{varwidth}
@@ -553,47 +552,42 @@
 
 \newlength{\HeaderHeight}
 \setlength{\HeaderHeight}{1in}
-\newcommand{\boxedheader}[6]{%
+
+\newcommand{\gridheader}[7]{%
+	\makebox[0pt][l]{\parbox[b][\HeaderHeight]{#7}{%
+		\raggedright #1\vfill}}%
+	\makebox[0pt][l]{\parbox[b][\HeaderHeight]{#7}{%
+		\centering #2\vfill}}%
+	\makebox[0pt][l]{\parbox[b][\HeaderHeight]{#7}{%
+		\raggedleft #3\vfill}}%
+	\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#7}{%
+		\raggedright\vspace*{\fill}#4}}}%
+	\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#7}{%
+		\centering\vspace*{\fill}#5}}}%
+	\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#7}{%
+		\raggedleft\vspace*{\fill}#6}}}%
+	\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#7}{%
+		\centering\vspace*{\fill}\TitleFont\strut\FancyTitle\strut\vspace*{\fill}}}%
+}%
+
+\newcommand{\boxedheader}[6]{{%
+	\setlength{\fboxsep}{3pt}%
 	\fbox{%
-		\setlength{\dimen255}{\dimexpr \textwidth-2\fboxrule-2\fboxsep}%
-		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\dimen255}{%
-			\raggedright #1\vfill}}%
-		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\dimen255}{%
-			\centering #2\vfill}}%
-		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\dimen255}{%
-			\raggedleft #3\vfill}}%
-		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\dimen255}{%
-			\raggedright\vspace*{\fill}#4}}}%
-		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\dimen255}{%
-			\centering\vspace*{\fill}#5}}}%
-		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\dimen255}{%
-			\raggedleft\vspace*{\fill}#6}}}%
-		\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\dimen255}{%
-			\centering\vspace*{\fill}\TitleFont\strut\FancyTitle\strut\vspace*{\fill}}}%
+		\gridheader{#1}{#2}{#3}{#4}{#5}{#6}{\linewidth-2\fboxrule-2\fboxsep}%
 	}%
-}
+}}
 
 \newcommand{\tcboxedheader}[6]{%
 	\begin{tcolorbox}[
-		enhanced, empty,
-		boxrule=0pt, boxsep=0pt,
-		left=0pt, right=0pt, top=0pt, bottom=0pt,
-		% rounded corners=1mm if you want to match the theorems?
-		frame code={\draw[rounded corners] ([shift={(-1.5mm,-1.5mm)}]frame.south west) rectangle ([shift={(1.5mm,1.5mm)}]frame.north east);}]
-		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\textwidth}{%
-			\raggedright #1\vfill}}%
-		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\textwidth}{%
-			\centering #2\vfill}}%
-		\makebox[0pt][l]{\parbox[b][\HeaderHeight]{\textwidth}{%
-			\raggedleft #3\vfill}}%
-		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\textwidth}{%
-			\raggedright\vspace*{\fill}#4}}}%
-		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\textwidth}{%
-			\centering\vspace*{\fill}#5}}}%
-		\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\textwidth}{%
-			\raggedleft\vspace*{\fill}#6}}}%
-		\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{\textwidth}{%
-			\centering\vspace*{\fill}\TitleFont\strut\FancyTitle\strut\vspace*{\fill}}}%
+			enhanced, empty,
+			boxrule=0pt, boxsep=0pt,
+			%left=3pt, right=3pt, top=3pt, bottom=3pt,
+			%frame code={\draw[rounded corners] (frame.south west) rectangle (frame.north east);}
+			% rounded corners=1mm if you want to match the theorems?
+			left=0pt, right=0pt, top=0pt, bottom=0pt,
+			frame code={\draw[rounded corners] ([shift={(-1.5mm,-1.5mm)}]frame.south west) rectangle ([shift={(1.5mm,1.5mm)}]frame.north east);}
+		]
+		\gridheader{#1}{#2}{#3}{#4}{#5}{#6}{\linewidth}
 	\end{tcolorbox}
 }
 
@@ -620,8 +614,9 @@
 \newcommand{\FirstPageHeader}{}
 \HeaderStyleZG
 
-\renewcommand{\maketitle}{%
+\renewcommand{\maketitle}{{%
 	\thispagestyle{firstpage}%
+	\onehalfspacing%
 	\noindent%
 	\FirstPageHeader%
 	%\let\maketitle\undefined%
@@ -629,7 +624,7 @@
 	\bigskip%
 	\vspace{-\parskip}%
 	% FIX ME: \noindent for first line of text after heading?
-}
+}}
 \if@showtitle
 	\AtBeginDocument{\maketitle}
 \fi
