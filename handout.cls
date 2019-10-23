@@ -499,16 +499,16 @@
 \newlength{\@namewidth}
 
 \newcommand{\headerZG}{%
-	\twopartheader%
+	\LSheader%
 		{{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
-		{\ifshowname\NameLine\\[-1pt]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}
+		{\ifshowname\NameLine\\[-1pt]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}%
 }
 
 \newcommand{\headerZGpic}[1]{%
-	\twopartheaderpic%
+	\PLSheader%
 		{#1}%
 		{c}{\centering{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
-		{t}{\NameLine\ifshowname\\[-1pt]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}
+		{t}{\NameLine\ifshowname\\[-1pt]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}%
 }
 
 \RequirePackage{varwidth}
@@ -522,32 +522,140 @@
 \newcommand{\rprotrude}[4][0pt]{\raisebox{\depth-#1}[\totalheight-#2-#1]{\makebox[\width-#3][l]{#4}}}
 \newcommand{\protrude}{\lprotrude}
 
-\newsavebox{\@headerpic}
-\newsavebox{\@headerrightsection}
-\newcommand{\twopartheaderpic}[5]{%
-	\savebox{\@headerpic}{#1}%
-	\savebox{\@headerrightsection}{\raisebox{0pt}[\height][0pt]{\begin{varwidth}[b][\ht\@headerpic][#4]{\textwidth}\raggedleft #5\end{varwidth}}}%
-	\parbox[b][\ht\@headerpic]{\wd\@headerpic}{\usebox\@headerpic}%
-	\hfill%
-	\ifdim\wd\@headerrightsection=0pt%
-		\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic][#2]{\dimexpr \linewidth-\wd\@headerpic-.25em}{#3}}%
+\newsavebox{\@headersectionP} % Picture (fit to contents) 
+\newsavebox{\@headersectionS} % Short section (varwidth, fit to contents)
+\newsavebox{\@headersectionL} % Long section (parbox, fill available space)
+
+\newlength{\HeaderSectionSep}
+\setlength{\HeaderSectionSep}{.25em}
+% #1: height
+% #2: width
+% #3: outer alignment
+% #4: alignment for Short section's box
+% #5: contents of Short section's box
+% #6: alignment of Long section's box
+% #7: contents of Long section's box
+\newcommand{\@fillheaderboxes}[7][\height]{%
+	\savebox{\@headersectionS}{\begin{varwidth}[#3][#1][#4]{#2}#5\end{varwidth}}%
+	\ifdim\wd\@headersectionS=0pt%
+		\savebox{\@headersectionL}{\parbox[#3][#1][#6]{#2}{#7}}%
 	\else%
-		\raisebox{0pt}[\height][0pt]{\parbox[b][\ht\@headerpic][#2]{\dimexpr \linewidth-\wd\@headerrightsection-\wd\@headerpic-.5em}{#3}}%
-		\hfill%
-		\usebox{\@headerrightsection}%
+		\savebox{\@headersectionL}{\parbox[#3][#1][#6]{\dimexpr #2-\wd\@headersectionS-\HeaderSectionSep}{#7}}%
 	\fi%
 }
 
-\newcommand{\twopartheader}[2]{%
-	\savebox{\@headerrightsection}{\begin{varwidth}[t]{\textwidth}\raggedleft #2\end{varwidth}}%
-	\ifdim\wd\@headerrightsection=0pt%
-		\parbox[t]{\dimexpr \linewidth}{#1}%
-	\else%
-		\parbox[t]{\dimexpr \linewidth-\wd\@headerrightsection-.25em}{#1}%
+% expects three boxes, doesn't add space if the following box is empty, assumes the first is nonempty.  Assumes that no arguments are left blank
+\newcommand{\@arrangethreeboxes}[3]{%
+	\usebox{#1}%
+	\ifdim\wd#2>0pt%
 		\hfill%
-		\usebox{\@headerrightsection}%
+		\usebox{#2}%
+	\fi%
+	\ifdim\wd#3>0pt%
+		\hfill%
+		\usebox{#3}%
 	\fi%
 }
+\newcommand{\@arrangetwoboxes}[2]{%
+	\usebox{#1}%
+	\ifdim\wd#2>0pt%
+		\hfill%
+		\usebox{#2}%
+	\fi%
+}
+
+\newcommand{\@PLSheader}[5]{%
+	\savebox{\@headersectionP}{#1}%
+	\@fillheaderboxes%
+		[\ht\@headersectionP]{\linewidth-\wd\@headersectionP-\HeaderSectionSep}{b}%
+		{#4}{\raggedleft#5}%
+		{#2}{\raggedright#3}%
+	\@arrangethreeboxes{\@headersectionP}{\@headersectionL}{\@headersectionS}%
+}
+
+\newcommand{\@LSPheader}[5]{%
+	\savebox{\@headersectionP}{#5}%
+	\@fillheaderboxes%
+		[\ht\@headersectionP]{\linewidth-\wd\@headersectionP-\HeaderSectionSep}{b}%
+		{#3}{\raggedleft#4}%
+		{#1}{\raggedright#2}%
+	\@arrangethreeboxes{\@headersectionL}{\@headersectionS}{\@headersectionP}%
+}
+
+\newcommand{\@PSLheader}[5]{%
+	\savebox{\@headersectionP}{#1}%
+	\@fillheaderboxes%
+		[\ht\@headersectionP]{\linewidth-\wd\@headersectionP-\HeaderSectionSep}{b}%
+		{#2}{\raggedright#3}%
+		{#4}{\raggedleft#5}%
+	\@arrangethreeboxes{\@headersectionP}{\@headersectionS}{\@headersectionL}%
+}
+
+\newcommand{\@SLPheader}[5]{%
+	\savebox{\@headersectionP}{#5}%
+	\@fillheaderboxes%
+		[\ht\@headersectionP]{\linewidth-\wd\@headersectionP-\HeaderSectionSep}{b}%
+		{#1}{\raggedright#2}%
+		{#3}{\raggedleft#4}%
+	\@arrangethreeboxes{\@headersectionS}{\@headersectionL}{\@headersectionP}%
+}
+
+\newcommand{\PLLheader}[5]{%
+	\savebox{\@headersectionP}{#1}%
+	\usebox{\@headersectionP}%
+	\hfill%
+	\makebox[0pt][l]{\parbox[b][\ht\@headersectionP][#2]{\linewidth-\wd\@headersectionP-\HeaderSectionSep}{\raggedright#3}}%
+	\parbox[b][\ht\@headersectionP][#4]{\linewidth-\wd\@headersectionP-\HeaderSectionSep}{\raggedleft#5}%
+}
+
+\newcommand{\LPLheader}[5]{%
+	\savebox{\@headersectionP}{#3}%
+	\parbox[b][\ht\@headersectionP][#1]{.5\linewidth-.5\wd\@headersectionP-\HeaderSectionSep}{\raggedright#2}%
+	\hfill%
+	\usebox{\@headersectionP}%
+	\hfill%
+	\parbox[b][\ht\@headersectionP][#4]{.5\linewidth-.5\wd\@headersectionP-\HeaderSectionSep}{\raggedleft#5}%
+}
+
+\newcommand{\LLPheader}[5]{%
+	\savebox{\@headersectionP}{#5}%
+	\makebox[0pt][l]{\parbox[b][\ht\@headersectionP][#1]{\linewidth-\wd\@headersectionP-\HeaderSectionSep}{\raggedright#2}}%
+	\parbox[b][\ht\@headersectionP][#3]{\linewidth-\wd\@headersectionP-\HeaderSectionSep}{\raggedleft#4}%
+	\hfill%
+	\usebox{\@headersectionP}%
+}
+
+\newcommand{\@LSheader}[2]{%
+	\@fillheaderboxes{\linewidth}{t}%
+		{t}{\raggedleft#2}%
+		{t}{\raggedright#1}%
+	\@arrangetwoboxes{\@headersectionL}{\@headersectionS}{}%
+}
+
+\newcommand{\@SLheader}[2]{%
+	\@fillheaderboxes{\linewidth}{t}%
+		{t}{\raggedright#1}%
+		{t}{\raggedleft#2}%
+	\@arrangetwoboxes{\@headersectionS}{\@headersectionL}{}%
+}
+
+\newcommand{\LLheader}[2]{%
+	\makebox[0pt][l]{\parbox[t]{\linewidth}{\raggedright#1}}%
+	\parbox[t]{\linewidth}{\raggedleft#2}%
+}
+
+\newcommand{\twopartheaderpic}{\PLSheader}
+\newcommand{\threepartheader}{\PLSheader}
+\newcommand{\PLSheader}{\@ifstar\PLLheader\@PLSheader}
+\newcommand{\PSLheader}{\@ifstar\PLLheader\@PSLheader}
+\newcommand{\LSPheader}{\@ifstar\LLPheader\@LSPheader}
+\newcommand{\SLPheader}{\@ifstar\LLPheader\@SLPheader}
+
+\newcommand{\PSSheader}{\PLLheader}
+
+\newcommand{\twopartheader}{\LSheader}
+\newcommand{\LSheader}{\@ifstar\LLheader\@LSheader}
+\newcommand{\SLheader}{\@ifstar\LLheader\@SLheader}
 
 
 \newlength{\HeaderHeight}
@@ -590,6 +698,23 @@
 		\gridheader{#1}{#2}{#3}{#4}{#5}{#6}{\linewidth}
 	\end{tcolorbox}
 }
+
+
+\newcommand{\teeheader}[3][\TitleFont\FancyTitle]{%
+	\begin{center}%
+	\begin{tikzpicture}[outer sep=1mm, inner sep=0pt]
+		\node[anchor=south, align=center] (T) at (0,0)
+			{#1\strut};%
+		\node[anchor=north east, align=right] (L) at (0,0)
+			{\strut#2\strut};
+		\node[anchor=north west, align=left] (R) at (0,0)
+			{\strut#3\strut};
+		\draw (T.south east) -- (T.south west);
+		\draw ([yshift=-1mm] L.north east) -- ([yshift=2mm] L.south east) -- ([yshift=2mm] R.south west);
+	\end{tikzpicture}%
+	\end{center}%
+}
+
 
 \newcommand{\HeaderStyleMS}{
 	\renewcommand{\CourseNameFont}{}

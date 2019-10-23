@@ -1,5 +1,9 @@
-\documentclass[12pt,twoside,parskip,notitle]{handout}
+% This is a demonstration of some different headers that you can make.
+% You should generally not need the `notitle` option below, and so won't need to explicitly call `\maketitle`.  
 
+\documentclass[12pt,twoside,parskip,notitle,showframe]{handout}
+
+% You may not care about all of these, depending on what your header actually displays
 \course{Algebra 1A}
 \instructor{Zach}
 \schoolyear{2019--20}
@@ -52,10 +56,10 @@ They are all drawing their content from the commands:
 \renewcommand{\SheetNumberPrefix}{}
 \renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{%
-	\twopartheaderpic%
+	\PLSheader%
 	{\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
 	{b}{{\TitleFont\FancyTitle}}%
-	{t}{\NameLine\ifshowname\\[-1pt]\fi\makebox[\NameLineLength]{{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}
+	{t}{\ifshowname\NameLine\\[-1pt]\fi\makebox[\NameLineLength]{{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}%
 \maketitle
 \singlespacing
 \begin{verbatim}
@@ -64,10 +68,10 @@ They are all drawing their content from the commands:
 \renewcommand{\SheetNumberPrefix}{}
 \renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{%
-    \twopartheaderpic%
+    \PLSheader%
     {\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
     {b}{{\TitleFont\FancyTitle}}%
-    {t}{\NameLine\ifshowname\\[-1pt]\fi\makebox[\NameLineLength]
+    {t}{\ifshowname\NameLine\\[-1pt]\fi\makebox[\NameLineLength]
       {{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}
 \end{verbatim}
 \endgroup
@@ -110,9 +114,9 @@ They are all drawing their content from the commands:
 \renewcommand{\SheetNumberPostfix}{:\ }
 \renewcommand{\TitleFont}{\LARGE\itshape}
 \setlength{\NameLineLength}{1.4in}
-\renewcommand{\FirstPageHeader}{\tcboxedheader{\CourseNameFont\CourseName}{}
-  {Unit~\UnitNumber:\ \UnitName}{\SchoolNameFont\SchoolName}{\SchoolYear, 
-  Block~\Block}{\NameLine}}
+\renewcommand{\FirstPageHeader}{\tcboxedheader%
+    {\CourseNameFont\CourseName}{}{Unit~\UnitNumber:\ \UnitName}%
+    {\SchoolNameFont\SchoolName}{\SchoolYear, Block~\Block}{\NameLine}}
 \end{verbatim}
 \endgroup
 
@@ -129,6 +133,7 @@ They are all drawing their content from the commands:
 		\SchoolYear%
 	\end{center}}
 \maketitle
+\singlespacing
 \begin{verbatim}
 \renewcommand{\TitleFont}{\Huge}
 \renewcommand{\SheetNumberPrefix}{}
@@ -149,19 +154,69 @@ They are all drawing their content from the commands:
 \maketitle
 \verb|\HeaderStyleMS|
 
-or equivalently
+which is defined as
 
+\singlespacing
 \begin{verbatim}
 \renewcommand{\CourseNameFont}{}
 \renewcommand{\SheetNumberPrefix}{Handout~}
 \renewcommand{\SheetNumberPostfix}{:\ }
 \renewcommand{\SchoolNameFont}{}
 \renewcommand{\TitleFont}{\Large}
-\renewcommand{\FirstPageHeader}{%
-    \boxedheader%
-        {\CourseNameFont\CourseName}{}{Teacher: \InstructorName}%
-        {Week \WeekNumber}{}{{\SchoolNameFont\SchoolName} \SchoolYear}}
+\renewcommand{\FirstPageHeader}{\boxedheader%
+    {\CourseNameFont\CourseName}{}{Teacher: \InstructorName}%
+    {Week \WeekNumber}{}{{\SchoolNameFont\SchoolName} \SchoolYear}}
 \end{verbatim}
 \endgroup
+
+\newpage
+
+\begingroup
+\renewcommand{\Title}{A very very very long title indeed!}
+\renewcommand{\TitleFont}{\huge}
+\renewcommand{\CourseNameFont}{}
+\renewcommand{\FirstPageHeader}{\PSLheader*%
+	{\resizebox{!}{1in}{\squircle[cyan]}}%
+	{b}{\SchoolYear\\{\CourseNameFont\CourseName}\\{\SchoolNameFont\SchoolName}}%
+	{t}{{\TitleFont\FancyTitle}\\[\fill]\NameLine}}
+\maketitle
+\singlespacing
+\begin{verbatim}
+\renewcommand{\TitleFont}{\huge}
+\renewcommand{\CourseNameFont}{}
+\renewcommand{\FirstPageHeader}{\PSLheader*%
+    {\resizebox{!}{1in}{\squircle[cyan]}}%
+    {b}{\SchoolYear\\{\CourseNameFont\CourseName}\\{\SchoolNameFont\SchoolName}}%
+    {t}{{\TitleFont\FancyTitle}\\[\fill]\NameLine}}
+\end{verbatim}
+\endgroup
+
+\newpage
+
+\begingroup
+\renewcommand{\TitleFont}{\huge}
+\renewcommand{\CourseNameFont}{}
+\renewcommand{\SheetNumberPrefix}{Handout~}
+\renewcommand{\SheetNumberPostfix}{}
+\renewcommand{\FirstPageHeader}{\teeheader%
+	[\TitleFont\Title]%
+	{{\CourseNameFont\CourseName}\\{\InstructorName}}%
+	{{\FancySheetNumber}\\{\SchoolYear}}%
+}%
+\maketitle
+\singlespacing
+\begin{verbatim}
+\renewcommand{\TitleFont}{\huge}
+\renewcommand{\CourseNameFont}{}
+\renewcommand{\SheetNumberPrefix}{Handout~}
+\renewcommand{\SheetNumberPostfix}{}
+\renewcommand{\FirstPageHeader}{\teeheader%
+    [\TitleFont\Title]%
+    {{\CourseNameFont\CourseName}\\{\InstructorName}}%
+    {{\FancySheetNumber}\\{\SchoolYear}}%
+}%
+\end{verbatim}
+\endgroup
+
 
 \end{document}
