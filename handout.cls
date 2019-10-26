@@ -772,8 +772,50 @@
 
 
 %%%%%%%%%% Assorted %%%%%%%%%%
+\usetikzlibrary{decorations.pathmorphing}
+\newcommand{\Squircle}[2]{\resizebox{!}{#1}{\tikz{\draw[line width=.11cm,#2] (-.5, -.5) rectangle (.5, .5) (0,0) circle (.25);}}}
 
-\newcommand{\squircle}[1][]{\settoheight{\dimen255}{I}\resizebox{\dimen255}{!}{\tikz{\draw[very thick,#1] (0, 0) rectangle (.4, .4) (.2,.2) circle (.1);}}}
+\pgfdeclaredecoration{vertical random steps}{start}
+{%
+  \state{start}[width=+0pt,next state=step,persistent precomputation=\pgfdecoratepathhascornerstrue]{}%
+  \state{step}[auto end on length=1.5\pgfdecorationsegmentlength,
+               auto corner on length=1.5\pgfdecorationsegmentlength,
+               width=+\pgfdecorationsegmentlength]
+  {
+    \pgfpathlineto{
+      \pgfpointadd
+      {\pgfpoint{\pgfdecorationsegmentlength}{0pt}}
+      {\pgfpoint{0pt}{rand*\pgfdecorationsegmentamplitude}}
+    }
+  }%
+  \state{final}
+  {}%
+}%
+
+\newcommand{\SquircleStripes}[8][1]{\resizebox{!}{#2}{\tikz{%
+	\draw[line width=.02cm, #3] (-.53, -.53) rectangle (.53, .53) (0,0) circle (.25+#1*.05);
+	\draw[line width=.02cm, #4] (-.51, -.51) rectangle (.51, .51) (0,0) circle (.25+#1*.03);
+	\draw[line width=.02cm, #5] (-.49, -.49) rectangle (.49, .49) (0,0) circle (.25+#1*.01);
+	\draw[line width=.02cm, #6] (-.47, -.47) rectangle (.47, .47) (0,0) circle (.25-#1*.01);
+	\draw[line width=.02cm, #7] (-.45, -.45) rectangle (.45, .45) (0,0) circle (.25-#1*.03);
+	\draw[line width=.02cm, #8] (-.43, -.43) rectangle (.43, .43) (0,0) circle (.25-#1*.05);
+}}}
+\newcommand{\SquircleRainbow}[2][1]{\SquircleStripes[#1]{#2}{red}{orange}{yellow}{green!90!black}{blue!60!cyan}{violet!80}}
+\newcommand{\SquircleFadeIn}[3][1]{\def\tmp{#3}\ifx\tmp\empty\def\tmp{black}\fi\SquircleStripes[#1]{#2}{\tmp!80}{\tmp!70}{\tmp!60}{\tmp!50}{\tmp!40}{\tmp!30}}
+\newcommand{\SquircleFadeOut}[3][1]{\def\tmp{#3}\ifx\tmp\empty\def\tmp{black}\fi\SquircleStripes[#1]{#2}{\tmp!30}{\tmp!40}{\tmp!50}{\tmp!60}{\tmp!70}{\tmp!80}}
+\newcommand{\SquircleSoft}[2]{\def\tmp{#2}\ifx\tmp\empty\def\tmp{black}\fi\Squircle{#1}{
+	\tmp!10, line width=.165cm,
+	postaction={draw, \tmp!20, line width=.135cm},
+	postaction={draw, \tmp!40, line width=.105cm},
+	postaction={draw, \tmp!60, line width=.075cm},
+	postaction={draw, \tmp!75, line width=.045cm},
+	postaction={draw, \tmp, line width=.015cm}}}
+\newcommand{\SquircleOuterLine}[3]{\Squircle{#1}{black,#3,postaction={draw=gray, line width={\dimexpr .11cm-.8pt},#2}}}
+\newcommand{\SquircleInnerLine}[3]{\Squircle{#1}{gray,#2,postaction={draw=black, thin,#3}}}
+\newcommand{\SquircleShakyLine}[4][]{\SquircleInnerLine{#2}{#3}{line join=bevel, decorate, decoration={vertical random steps, amplitude=.045cm, segment length=.022cm,#1},#4}}
+\newcommand{\SquircleCrazyLine}[4][]{\SquircleInnerLine{#2}{#3}{line join=bevel, decorate, decoration={random steps, segment length=.02cm, amplitude=.04cm,#1},#4}}
+\newcommand{\squircle}[1][]{{\settoheight{\dimen255}{I}\Squircle{\dimen255}{line width=.1cm, #1}}}
+
 \renewcommand{\qedsymbol}{\squircle}
 
 \newcommand{\SpoilerFont}{\itshape}
