@@ -102,7 +102,7 @@
 }
 \newcommand{\PStcbpath@toploop}{%
 	\path[draw, line cap=round, rounded corners=1mm]%
-		(frame.south east) --%
+		([xshift=1.5in] frame.south west) --%(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		(title.south east);%
 	\path[draw, line cap=round]%
@@ -112,7 +112,7 @@
 }
 \newcommand{\PStcbpath@doublein}{%
 	\path[draw, line cap=round, rounded corners=1mm]%
-		(frame.south east) --%
+		([xshift=1.5in] frame.south west) --%(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		([xshift = 1mm]title.south east);%
 	\path[draw, line cap=round]%
@@ -122,7 +122,7 @@
 }
 \newcommand{\PStcbpath@doubleout}{%
 	\path[draw, line cap=round, rounded corners=1mm]%
-		(frame.south east) --%
+		([xshift=1.5in] frame.south west) --%(frame.south east) --%
 		([xshift=-1.5mm] frame.south west) |-%
 		([yshift=-1mm]title.south east);%
 	\path[draw, line cap=round]%
