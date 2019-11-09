@@ -45,6 +45,11 @@
 \DeclareOption{parskip}{\@loadparskiptrue}
 \DeclareOption{parindent}{\@loadparskipfalse}
 
+\newif\if@boxedsolutions
+\@boxedsolutionsfalse
+\DeclareOption{boxedsolutions}{\@boxedsolutionstrue}
+\DeclareOption{noboxedsolutions}{\@boxedsolutionsfalse}
+
 %\newcommand{\section@symbol}{\S}
 %\DeclareOption{noS}{\renewcommand{\section@symbol}{}}
 %\DeclareOption{quiz}{\renewcommand{\section@symbol}{Quiz}}
@@ -321,7 +326,7 @@
 	\def\solution@nostar%
 	{%
 		\@insolutiontrue%
-		\begingroup\lrbox{\solutionbox}\minipage[t]{\linewidth}%
+		\begingroup\lrbox{\solutionbox}\minipage[t]{\if@boxedsolutions\dimexpr\linewidth-2\fboxsep-2\fboxrule\else\linewidth\fi}%
 			\setlength{\parskip}{\outsideparskip}%
 			{\SolutionPrefixFont\SolutionPrefix}%
 			\ignorespaces%
@@ -380,13 +385,24 @@
 			\if@cancelspace%
 				\@usenaturalheighttrue%
 			\fi%
-			\if@usenaturalheight%
+			\if@usenaturalheight% show solution, natural space
 				% I used to have \vspace*{2\lineskip} before the \par, but now I'm not sure why that was needed...
-				\usebox{\solutionbox}{}\par% show solution, natural space
+				\if@boxedsolutions%
+					\fbox{\usebox{\solutionbox}}%
+				\else%
+					\usebox{\solutionbox}%
+				\fi%
+				{}\par%
 				\@usedefaultspacefalse%
 				\def\@solutionspace{0pt}%
-			\else%
-				\raisebox{0pt}[0pt][0pt]{\usebox{\solutionbox}}\par\vspace*{\dimexpr -\baselineskip-\parskip}% show solutions, fixed space
+			\else% show solutions, fixed space
+				\raisebox{0pt}[0pt][0pt]{%
+				\if@boxedsolutions%
+					\fbox{\usebox{\solutionbox}}%
+				\else%
+					\usebox{\solutionbox}%
+				\fi}%
+				\par\vspace*{\dimexpr -\baselineskip-\parskip}%
 			\fi%
 		\fi%
 	\else%
