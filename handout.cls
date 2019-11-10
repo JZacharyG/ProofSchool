@@ -11,9 +11,13 @@
 \DeclareOption{noname}{\shownamefalse\runningnamefalse}
 
 \newif\ifshowsolutions
+\newif\if@boxsolutions
 \showsolutionsfalse
-\DeclareOption{solutions}{\showsolutionstrue}
+\@boxsolutionsfalse
+\DeclareOption{solutions}{\showsolutionstrue\@boxsolutionsfalse}
+\DeclareOption{boxedsolutions}{\showsolutionstrue\@boxsolutionstrue} % perhaps use varwidth instead of minipage for these solutions? means display equations don't take the full line, but that might be fine...
 \DeclareOption{nosolutions}{\showsolutionsfalse}
+
 
 \newif\if@cancelspace
 \@cancelspacefalse
@@ -45,10 +49,6 @@
 \DeclareOption{parskip}{\@loadparskiptrue}
 \DeclareOption{parindent}{\@loadparskipfalse}
 
-\newif\if@boxedsolutions
-\@boxedsolutionsfalse
-\DeclareOption{boxedsolutions}{\@boxedsolutionstrue}
-\DeclareOption{noboxedsolutions}{\@boxedsolutionsfalse}
 
 %\newcommand{\section@symbol}{\S}
 %\DeclareOption{noS}{\renewcommand{\section@symbol}{}}
@@ -326,7 +326,7 @@
 	\def\solution@nostar%
 	{%
 		\@insolutiontrue%
-		\begingroup\lrbox{\solutionbox}\minipage[t]{\if@boxedsolutions\dimexpr\linewidth-2\fboxsep-2\fboxrule\else\linewidth\fi}%
+		\begingroup\lrbox{\solutionbox}\minipage[t]{\if@boxsolutions\dimexpr\linewidth-2\fboxsep-2\fboxrule\else\linewidth\fi}%
 			\setlength{\parskip}{\outsideparskip}%
 			{\SolutionPrefixFont\SolutionPrefix}%
 			\ignorespaces%
@@ -387,7 +387,7 @@
 			\fi%
 			\if@usenaturalheight% show solution, natural space
 				% I used to have \vspace*{2\lineskip} before the \par, but now I'm not sure why that was needed...
-				\if@boxedsolutions%
+				\if@boxsolutions%
 					\fbox{\usebox{\solutionbox}}%
 				\else%
 					\usebox{\solutionbox}%
@@ -397,7 +397,7 @@
 				\def\@solutionspace{0pt}%
 			\else% show solutions, fixed space
 				\raisebox{0pt}[0pt][0pt]{%
-				\if@boxedsolutions%
+				\if@boxsolutions%
 					\fbox{\usebox{\solutionbox}}%
 				\else%
 					\usebox{\solutionbox}%
