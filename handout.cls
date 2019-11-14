@@ -249,13 +249,20 @@
 \newif\if@insolution        \@insolutionfalse
 \newif\if@firstprob         \@firstprobtrue
 
-\newcommand{\ProbsInColumns}[1]{\ifnum#1=0 \@probsincolumnsfalse\else\@probsincolumnstrue\def\@numcolumns{#1}\fi}
-\newcommand{\ProbsNotInColumns}{\ProbsInColumns{0}}
+\def\@numcolumns{1}
 
-\enitkv@key{}{points}{\@showpointstrue\def\v{#1}}
+\newcommand{\ProbsInColumns}[1]{\ifnum#1=0 \@probsincolumnsfalse\def\@numcolumns{1}\else\@probsincolumnstrue\def\@numcolumns{#1}\fi}
+\newcommand{\ProbsNotInColumns}{\ProbsInColumns{0}}
+\enitkv@key{}{columns}[3]{\ProbsInColumns{#1}}
+\enitkv@key{}{points}{\@showpointstrue\def\@numpoints{#1}}
 \enitkv@key{}{space}[1]{\set@solutionspace{#1}\@usedefaultspacefalse}
 \SetEnumitemKey{nospace}{space=0pt}
-\enitkv@key{}{columns}[3]{\ProbsInColumns{#1}}
+\SetEnumitemKey{no space}{nospace}
+\enitkv@key{}{spaces}{\fancysetlength{\@defaultsolutionspace}{#1}}
+\SetEnumitemKey{nospaces}{spaces=0pt}
+\SetEnumitemKey{no spaces}{nospaces}
+\SetEnumitemKey{fixspaces}{spaces={\glueexpr \stretch{1}/\@numcolumns}}
+\SetEnumitemKey{fix spaces}{fixspaces}
 
 \newlength{\probcolsep}     \setlength{\probcolsep}{0.5cm}
 
@@ -284,6 +291,9 @@
 			\ignorespaces%
 	}%
 }
+
+\newlength{\@defaultsolutionspace}
+\setlength{\@defaultsolutionspace}{\stretch{1}}
 
 \newcommand{\set@solutionspace}[1]{%
 	\pgfmathparse{#1}%
@@ -316,7 +326,7 @@
 		\old@prob[resume=pro, #1]%
 	\fi%
 	\@firstprobtrue%
-	\item \if@showpoints(\v\if\v1\relax\:\!\pointsymbol\else\,\pointssymbol\fi)\fi%
+	\item \if@showpoints(\@numpoints\if\@numpoints1\relax\:\!\pointsymbol\else\,\pointssymbol\fi)\fi%
 }
 
 \renewcommand{\endprob}{%
@@ -342,7 +352,7 @@
 	\if@usedefaultspace%
 		\def\@solutionspace{0pt}%
 		\if@firstprob%
-			\def\@solutionspace{\stretch{1}}%
+			\def\@solutionspace{\@defaultsolutionspace}%
 		\fi%
 	\fi%
 	\old@endprob%
