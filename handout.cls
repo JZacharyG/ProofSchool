@@ -33,7 +33,7 @@
 
 
 \DeclareOption*{%
-  \PassOptionsToClass{\CurrentOption}{article}%
+	\PassOptionsToClass{\CurrentOption}{article}%
 }
 
 %\ExecuteOptions{12pt, twoside, letterpaper}
@@ -763,7 +763,6 @@
 	\onehalfspacing%
 	\noindent%
 	\FirstPageHeader%
-	%\let\maketitle\undefined%
 	\par%
 	\bigskip%
 	\vspace{-\parskip}%
@@ -843,6 +842,13 @@
 	\belowdisplayshortskip=7pt plus 3pt minus 4pt%
 }{}{}
 
+% A fix for the bad spacing around \left and \right
+% Taken from: https://tex.stackexchange.com/questions/2607/spacing-around-left-and-right
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+
 \RequirePackage{xstring}
 %\newcommand{\smartoverline}[2][\@nil]{%
 %	{\def\tmp{#1}%
@@ -872,3 +878,31 @@
 }
 
 \newcommand{\intersentencespace}{\spacefactor\sfcode`. \space}
+
+\newtcolorbox{centeredframe}[1][0pt]{
+	before upper={\setlength{\parskip}{\outsideparskip}},
+	enhanced,
+	empty,
+	boxrule=0mm,
+	boxsep=0mm,
+	left=#1,
+	right=#1,
+	top=1.5mm,
+	bottom=1.5mm,
+	frame code={\draw[rounded corners=1mm] ([shift={(#1-1.5mm,0pt)}]frame.south west) rectangle ([shift={(-1*#1+1.5mm,0pt)}]frame.north east);},
+}
+
+\newtcolorbox{partialframe}[1][0pt]{
+	before upper={\setlength{\parskip}{\outsideparskip}},
+	enhanced,
+	empty,
+	boxrule=0mm,
+	boxsep=0mm,
+	left=#1,
+	right=#1,
+	top=1.5mm,
+	bottom=1.5mm,
+	frame code={\draw[line cap=round, rounded corners=1mm] ([shift={(#1+1.5in,0pt)}]frame.south west) -- ([shift={(#1-1.5mm,0pt)}]frame.south west) |- ([shift={(#1+1in,0pt)}]frame.north west);},
+}
+
+
