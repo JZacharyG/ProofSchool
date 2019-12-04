@@ -242,6 +242,8 @@
 }}}}}
 \SetEnumitemKey{calculator}{format={\placeprobpic{\raisebox{-1.5pt}[0pt][0pt]{\resizebox{.9em}{!}{\tikz{\node[draw,rounded corners=3pt, inner sep=1pt]{$\kern-.2em\begin{smallmatrix}+-\\\times\div\end{smallmatrix}\kern-.2em$}}}}}}}
 %\SetEnumitemKey{surprising}{format={\placeprobpic{\tikz[baseline=(txt.base)]{\node[inner xsep=0pt, xshift=.6pt] (txt1){\phantom{?}};\clip (txt1.south west) rectangle (txt1.north east);\node[xslant=-.23](txt){\textit{\textinterrobang}};}}}}
+\usepackage{marvosym}
+\SetEnumitemKey{attention}{format={\placeprobpic{\scalebox{1.35}{\Pointinghand}}}}
 
 
 \newif\if@showpoints        \@showpointsfalse
