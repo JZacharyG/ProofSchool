@@ -390,12 +390,12 @@
 \newcommand{\TitleFont}{\large\bfseries\boldmath}
 \def\Title{}
 \def\ShortTitle{}
-\renewcommand{\title}[2][\@nil]{
-	\def\ShortTitle{#1}
-	\ifx\ShortTitle\@nnil
-		\def\ShortTitle{#2}
-	\fi
-	\def\Title{#2}
+\renewcommand{\title}[2][\@nil]{%
+	\def\ShortTitle{#1}%
+	\ifx\ShortTitle\@nnil%
+		\def\ShortTitle{#2}%
+	\fi%
+	\def\Title{#2}%
 }
 
 \def\Block{}
@@ -410,16 +410,23 @@
 
 \newcommand{\CourseNameFont}{\large}
 \def\CourseName{}
-\newcommand{\course}[1]{\def\CourseName{#1}}
+\def\CourseShortName{}
+\newcommand{\course}[2][\@nil]{%
+	\def\CourseShortName{#1}%
+	\ifx\CourseShortName\@nnil%
+		\def\CourseShortName{#2}%
+	\fi%
+	\def\CourseName{#2}%
+}%\def\CourseName{#1}}
 
 \def\InstructorName{}
 \def\InstructorFullName{}
-\newcommand{\instructor}[2][\@nil]{
-	\def\InstructorFullName{#1}
-	\ifx\InstructorFullName\@nnil
-		\def\InstructorFullName{#2}
-	\fi
-	\def\InstructorName{#2}
+\newcommand{\instructor}[2][\@nil]{%
+	\def\InstructorFullName{#1}%
+	\ifx\InstructorFullName\@nnil%
+		\def\InstructorFullName{#2}%
+	\fi%
+	\def\InstructorName{#2}%
 }
 
 \def\UnitName{}
@@ -629,23 +636,23 @@
 	\@fillheaderboxes{\linewidth}{t}%
 		{t}{\raggedleft#2}%
 		{t}{\raggedright#1}%
-	\@arrangetwoboxes{\@headersectionL}{\@headersectionS}{}%
+	\@arrangetwoboxes{\@headersectionL}{\@headersectionS}\\%
 }
 
 \newcommand{\@SLheader}[2]{%
 	\@fillheaderboxes{\linewidth}{t}%
 		{t}{\raggedright#1}%
 		{t}{\raggedleft#2}%
-	\@arrangetwoboxes{\@headersectionS}{\@headersectionL}{}%
+	\@arrangetwoboxes{\@headersectionS}{\@headersectionL}\\%
 }
 
 \newcommand{\LLheader}[2]{%
 	\makebox[0pt][l]{\parbox[t]{\linewidth}{\raggedright#1}}%
-	\parbox[t]{\linewidth}{\raggedleft#2}%
+	\parbox[t]{\linewidth}{\raggedleft#2}\\%
 }
 
-\newcommand{\twopartheaderpic}{\PLSheader}
-\newcommand{\threepartheader}{\PLSheader}
+\newcommand{\twopartheaderpic}{\PLSheader} % deprecated
+\newcommand{\threepartheader}{\PLSheader} % deprecated
 \newcommand{\PLSheader}{\@ifstar\PLLheader\@PLSheader}
 \newcommand{\PSLheader}{\@ifstar\PLLheader\@PSLheader}
 \newcommand{\LSPheader}{\@ifstar\LLPheader\@LSPheader}
@@ -653,7 +660,7 @@
 
 \newcommand{\PSSheader}{\PLLheader}
 
-\newcommand{\twopartheader}{\LSheader}
+\newcommand{\twopartheader}{\LSheader} % deprecated
 \newcommand{\LSheader}{\@ifstar\LLheader\@LSheader}
 \newcommand{\SLheader}{\@ifstar\LLheader\@SLheader}
 
