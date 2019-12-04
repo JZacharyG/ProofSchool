@@ -4,8 +4,11 @@
 
 \newif\ifshowname
 \shownametrue
-\DeclareOption{name}{\shownametrue}
-\DeclareOption{noname}{\shownamefalse}
+\newif\ifrunningname
+\runningnamefalse
+\DeclareOption{name}{\shownametrue\runningnamefalse}
+\DeclareOption{runningname}{\shownametrue\runningnametrue}
+\DeclareOption{noname}{\shownamefalse\runningnamefalse}
 
 \newif\ifshowsolutions
 \showsolutionsfalse
@@ -393,7 +396,12 @@
 \fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
 \fancyfoot[L]{{\SpoilerFont\@spoilertext}}
 \fancyhead[L]{\FancyShortTitle}
-\fancyhead[RO]{\NameLine}
+\ifrunningname
+	\fancyhead[RO]{\NameLine}
+	\fancyhead[RE]{\CourseShortName}
+\else
+	\fancyhead[R]{\CourseShortName}
+\fi
 
 \renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5\height}{\squircle}\quad\hrulefill}
 
