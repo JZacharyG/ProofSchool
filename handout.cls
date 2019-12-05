@@ -25,6 +25,11 @@
 \DeclareOption{title}{\@showtitletrue}
 \DeclareOption{notitle}{\@showtitlefalse}
 
+\newif\if@numbernextprob
+\@numbernextprobtrue
+\DeclareOption{probnumbers}{}
+\DeclareOption{noprobnumbers}{\@numbernextprobfalse}
+
 \newif\if@loadparskip
 \@loadparskipfalse
 \DeclareOption{parskip}{\@loadparskiptrue}
@@ -212,6 +217,8 @@
 
 \RequirePackage[shortlabels]{enumitem}
 
+\newcommand{\checkbox}{\tikz[baseline={(0,0)}]{\draw[line join=round](-1mm,-1mm) rectangle (4mm,4mm);}}
+
 \setlist[enumerate,1]{label={\arabic*.}}
 \setlist[enumerate,2]{label={\alph*)}}
 \setlist[enumerate,3]{label={\roman*)}}
@@ -226,7 +233,9 @@
 %\setlist[probs]{align=left, leftmargin=*, labelindent=0em, labelwidth=0em, itemindent=0em}
 \setlist[prob]{align=left, leftmargin=!, labelindent=0em, labelsep=.5em, labelwidth=1em}
 
-\newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\hspace{0.5pt}}}
+\newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\,}}
+%\newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\hspace{0.5pt}}}
+\SetEnumitemKey{check}{format={\placeprobpic{\checkbox\,}}}
 \SetEnumitemKey{bonus}{format={\placeprobpic{$\star$}}}
 \SetEnumitemKey{discuss}{format={\placeprobpic{\tikz{
 	\node[draw, ellipse callout, callout pointer arc=30, callout relative pointer={(0.3ex, -0.5ex)}, minimum width=1.25ex, minimum height=.8ex, inner sep=0pt, outer sep=2pt] at (.3ex, -.4ex){};
@@ -312,6 +321,8 @@
 \LetLtxMacro{\old@prob}{\prob}
 \LetLtxMacro{\old@endprob}{\endprob}
 
+\newenvironment{prob*}[1][]{\@numbernextprobfalse\prob[#1]}{\endprob}
+
 \renewcommand{\prob}[1][]{%
 	\if@probsincolumns%
 		\@inacolumntrue%
@@ -325,10 +336,15 @@
 	\@showpointsfalse%
 	\@usedefaultspacetrue%
 	\allow@solution%
-	\if@firstprob%
-		\old@prob[series=pro, #1]%
-	\else%	
-		\old@prob[resume=pro, #1]%
+	\if@numbernextprob%
+		\if@firstprob%
+			\old@prob[series=pro, #1]%
+		\else%	
+			\old@prob[resume=pro, #1]%
+		\fi%
+	\else%
+		\old@prob[leftmargin=!, labelindent=0em, labelsep=0em, labelwidth=0em, label={}, ref={}, #1]%
+		\@numbernextprobtrue%
 	\fi%
 	\@firstprobtrue%
 	\item \if@showpoints(\@numpoints\if\@numpoints1\relax\:\!\pointsymbol\else\,\pointssymbol\fi)\fi%
@@ -914,5 +930,8 @@
 	bottom=1.5mm,
 	frame code={\draw[line cap=round, rounded corners=1mm] ([shift={(#1+1.5in,0pt)}]frame.south west) -- ([shift={(#1-1.5mm,0pt)}]frame.south west) |- ([shift={(#1+1in,0pt)}]frame.north west);},
 }
+
+% lower it's argument so that the top is aligned with the top of a normal line of text (specifically, the height of an `I').  An optional argument allows you to specify the perceived depth.
+\newcommand{\aligntop}[2][\dimexpr\totalheight-\dimen255]{{\settoheight{\dimen255}{I}\raisebox{\dimexpr\dimen255-\height}[\dimen255][#1]{#2}}}
 
 
