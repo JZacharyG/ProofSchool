@@ -27,8 +27,12 @@
 
 \newif\if@numbernextprob
 \@numbernextprobtrue
+\newif\if@checkboxes
+\@checkboxesfalse
 \DeclareOption{probnumbers}{}
+\DeclareOption{checkboxes}{\@checkboxestrue}
 \DeclareOption{noprobnumbers}{\@numbernextprobfalse}
+
 
 \newif\if@loadparskip
 \@loadparskipfalse
@@ -232,7 +236,9 @@
 \setlist[prob,3]{label={\roman*)}, ref={\alph{probii}\;\!\roman*)}}
 %\setlist[probs]{align=left, leftmargin=*, labelindent=0em, labelwidth=0em, itemindent=0em}
 \setlist[prob]{align=left, leftmargin=!, labelindent=0em, labelsep=.5em, labelwidth=1em}
-
+\if@checkboxes
+	\setlist[prob,1]{labelwidth=1.25em, label={{\noexpand\checkbox}}, ref={}}
+\fi
 \newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\,}}
 %\newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\hspace{0.5pt}}}
 \SetEnumitemKey{check}{format={\placeprobpic{\checkbox\,}}}
