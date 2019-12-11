@@ -15,9 +15,8 @@
 \showsolutionsfalse
 \@boxsolutionsfalse
 \DeclareOption{solutions}{\showsolutionstrue\@boxsolutionsfalse}
-\DeclareOption{boxedsolutions}{\showsolutionstrue\@boxsolutionstrue} % perhaps use varwidth instead of minipage for these solutions? means display equations don't take the full line, but that might be fine...
+\DeclareOption{boxedsolutions}{\showsolutionstrue\@boxsolutionstrue}
 \DeclareOption{nosolutions}{\showsolutionsfalse}
-
 
 \newif\if@cancelspace
 \@cancelspacefalse
@@ -326,7 +325,12 @@
 	\def\solution@nostar%
 	{%
 		\@insolutiontrue%
-		\begingroup\lrbox{\solutionbox}\minipage[t]{\if@boxsolutions\dimexpr\linewidth-2\fboxsep-2\fboxrule\else\linewidth\fi}%
+		\begingroup\lrbox{\solutionbox}%
+			\if@boxsolutions%
+				\varwidth[t]{\dimexpr\linewidth-2\fboxsep-2\fboxrule}%
+			\else%
+				\minipage[t]{\linewidth}%
+			\fi%
 			\setlength{\parskip}{\outsideparskip}%
 			{\SolutionPrefixFont\SolutionPrefix}%
 			\ignorespaces%
@@ -379,7 +383,12 @@
 
 \renewcommand{\endprob}{%
 	\if@insolution%
-		\endminipage\endlrbox\endgroup%
+		\if@boxsolutions%
+			\endvarwidth%
+		\else%
+			\endminipage%
+		\fi%
+		\endlrbox\endgroup%
 		\par%
 		\ifshowsolutions%
 			\if@cancelspace%
