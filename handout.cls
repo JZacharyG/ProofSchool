@@ -25,6 +25,12 @@
 \DeclareOption{title}{\@showtitletrue}
 \DeclareOption{notitle}{\@showtitlefalse}
 
+\newif\if@boxedtheorems
+\@boxedtheoremstrue
+\DeclareOption{boxedtheorems}{\@boxedtheoremstrue}
+\DeclareOption{noboxedtheorems}{\@boxedtheoremsfalse}
+\DeclareOption{boringtheorems}{\@boxedtheoremsfalse}
+
 \newif\if@numbernextprob
 \@numbernextprobtrue
 \newif\if@checkboxes
@@ -72,9 +78,9 @@
 \if@loadparskip
 	%\RequirePackage[parfill]{parskip}
 	\RequirePackage{parskip}
-	\def\thm@space@setup{%
-		\thm@preskip=\parskip \thm@postskip=0pt%
-	}
+%	\def\thm@space@setup{%
+%		\thm@preskip=\parskip \thm@postskip=0pt%
+%	}
 \fi
 
 \RequirePackage[OT1,T1]{fontenc}
@@ -98,109 +104,119 @@
 
 
 %%%%%%%%%% Theorems %%%%%%%%%%
-
-\newcommand{\PStcbpath@hook}{%
-	\path[draw, line cap=round, rounded corners=1mm]%
-		([xshift=1.5in] frame.south west) --%(frame.south east) --%
-		([xshift=-1.5mm] frame.south west) |-%
-		(title.south east);%
-	\path[draw, line cap=round]%
-		(title.south east)%
-			arc (-90:-40:.85mm)%
-			arc (140:-130:.6mm);%
-		%([xshift=1.5mm, yshift=3mm]frame.south east)
-		%	arc (180:130:.85mm)
-		%	arc (-50:220:.6mm);}
-}
-\newcommand{\PStcbpath@toploop}{%
-	\path[draw, line cap=round, rounded corners=1mm]%
-		([xshift=1.5in] frame.south west) --%(frame.south east) --%
-		([xshift=-1.5mm] frame.south west) |-%
-		(title.south east);%
-	\path[draw, line cap=round]%
-		(title.south east)%
-			arc (-90:-20:1.1mm)%
-			arc (160:-120:.55mm);%
-}
-\newcommand{\PStcbpath@doublein}{%
-	\path[draw, line cap=round, rounded corners=1mm]%
-		([xshift=1.5in] frame.south west) --%(frame.south east) --%
-		([xshift=-1.5mm] frame.south west) |-%
-		([xshift = 1mm]title.south east);%
-	\path[draw, line cap=round]%
-		([xshift = 1mm]title.south east)%
-		arc (90:-90:.5mm) --%
-		([yshift=-1mm, xshift=-0.5mm]title.south west);%
-}
-\newcommand{\PStcbpath@doubleout}{%
-	\path[draw, line cap=round, rounded corners=1mm]%
-		([xshift=1.5in] frame.south west) --%(frame.south east) --%
-		([xshift=-1.5mm] frame.south west) |-%
-		([yshift=-1mm]title.south east);%
-	\path[draw, line cap=round]%
-		([yshift=-1mm] title.south east)%
-		arc (-90:90:.5mm) --%
-		([xshift=-1.5mm]title.south west);%
-}
-
-
-\newcounter{tcbthm} % all theorems and definitions and everything share this counter
-\setcounter{tcbthm}{0}
-
-\newcommand{\newPStheorem}[2]{\newPStcbPair{#1}{#2}{}{\ (}{)}{\PStcbpath@hook}{fontupper=\itshape}}
-\newcommand{\newPSdefinition}[2]{\newPStcbPair{#1}{#2}{}{\ }{}{\PStcbpath@hook}{}}
-\newcommand{\newPSexample}[2]{\newPStcbPair{#1}{#2}{}{\textbf{:}\ }{}{\PStcbpath@doublein}{top=2.5mm}}
-
-% #1: command
-% #2: Category (as it is to be displayed)
-% #3: end of title (always typeset)
-% #4: before name (only typeset if a name is given for the the box)
-% #5: after name (only typeset if a name is given for the the box)
-% #6: frame path
-% #7: additional code
-% #8: number (in the starred versions, nothing, in the unstarred version, it should increment and print the number)
-\newcommand{\newPStcbPair}[7]{
-	\newPStcb{#1*}{#2}{#3}{#4}{#5}{#6}{#7}{}%
-	\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{before upper={\addtocounter{tcbthm}{-1}\refstepcounter{tcbthm}},#7}{\stepcounter{tcbthm}\ \thetcbthm}%
-}
-\newcommand{\newPStcb}[8]{
-	\newtcolorbox{#1}[1][\@nil]{
-		before upper={\setlength{\parskip}{\outsideparskip}},
-		title={\raisebox{0pt}[\height][0pt]{\textbf{#2#8}% raisebox is there to smash the depth, so that the hight of the title above the frame line is consistent.  There may well be a better way to do this!
-			\def\tmp{##1}\ifx\tmp\@nnil\else#4\tmp#5\fi#3}},
-		enhanced,
-		empty,
-		boxrule=0mm,
-		boxsep=0mm,
-		left=0mm,
-		right=0mm,
-		top=1.5mm,
-		bottom=1.5mm,
-		coltitle=black,
-		attach boxed title to top left,
-		boxed title style={
+\if@boxedtheorems
+	\newcommand{\PStcbpath@hook}{%
+		\path[draw, line cap=round, rounded corners=1mm]%
+			([xshift=1.5in] frame.south west) --%(frame.south east) --%
+			([xshift=-1.5mm] frame.south west) |-%
+			(title.south east);%
+		\path[draw, line cap=round]%
+			(title.south east)%
+				arc (-90:-40:.85mm)%
+				arc (140:-130:.6mm);%
+			%([xshift=1.5mm, yshift=3mm]frame.south east)
+			%	arc (180:130:.85mm)
+			%	arc (-50:220:.6mm);}
+	}
+	\newcommand{\PStcbpath@toploop}{%
+		\path[draw, line cap=round, rounded corners=1mm]%
+			([xshift=1.5in] frame.south west) --%(frame.south east) --%
+			([xshift=-1.5mm] frame.south west) |-%
+			(title.south east);%
+		\path[draw, line cap=round]%
+			(title.south east)%
+				arc (-90:-20:1.1mm)%
+				arc (160:-120:.55mm);%
+	}
+	\newcommand{\PStcbpath@doublein}{%
+		\path[draw, line cap=round, rounded corners=1mm]%
+			([xshift=1.5in] frame.south west) --%(frame.south east) --%
+			([xshift=-1.5mm] frame.south west) |-%
+			([xshift = 1mm]title.south east);%
+		\path[draw, line cap=round]%
+			([xshift = 1mm]title.south east)%
+			arc (90:-90:.5mm) --%
+			([yshift=-1mm, xshift=-0.5mm]title.south west);%
+	}
+	\newcommand{\PStcbpath@doubleout}{%
+		\path[draw, line cap=round, rounded corners=1mm]%
+			([xshift=1.5in] frame.south west) --%(frame.south east) --%
+			([xshift=-1.5mm] frame.south west) |-%
+			([yshift=-1mm]title.south east);%
+		\path[draw, line cap=round]%
+			([yshift=-1mm] title.south east)%
+			arc (-90:90:.5mm) --%
+			([xshift=-1.5mm]title.south west);%
+	}
+	
+	
+	\newcounter{tcbthm} % all theorems and definitions and everything share this counter
+	\setcounter{tcbthm}{0}
+	
+	\newcommand{\newPStheorem}[2]{\newPStcbPair{#1}{#2}{}{\ (}{)}{\PStcbpath@hook}{fontupper=\itshape}}
+	\newcommand{\newPSdefinition}[2]{\newPStcbPair{#1}{#2}{}{\ }{}{\PStcbpath@hook}{}}
+	\newcommand{\newPSexample}[2]{\newPStcbPair{#1}{#2}{}{\textbf{:}\ }{}{\PStcbpath@doublein}{top=2.5mm}}
+	
+	% #1: command
+	% #2: Category (as it is to be displayed)
+	% #3: end of title (always typeset)
+	% #4: before name (only typeset if a name is given for the the box)
+	% #5: after name (only typeset if a name is given for the the box)
+	% #6: frame path
+	% #7: additional code
+	% #8: number (in the starred versions, nothing, in the unstarred version, it should increment and print the number)
+	\newcommand{\newPStcbPair}[7]{
+		\newPStcb{#1*}{#2}{#3}{#4}{#5}{#6}{#7}{}%
+		\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{before upper={\addtocounter{tcbthm}{-1}\refstepcounter{tcbthm}},#7}{\stepcounter{tcbthm}\ \thetcbthm}%
+	}
+	\newcommand{\newPStcb}[8]{
+		\newtcolorbox{#1}[1][\@nil]{
+			before upper={\setlength{\parskip}{\outsideparskip}},
+			title={\raisebox{0pt}[\height][0pt]{\textbf{#2#8}% raisebox is there to smash the depth, so that the hight of the title above the frame line is consistent.  There may well be a better way to do this!
+				\def\tmp{##1}\ifx\tmp\@nnil\else#4\tmp#5\fi#3}},
+			enhanced,
 			empty,
 			boxrule=0mm,
 			boxsep=0mm,
 			left=0mm,
 			right=0mm,
-			top=0mm,
+			top=1.5mm,
 			bottom=1.5mm,
-		},
-		frame code={#6},
-		#7
+			coltitle=black,
+			attach boxed title to top left,
+			boxed title style={
+				empty,
+				boxrule=0mm,
+				boxsep=0mm,
+				left=0mm,
+				right=0mm,
+				top=0mm,
+				bottom=1.5mm,
+			},
+			frame code={#6},
+			#7
+		}
 	}
-}
-
-\newPStheorem{theorem}{Theorem}
-\newPStheorem{lemma}{Lemma}
-\newPStheorem{corollary}{Corollary}
-\newPStheorem{claim}{Claim}
-\newPStheorem{conjecture}{Conjecture}
-\newPStheorem{proposition}{Proposition}
-\newPSdefinition{definition}{Definition}
-\newPSexample{example}{Example}
-
+	
+	\newPStheorem{theorem}{Theorem}
+	\newPStheorem{lemma}{Lemma}
+	\newPStheorem{corollary}{Corollary}
+	\newPStheorem{claim}{Claim}
+	\newPStheorem{conjecture}{Conjecture}
+	\newPStheorem{proposition}{Proposition}
+	\newPSdefinition{definition}{Definition}
+	\newPSexample{example}{Example}
+\else
+	\newtheorem{theorem}{Theorem}                  \newtheorem*{theorem*}{Theorem}
+	\newtheorem{lemma}[theorem]{Lemma}             \newtheorem*{lemma*}{Lemma}
+	\newtheorem{corollary}[theorem]{Corollary}     \newtheorem*{corollary*}{Corollary}
+	\newtheorem{claim}[theorem]{Claim}             \newtheorem*{claim*}{Claim}
+	\newtheorem{conjecture}[theorem]{Conjecture}   \newtheorem*{conjecture*}{Conjecture}
+	\newtheorem{proposition}[theorem]{Proposition} \newtheorem*{proposition*}{Proposition}
+	\theoremstyle{definition}
+	\newtheorem{definition}[theorem]{Definition}   \newtheorem*{definition*}{Definition}
+	\newtheorem{example}[theorem]{Example}         \newtheorem*{example*}{Example}
+\fi
 
 
 
