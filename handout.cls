@@ -880,6 +880,10 @@
 \newcommand{\DefaultSpoilerText}{Spoilers ahead! Proceed with caution\ldots}
 \newcommand{\spoilerbreak}[1][\DefaultSpoilerText]{\renewcommand{\@spoilertext}{#1}\newpage\renewcommand{\@spoilertext}{}}
 
+\newcommand{\ScratchWorkFont}{\itshape}
+\newcommand{\DefaultScratchWorkText}{Scratch work}
+\newcommand{\scratchpage}[1][\DefaultScratchWorkText]{\newpage\begin{center}\ScratchWorkFont#1\end{center}}
+
 \newcommand{\bonus}{{\Large{$\star$}}}
 
 % I just think there is too much space around displayed equations?
