@@ -68,7 +68,7 @@
 \tcbuselibrary{skins}
 
 
-\RequirePackage{letltxmacro, etoolbox, textcomp, url}
+\RequirePackage{letltxmacro, etoolbox, xpatch, textcomp, url}
 
 
 
@@ -82,6 +82,7 @@
 \if@loadparskip
 	%\RequirePackage[parfill]{parskip}
 	\RequirePackage{parskip}
+	\xpatchcmd{\proof}{\topsep6\p@\@plus6\p@\relax}{}{}{}
 %	\def\thm@space@setup{%
 %		\thm@preskip=\parskip \thm@postskip=0pt%
 %	}
