@@ -552,8 +552,7 @@
 \newcommand{\blank@starred}[2][]{\filledblank@starred[#1]{}{#2}}
 
 \newcommand{\filledblank}{\@ifstar\filledblank@starred\filledblank@unstarred}
-\newcommand{\filledblank@unstarred}[3][]{\filledblank@starred[\smash{#1}]{\smash{#2}}{#3}}
-\newcommand{\filledblank@starred}[3][]{%
+\newcommand{\filledblank@unstarred}[3][]{%
 	\leavevmode%
 	\begingroup%
 		\savebox{\@blanktext}{\vphantom{\@blankspacertext}\ifsoln[#2]{#1}}%
@@ -564,6 +563,7 @@
 		\leaders\hrule height \dimexpr -\dp\@blanktext-1.2pt depth \dimexpr \dp\@blanktext+1.6pt\hskip \@blanklength\kern\z@%
 	\endgroup%
 }
+\newcommand{\filledblank@starred}[3][]{\smash{\filledblank@unstarred[{#1}]{#2}{#3}}}
 
 
 \let\oldS\S
