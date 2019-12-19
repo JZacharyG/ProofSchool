@@ -408,7 +408,7 @@
 \def\SchoolYear{YYYY--YY}
 \newcommand{\schoolyear}[1]{\def\SchoolYear{#1}}
 
-\newcommand{\CourseNameFont}{\large}
+\newcommand{\CourseNameFont}{}
 \def\CourseName{}
 \def\CourseShortName{}
 \newcommand{\course}[2][\@nil]{%
@@ -498,6 +498,7 @@
 \newcommand{\FancyShortTitle}{\FancySheetNumber\ShortTitle\mbox{}}
 
 \newcommand{\NameLine}{\ifshowname\NameLineText\filledblank[\textbf{\AnswerKeyName}]{\StudentName}{\NameLineLength}\fi}
+\newcommand{\NameSpace}{\ifshowname\NameLineText\makebox[\NameLineLength][c]{\ifsoln[\StudentName]{\textbf{\AnswerKeyName}}}\fi}
 
 \newcommand{\NameLineText}{Name:~}
 \newlength{\NameLineLength}
@@ -506,12 +507,14 @@
 \newlength{\@namewidth}
 
 \newcommand{\headerZG}{%
+	\renewcommand{\CourseNameFont}{\large}%
 	\LSheader%
 		{{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
 		{\ifshowname\NameLine\\[-1pt]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}%
 }
 
 \newcommand{\headerZGpic}[1]{%
+	\renewcommand{\CourseNameFont}{\large}%
 	\PLSheader%
 		{#1}%
 		{c}{\centering{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
@@ -724,7 +727,6 @@
 
 
 \newcommand{\HeaderStyleMS}{
-	\renewcommand{\CourseNameFont}{}
 	\renewcommand{\SheetNumberPrefix}{Handout~}
 	\renewcommand{\SheetNumberPostfix}{:\ }
 	\renewcommand{\SchoolNameFont}{}

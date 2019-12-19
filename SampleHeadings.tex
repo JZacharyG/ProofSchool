@@ -54,7 +54,6 @@ They are all drawing their content from the commands:
 \setlength{\NameLineLength}{1.7in}
 \renewcommand{\TitleFont}{\LARGE\sf}
 \renewcommand{\SheetNumberPrefix}{}
-\renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{%
 	\PLSheader%
 	{\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
@@ -66,7 +65,6 @@ They are all drawing their content from the commands:
 \setlength{\NameLineLength}{1.7in}
 \renewcommand{\TitleFont}{\LARGE\sf}
 \renewcommand{\SheetNumberPrefix}{}
-\renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{%
     \PLSheader%
     {\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
@@ -81,7 +79,6 @@ They are all drawing their content from the commands:
 \begingroup
 \renewcommand{\TitleFont}{\LARGE\bfseries\boldmath}
 \renewcommand{\SheetNumberPrefix}{}
-\renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{%
 	\LSheader%
 	{{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName}~$\circ$~{\SchoolNameFont\SchoolName}~$\circ$~\SchoolYear}%
@@ -91,7 +88,6 @@ They are all drawing their content from the commands:
 \begin{verbatim}
 \renewcommand{\TitleFont}{\LARGE\bfseries\boldmath}
 \renewcommand{\SheetNumberPrefix}{}
-\renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{%
     \LSheader%
     {{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName}~$\circ$~
@@ -106,7 +102,7 @@ They are all drawing their content from the commands:
 \renewcommand{\SheetNumberPostfix}{:\ }
 \renewcommand{\TitleFont}{\LARGE\itshape}
 \setlength{\NameLineLength}{1.4in}
-\renewcommand{\FirstPageHeader}{\tcboxedheader{\CourseNameFont\CourseName}{}{Unit~\UnitNumber:\ \UnitName}{\SchoolNameFont\SchoolName}{\SchoolYear, Block~\Block}{\NameLine}}
+\renewcommand{\FirstPageHeader}{\tcboxedheader{\CourseNameFont\CourseName}{}{Unit~\UnitNumber:\ \UnitName}{\SchoolNameFont\SchoolName}{\SchoolYear, Block~\Block}{\NameSpace}}
 \maketitle
 \singlespacing
 \begin{verbatim}
