@@ -463,7 +463,7 @@
 \fancyfoot[L]{{\SpoilerFont\@spoilertext}}
 \fancyhead[L]{\FancyShortTitle}
 \ifrunningname
-	\fancyhead[RO]{\NameLine}
+	\fancyhead[RO]{\NameSpace}
 	\fancyhead[RE]{\CourseShortName}
 \else
 	\fancyhead[R]{\CourseShortName}
@@ -544,6 +544,8 @@
 
 \newlength{\@blanklength}
 \newbox{\@blanktext}
+\newcommand{\@blankspacertext}{jgy}
+%\newcommand{\@blankspacertext}{$\tfrac11$}
 
 \newcommand{\blank}{\@ifstar\blank@starred\blank@unstarred}
 \newcommand{\blank@unstarred}[2][]{\filledblank@unstarred[#1]{}{#2}}
@@ -554,7 +556,7 @@
 \newcommand{\filledblank@starred}[3][]{%
 	\leavevmode%
 	\begingroup%
-		\savebox{\@blanktext}{\ifsoln[#2]{#1}}%
+		\savebox{\@blanktext}{\vphantom{\@blankspacertext}\ifsoln[#2]{#1}}%
 		\fancysetlength{\@blanklength}{#3}%
 		\hspace*{\glueexpr \@blanklength/2}%
 		\makebox[0pt][c]{\usebox{\@blanktext}}%
