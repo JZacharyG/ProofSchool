@@ -58,7 +58,7 @@ They are all drawing their content from the commands:
 	\PLSheader%
 	{\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
 	{b}{{\TitleFont\FancyTitle}}%
-	{t}{\ifshowname\NameLine\\[-1pt]\fi\makebox[\NameLineLength]{{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}%
+	{t}{\ifshowname\NameLine\\\fi\makebox[\NameLineLength]{{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}%
 \maketitle
 \singlespacing
 \begin{verbatim}
@@ -69,7 +69,7 @@ They are all drawing their content from the commands:
     \PLSheader%
     {\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
     {b}{{\TitleFont\FancyTitle}}%
-    {t}{\ifshowname\NameLine\\[-1pt]\fi\makebox[\NameLineLength]
+    {t}{\ifshowname\NameLine\\\fi\makebox[\NameLineLength]
       {{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}
 \end{verbatim}
 \endgroup
@@ -173,7 +173,7 @@ which is defined as
 \renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{\PSLheader*%
 	{\resizebox{!}{1in}{\squircle[cyan]}}%
-	{b}{\SchoolYear\\{\CourseNameFont\CourseName}\\{\SchoolNameFont\SchoolName}}%
+	{b}{\singlespacing\SchoolYear\\{\CourseNameFont\CourseName}\\{\SchoolNameFont\SchoolName}}%
 	{t}{{\TitleFont\FancyTitle}\\[\fill]\NameLine}}
 \maketitle
 \singlespacing
@@ -182,7 +182,8 @@ which is defined as
 \renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{\PSLheader*%
     {\resizebox{!}{1in}{\squircle[cyan]}}%
-    {b}{\SchoolYear\\{\CourseNameFont\CourseName}\\{\SchoolNameFont\SchoolName}}%
+    {b}{\singlespacing\SchoolYear\\{\CourseNameFont\CourseName}\\
+      {\SchoolNameFont\SchoolName}}%
     {t}{{\TitleFont\FancyTitle}\\[\fill]\NameLine}}
 \end{verbatim}
 \endgroup

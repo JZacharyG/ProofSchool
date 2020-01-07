@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{handout}[2019/10/15 A document class for Proof School handouts]
+\ProvidesClass{handout}[2020/01/01 A document class for Proof School handouts]
 \newcommand{\AnswerKeyName}{Answer Key}
 
 \newif\ifshowname
@@ -47,12 +47,6 @@
 \@loadparskipfalse
 \DeclareOption{parskip}{\@loadparskiptrue}
 \DeclareOption{parindent}{\@loadparskipfalse}
-
-
-%\newcommand{\section@symbol}{\S}
-%\DeclareOption{noS}{\renewcommand{\section@symbol}{}}
-%\DeclareOption{quiz}{\renewcommand{\section@symbol}{Quiz}}
-
 
 \DeclareOption*{%
 	\PassOptionsToClass{\CurrentOption}{article}%
@@ -211,6 +205,7 @@
 	\newPStheorem{proposition}{Proposition}
 	\newPSdefinition{definition}{Definition}
 	\newPSexample{example}{Example}
+	\newPSexample{remark}{Remark}
 \else
 	\newtheorem{theorem}{Theorem}                  \newtheorem*{theorem*}{Theorem}
 	\newtheorem{lemma}[theorem]{Lemma}             \newtheorem*{lemma*}{Lemma}
@@ -221,6 +216,7 @@
 	\theoremstyle{definition}
 	\newtheorem{definition}[theorem]{Definition}   \newtheorem*{definition*}{Definition}
 	\newtheorem{example}[theorem]{Example}         \newtheorem*{example*}{Example}
+	\newtheorem{remark}[theorem]{Remark}         \newtheorem*{remark*}{Remark}
 \fi
 
 
@@ -278,7 +274,7 @@
 }}}}}
 \SetEnumitemKey{calculator}{format={\placeprobpic{\raisebox{-1.5pt}[0pt][0pt]{\resizebox{.9em}{!}{\tikz{\node[draw,rounded corners=3pt, inner sep=1pt]{$\kern-.2em\begin{smallmatrix}+-\\\times\div\end{smallmatrix}\kern-.2em$}}}}}}}
 %\SetEnumitemKey{surprising}{format={\placeprobpic{\tikz[baseline=(txt.base)]{\node[inner xsep=0pt, xshift=.6pt] (txt1){\phantom{?}};\clip (txt1.south west) rectangle (txt1.north east);\node[xslant=-.23](txt){\textit{\textinterrobang}};}}}}
-\usepackage{marvosym}
+\RequirePackage{marvosym}
 \SetEnumitemKey{attention}{format={\placeprobpic{\scalebox{1.35}{\Pointinghand}}}}
 
 
@@ -305,7 +301,8 @@
 \SetEnumitemKey{fixspaces}{spaces={\glueexpr \stretch{1}/\@numcolumns}}
 \SetEnumitemKey{fix spaces}{fixspaces}
 
-\newlength{\probcolsep}     \setlength{\probcolsep}{0.5cm}
+\newlength{\ProbColSep}     \setlength{\ProbColSep}{0.5cm}
+\def\probcolsep{\ProbColSep}
 
 \newcommand{\ifsoln}[2][]{\ifshowsolutions{#2}\else{#1}\fi}
 
@@ -358,7 +355,7 @@
 \renewcommand{\prob}[1][]{%
 	\if@probsincolumns%
 		\@inacolumntrue%
-		\pgfmathparse{(\linewidth-((\@numcolumns)-1)*\probcolsep)/(\@numcolumns)}%
+		\pgfmathparse{(\linewidth-((\@numcolumns)-1)*\ProbColSep)/(\@numcolumns)}%
 		\minipage[t]{\pgfmathresult pt}%
 		\setlength{\parskip}{\outsideparskip}%
 	\fi%
@@ -590,13 +587,11 @@
 \newlength{\NameLineLength}
 \setlength{\NameLineLength}{1.75in}
 
-\newlength{\@namewidth}
-
 \newcommand{\headerZG}{%
 	\renewcommand{\CourseNameFont}{\large}%
 	\LSheader%
 		{{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
-		{\ifshowname\NameLine\\[-1pt]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}%
+		{\ifshowname\NameLine\\\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}%
 }
 
 \newcommand{\headerZGpic}[1]{%
@@ -604,7 +599,7 @@
 	\PLSheader%
 		{#1}%
 		{c}{\centering{\TitleFont\FancyTitle}\\{\CourseNameFont\CourseName\ifx\UnitName\empty\else: \UnitName\fi}}%
-		{t}{\NameLine\ifshowname\\[-1pt]\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}%
+		{t}{\ifshowname\NameLine\\\fi\makebox[\NameLineLength]{~\SchoolYear\hfill\squircle\hfill Block \Block~}}%
 }
 
 \RequirePackage{varwidth}
@@ -757,31 +752,31 @@
 \newlength{\HeaderHeight}
 \setlength{\HeaderHeight}{1in}
 
-\newcommand{\gridheader}[7]{%
-	\makebox[0pt][l]{\parbox[b][\HeaderHeight]{#7}{%
-		\raggedright #1\vfill}}%
-	\makebox[0pt][l]{\parbox[b][\HeaderHeight]{#7}{%
-		\centering #2\vfill}}%
-	\makebox[0pt][l]{\parbox[b][\HeaderHeight]{#7}{%
-		\raggedleft #3\vfill}}%
-	\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#7}{%
-		\raggedright\vspace*{\fill}#4}}}%
-	\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#7}{%
-		\centering\vspace*{\fill}#5}}}%
-	\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#7}{%
-		\raggedleft\vspace*{\fill}#6}}}%
-	\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#7}{%
-		\centering\vspace*{\fill}\TitleFont\strut\FancyTitle\strut\vspace*{\fill}}}%
+\newcommand{\gridheader}[8][\TitleFont\strut\FancyTitle\strut]{%
+	\makebox[0pt][l]{\parbox[b][\HeaderHeight]{#8}{%
+		\raggedright #2\vfill}}%
+	\makebox[0pt][l]{\parbox[b][\HeaderHeight]{#8}{%
+		\centering #3\vfill}}%
+	\makebox[0pt][l]{\parbox[b][\HeaderHeight]{#8}{%
+		\raggedleft #4\vfill}}%
+	\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#8}{%
+		\raggedright\vspace*{\fill}#5}}}%
+	\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#8}{%
+		\centering\vspace*{\fill}#6}}}%
+	\makebox[0pt][l]{\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#8}{%
+		\raggedleft\vspace*{\fill}#7}}}%
+	\raisebox{0pt}[\height][0pt]{\parbox[b][\HeaderHeight]{#8}{%
+		\centering\vspace*{\fill}#1\vspace*{\fill}}}%
 }%
 
-\newcommand{\boxedheader}[6]{{%
+\newcommand{\boxedheader}[7][\TitleFont\strut\FancyTitle\strut]{{%
 	\setlength{\fboxsep}{3pt}%
 	\fbox{%
-		\gridheader{#1}{#2}{#3}{#4}{#5}{#6}{\linewidth-2\fboxrule-2\fboxsep}%
+		\gridheader[#1]{#2}{#3}{#4}{#5}{#6}{#7}{\linewidth-2\fboxrule-2\fboxsep}%
 	}%
 }}
 
-\newcommand{\tcboxedheader}[6]{%
+\newcommand{\tcboxedheader}[7][\TitleFont\strut\FancyTitle\strut]{%
 	\begin{tcolorbox}[
 			enhanced, empty,
 			boxrule=0pt, boxsep=0pt,
@@ -791,7 +786,7 @@
 			left=0pt, right=0pt, top=0pt, bottom=0pt,
 			frame code={\draw[rounded corners] ([shift={(-1.5mm,-1.5mm)}]frame.south west) rectangle ([shift={(1.5mm,1.5mm)}]frame.north east);}
 		]
-		\gridheader{#1}{#2}{#3}{#4}{#5}{#6}{\linewidth}
+		\gridheader[#1]{#2}{#3}{#4}{#5}{#6}{#7}{\linewidth}
 	\end{tcolorbox}
 }
 
