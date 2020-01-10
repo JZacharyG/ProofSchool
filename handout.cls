@@ -168,8 +168,8 @@
 	% #7: additional code
 	% #8: counter
 	\newcommand{\newPStcbPair}[8]{
-		\newPStcb{#1*}{#2}{#3}{#4}{#5}{#6}{#7}{}%
-		\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{before upper={\addtocounter{#8}{-1}\refstepcounter{#8}},#7}{\stepcounter{#8}\ \csname the#8\endcsname}%
+		\newPStcb{#1*}{#2}{#3}{#4}{#5}{#6}{before upper={\setlength{\parskip}{\outsideparskip}},#7}{}%
+		\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{before upper={\setlength{\parskip}{\outsideparskip}\addtocounter{#8}{-1}\refstepcounter{#8}},#7}{\stepcounter{#8}\ \csname the#8\endcsname}%
 	}
 	% #1: command
 	% #2: Category (as it is to be displayed)
@@ -181,7 +181,6 @@
 	% #8: number (in the starred versions, nothing, in the unstarred version, it should increment and print the number)
 	\newcommand{\newPStcb}[8]{
 		\newtcolorbox{#1}[1][\@nil]{
-			before upper={\setlength{\parskip}{\outsideparskip}},
 			title={\raisebox{0pt}[\height][0pt]{\textbf{#2#8}% raisebox is there to smash the depth, so that the hight of the title above the frame line is consistent.  There may well be a better way to do this!
 				\def\tmp{##1}\ifx\tmp\@nnil\else#4\tmp#5\fi#3}},
 			enhanced,
