@@ -34,6 +34,11 @@
 \DeclareOption{noboxedtheorems}{\@boxedtheoremsfalse}
 \DeclareOption{boringtheorems}{\@boxedtheoremsfalse}
 
+\newif\if@sharedtheoremnums
+\@sharedtheoremnumstrue
+\DeclareOption{sharednumbers}{\@sharedtheoremnumstrue}
+\DeclareOption{differentnumbers}{\@sharedtheoremnumsfalse}
+
 \newif\if@numbernextprob
 \@numbernextprobtrue
 \newif\if@checkboxes
@@ -149,12 +154,10 @@
 	}
 	
 	
-	\newcounter{tcbthm} % all theorems and definitions and everything share this counter
-	\setcounter{tcbthm}{0}
 	
-	\newcommand{\newPStheorem}[2]{\newPStcbPair{#1}{#2}{}{\ (}{)}{\PStcbpath@hook}{fontupper=\itshape}}
-	\newcommand{\newPSdefinition}[2]{\newPStcbPair{#1}{#2}{}{\ }{}{\PStcbpath@hook}{}}
-	\newcommand{\newPSexample}[2]{\newPStcbPair{#1}{#2}{}{\textbf{:}\ }{}{\PStcbpath@doublein}{top=2.5mm}}
+	\newcommand{\newPStheorem}[3]{\newPStcbPair{#1}{#2}{}{\ (}{)}{\PStcbpath@hook}{fontupper=\itshape}{#3}}
+	\newcommand{\newPSdefinition}[3]{\newPStcbPair{#1}{#2}{}{\ }{}{\PStcbpath@hook}{}{#3}}
+	\newcommand{\newPSexample}[3]{\newPStcbPair{#1}{#2}{}{\textbf{:}\ }{}{\PStcbpath@doublein}{top=2.5mm}{#3}}
 	
 	% #1: command
 	% #2: Category (as it is to be displayed)
@@ -163,11 +166,19 @@
 	% #5: after name (only typeset if a name is given for the the box)
 	% #6: frame path
 	% #7: additional code
-	% #8: number (in the starred versions, nothing, in the unstarred version, it should increment and print the number)
-	\newcommand{\newPStcbPair}[7]{
+	% #8: counter
+	\newcommand{\newPStcbPair}[8]{
 		\newPStcb{#1*}{#2}{#3}{#4}{#5}{#6}{#7}{}%
-		\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{before upper={\addtocounter{tcbthm}{-1}\refstepcounter{tcbthm}},#7}{\stepcounter{tcbthm}\ \thetcbthm}%
+		\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{before upper={\addtocounter{#8}{-1}\refstepcounter{#8}},#7}{\stepcounter{#8}\ \csname the#8\endcsname}%
 	}
+	% #1: command
+	% #2: Category (as it is to be displayed)
+	% #3: end of title (always typeset)
+	% #4: before name (only typeset if a name is given for the the box)
+	% #5: after name (only typeset if a name is given for the the box)
+	% #6: frame path
+	% #7: additional code
+	% #8: number (in the starred versions, nothing, in the unstarred version, it should increment and print the number)
 	\newcommand{\newPStcb}[8]{
 		\newtcolorbox{#1}[1][\@nil]{
 			before upper={\setlength{\parskip}{\outsideparskip}},
@@ -196,27 +207,67 @@
 			#7
 		}
 	}
+	\newcounter{psh@thmcount}\setcounter{psh@thmcount}{0}
+	\newPStheorem{theorem}{Theorem}{psh@thmcount}
 	
-	\newPStheorem{theorem}{Theorem}
-	\newPStheorem{lemma}{Lemma}
-	\newPStheorem{corollary}{Corollary}
-	\newPStheorem{claim}{Claim}
-	\newPStheorem{conjecture}{Conjecture}
-	\newPStheorem{proposition}{Proposition}
-	\newPSdefinition{definition}{Definition}
-	\newPSexample{example}{Example}
-	\newPSexample{remark}{Remark}
+	\if@sharedtheoremnums
+		\newPStheorem{lemma}{Lemma}{psh@thmcount}
+		\newPStheorem{corollary}{Corollary}{psh@thmcount}
+		\newPStheorem{claim}{Claim}{psh@thmcount}
+		\newPStheorem{conjecture}{Conjecture}{psh@thmcount}
+		\newPStheorem{proposition}{Proposition}{psh@thmcount}
+		\newPSdefinition{definition}{Definition}{psh@thmcount}
+		\newPSexample{example}{Example}{psh@thmcount}
+		\newPSexample{remark}{Remark}{psh@thmcount}
+	\else
+		\newcounter{psh@lemcount}\setcounter{psh@lemcount}{0}
+		\newPStheorem{lemma}{Lemma}{psh@lemcount}
+		
+		\newcounter{psh@corcount}\setcounter{psh@corcount}{0}
+		\newPStheorem{corollary}{Corollary}{psh@corcount}
+		
+		\newcounter{psh@claimcount}\setcounter{psh@claimcount}{0}
+		\newPStheorem{claim}{Claim}{psh@claimcount}
+		
+		\newcounter{psh@conjcount}\setcounter{psh@conjcount}{0}
+		\newPStheorem{conjecture}{Conjecture}{psh@conjcount}
+		
+		\newcounter{psh@propcount}\setcounter{psh@propcount}{0}
+		\newPStheorem{proposition}{Proposition}{psh@propcount}
+		
+		\newcounter{psh@defcount}\setcounter{psh@defcount}{0}
+		\newPSdefinition{definition}{Definition}{psh@defcount}
+		
+		\newcounter{psh@examplecount}\setcounter{psh@examplecount}{0}
+		\newPSexample{example}{Example}{psh@examplecount}
+		
+		\newcounter{psh@remcount}\setcounter{psh@remcount}{0}
+		\newPSexample{remark}{Remark}{psh@remcount}
+	\fi
 \else
-	\newtheorem{theorem}{Theorem}                  \newtheorem*{theorem*}{Theorem}
-	\newtheorem{lemma}[theorem]{Lemma}             \newtheorem*{lemma*}{Lemma}
-	\newtheorem{corollary}[theorem]{Corollary}     \newtheorem*{corollary*}{Corollary}
-	\newtheorem{claim}[theorem]{Claim}             \newtheorem*{claim*}{Claim}
-	\newtheorem{conjecture}[theorem]{Conjecture}   \newtheorem*{conjecture*}{Conjecture}
-	\newtheorem{proposition}[theorem]{Proposition} \newtheorem*{proposition*}{Proposition}
-	\theoremstyle{definition}
-	\newtheorem{definition}[theorem]{Definition}   \newtheorem*{definition*}{Definition}
-	\newtheorem{example}[theorem]{Example}         \newtheorem*{example*}{Example}
-	\newtheorem{remark}[theorem]{Remark}         \newtheorem*{remark*}{Remark}
+	\if@sharedtheoremnums
+		\newtheorem{theorem}{Theorem}                  \newtheorem*{theorem*}{Theorem}
+		\newtheorem{lemma}[theorem]{Lemma}             \newtheorem*{lemma*}{Lemma}
+		\newtheorem{corollary}[theorem]{Corollary}     \newtheorem*{corollary*}{Corollary}
+		\newtheorem{claim}[theorem]{Claim}             \newtheorem*{claim*}{Claim}
+		\newtheorem{conjecture}[theorem]{Conjecture}   \newtheorem*{conjecture*}{Conjecture}
+		\newtheorem{proposition}[theorem]{Proposition} \newtheorem*{proposition*}{Proposition}
+		\theoremstyle{definition}
+		\newtheorem{definition}[theorem]{Definition}   \newtheorem*{definition*}{Definition}
+		\newtheorem{example}[theorem]{Example}         \newtheorem*{example*}{Example}
+		\newtheorem{remark}[theorem]{Remark}         \newtheorem*{remark*}{Remark}
+	\else
+		\newtheorem{theorem}{Theorem}         \newtheorem*{theorem*}{Theorem}
+		\newtheorem{lemma}{Lemma}             \newtheorem*{lemma*}{Lemma}
+		\newtheorem{corollary}{Corollary}     \newtheorem*{corollary*}{Corollary}
+		\newtheorem{claim}{Claim}             \newtheorem*{claim*}{Claim}
+		\newtheorem{conjecture}{Conjecture}   \newtheorem*{conjecture*}{Conjecture}
+		\newtheorem{proposition}{Proposition} \newtheorem*{proposition*}{Proposition}
+		\theoremstyle{definition}
+		\newtheorem{definition}{Definition}   \newtheorem*{definition*}{Definition}
+		\newtheorem{example}{Example}         \newtheorem*{example*}{Example}
+		\newtheorem{remark}{Remark}           \newtheorem*{remark*}{Remark}
+	\fi
 \fi
 
 
