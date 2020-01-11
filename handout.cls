@@ -453,12 +453,12 @@
 				\@usedefaultspacefalse%
 				\def\@solutionspace{0pt}%
 			\else% show solutions, fixed space
-				\raisebox{0pt}[0pt][0pt]{%
+				\smash{\aligntop{%
 				\if@boxsolutions%
 					\fbox{\usebox{\solutionbox}}%
 				\else%
 					\usebox{\solutionbox}%
-				\fi}%
+				\fi}}%
 				\par\vspace*{\dimexpr -\baselineskip-\parskip}%
 			\fi%
 		\fi%
