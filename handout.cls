@@ -28,6 +28,11 @@
 \DeclareOption{title}{\@showtitletrue}
 \DeclareOption{notitle}{\@showtitlefalse}
 
+\newif\if@showpagenums
+\@showpagenumstrue
+\DeclareOption{pagenums}{\@showpagenumstrue}
+\DeclareOption{nopagenums}{\@showpagenumsfalse}
+
 \newif\if@boxedtheorems
 \@boxedtheoremstrue
 \DeclareOption{boxedtheorems}{\@boxedtheoremstrue}
@@ -506,7 +511,9 @@
 
 \pagestyle{fancy}
 \fancyhf{}% clear default for head and foot
-\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
+\if@showpagenums
+	\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
+\fi
 \fancyfoot[L]{{\SpoilerFont\@spoilertext}}
 \fancyhead[L]{\FancyShortTitle}
 \ifrunningname
