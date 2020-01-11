@@ -43,11 +43,15 @@ To begin, use the document class `handout`.  My typical usage looks like this:
 ```
 The following options are recognized:
 
--  `solutions`/`nosolutions` (default): set whether or not to typeset the solutions to problems.  (It basically just sets `\showsolutiontrue`, if you are familiar with TeX's ifs.)
+-  `solutions`/`boxedsolutions`/`nosolutions` (default): whether and how to typeset the solutions to problems.  (It basically just sets `\showsolutiontrue`, if you are familiar with TeX's ifs.)  If `boxedsolutions` is given, then solutions are typeset and are put in in `\fbox`es.
 - `spaces` (default)/`nospaces`: whether or not to leave the specified space after problems.  The `nospaces` option is useful for answer keys if you don't care about preserving formatting and for drafting problem sets, when you want to see as many problems at a time as possible.  Honestly, I don't use this it that often. 
 - `parskip`/`parindent` (default): parskip loads the parskip library, which I think looks great.
-- `name`( default)/`noname`: whether or not to leave a space for the students' names.
+- `name` (default)/`runningname`/`noname`: whether and how to leave a space for the students' names.  It is up to the heading to respect this option (by consulting `\ifshowname`).  If `runningname` is given, then the name is additionally printed in the header of every page (`oneside`) or every odd page (`twoside`).
 - `title` (default)/`notitle`: whether or not to automatically call `\maketitle` at the start of the document, which typesets the heading for the first page.
+- `pagenums`(default)/`nopagenums`: turns on/off the page numbers in the lower right corner.
+- `probnumbers` (default)/`checkboxes`/`noprobnumbers`: whether and how to display problem numbers.  `checkboxes` replaces the problem numbers with checkboxes, `noprobnumbers` removes the problem numbers.  In either of the latter two options, subproblems are still numbered.
+- `boxedtheorems`(default)/`noboxedtheorems`: switches between having a frame around theorems and such and a more traditional style.
+- `sharednumbers`(default)/`differentnumbers`: whether to use the same counter for theorems, definitions, et cetera or a separate one for each ("Theorem 1, Lemma 2, Theorem 3" vs "Theorem 1, Lemma 1, Theorem 2")
 - Anything that you can do for the `article` document class.  Notably,
   - `10pt`/`11pt`/`12pt`
   - `oneside`/`twoside`
@@ -65,17 +69,23 @@ You can add problem using the `prob` environment:
 \end{prob}
 ```
 
-You can add parts/subproblems by nesting these environments.  They can be nested up to three levels deep.  The first level is labeled with Arabic numerals, the second with lowercase letters, the third with lowercase roman numerals.
+You can add parts/subproblems by nesting these environments up to three levels deep.  The first level is labeled with Arabic numerals, the second with lowercase letters, the third with lowercase roman numerals.
+
+The `prob*` environment creates an unnumbered problem, which has all of the features of a problem (including easy control of spacing and the ability to add solutions) in a format that looks more or less like a normal block of text!  Unless explicitly suppressed, subproblems will still be numbered as usual.
+
 #### Solutions
+
 If `\solution` or `\solution*` appears inside a problem environment, then everything that follows will only by typeset if solutions are shown (with the option `solutions`).
 
 Importantly, the solution is placed in the space below the problem, but (if using `\solution`) it does not add any additional space, so the layout of the handout will be identical whether or not you show solutions.  This unfortunately means that the solution can spill over into the next problem, or off the end of the page, if you are not careful.  The starred version instead has the solution replace the space that would otherwise have been left.
 
 If typeset, the solution will be prepended with the contents of `\SolutionPrefixFont\SolutionPrefix`, which default to `\bfseries` and `SOLUTION:` respectively , but you can `\renewcommand` either of them if you’d like.
 #### Problems in Columns/Grids
-Problems can be placed in a grid (numbered across the row, instead of down the column).  This can be achieved with the option described below, or by issuing the command `\ProbsInColumns{n}`, where n is the desired number of columns. `\ProbsNotInColumns` is equivalent to `\ProbsInColumns{0}`, and causes subsequent problems to be typeset in the usual way.  This command is useful (in comparison to corresponding option to the `prob` environment) if you want to change the number of columns part way through a grid, or if you want to use columns for the top level of problems instead of just for subproblems.
+Problems can be placed in a grid (numbered across the row, instead of down the column).  This can be achieved with the `columns` option described below, or by issuing the command `\ProbsInColumns{n}`, where n is the desired number of columns. `\ProbsNotInColumns` is equivalent to `\ProbsInColumns{0}`, and causes subsequent problems to be typeset in the usual way.  This command is useful (in comparison to corresponding option to the `prob` environment) if you want to change the number of columns part way through a grid, or if you want to use columns for the top level of problems instead of just for subproblems.
 
 You do not need to add explicit linebreaks, but any linebreaks that you do add will be respected.  The first problem in a grid should be preceeded by a blank line.
+
+The space between columns is controlled by the length `\ProbColSep`, which is initially .5cm, and can be changed with `\setlength{\ProbColSep}{...}`.
 
 **Be forewarned:** the spaces below all problems in a row stack, which can lead to some unexpected results.
 
@@ -113,10 +123,10 @@ You do not need to add explicit linebreaks, but any linebreaks that you do add w
 The problem environment recognizes the following options (in square brackets after the `\begin{prob}`):
 
 - `space`/`nospace` will determine how much space is left after a problem.  `space` can be passed a length (e.g., `space=2in`), which will leave that much space below the problem for students to write their solution, or it may be passed a number (e.g., `space=2`), which will fill the available space on the page, in proportion to the numbers given (so if one problem is given `space=1` and another `space=2`, then the latter will be given twice as much space as the former).  `space` is equivalent to `space=1`, `nospace` is equivalent to `space=0pt`, and if neither is present, then a sensible default is used (equivalent to `nospace` if this problem contains subparts and `space` if not).
+- `spaces`/`nospaces` sets the default space for this problem and its subproblems (can still be explicitly overwritten by use `space` on the subproblem).
 - `points=n` displays the number of points that the question is worth at the beginning of the problem.
 - `columns=n`: typesets any subproblems of this problem in a grid with n columns.
-- `bonus`/`exciting`/`surprising`/`play`/`stop`/`discuss`/`calculator`: displays a little picture to the left of the problem number, to communicate in some way with the student.  This picture is, respectively: a star, a pair of exclamation marks, an interrobang, a beach ball, a stop sign, a pair of speech bubbles, and an array of arithmetic operations.  I'd love to add more, or give them more helpful names, if it would be helpful to you.
-
+- `bonus`/`exciting`/`surprising`/`play`/`stop`/`discuss`/`calculator`/`attention`/`check`: displays a little picture to the left of the problem number, to communicate in some way with the student.  This picture is, respectively: a star, a pair of exclamation marks, an interrobang, a beach ball, a stop sign, a pair of speech bubbles, an array of arithmetic operations, a pointing hand, and a checkbox.  I'd love to add more, or give them different names, if it would be helpful to you.
 - This environment is implemented as a enumerate-like environment using the `enumitem` package; any other options are just passed along to the underlying list (so for example, you can pass in  `start=23` to begin counting at 23).
 
 ### Headings
@@ -129,6 +139,7 @@ The problem environment recognizes the following options (in square brackets aft
   - `\unit`
   - `\unitnumber`
   - `\weeknumber`
+  - `\date`
   - `\sheetnumber`
   - `\title`
   - `\studentname`
@@ -138,30 +149,30 @@ The problem environment recognizes the following options (in square brackets aft
   
 - A heading is automatically placed at the top of the first page (unless the `notitle` option is given to the document class).  There are a few that are pre-defined, and you can fairly easily make your own!
 
-  - You can use `\renewcommand{\FirstPageHeader}{[...]}` to use a different header.  This is *also* the sort of thing that I'd recommend putting in `CourseInfo.tex`.
+  - You can use `\renewcommand{\FirstPageHeader}{...}` to use a different header.  This is *also* the sort of thing that I'd recommend putting in `CourseInfo.tex`.
 
   - So far, the predefined headers are
 
-    - `\headerZG` (default)
-    - `\headerZGpic`, which takes one mandatory argument.  This argument should produce an image (perhaps an `\includegraphics`, code for a Ti*k*Z picture, et cetera).
-      - These two commands are probably going to be replaced and renamed soon, so be careful!
-    - `\boxedheader`, which takes 6 mandatory arguments which populate, respectively, upper left corner, upper center, upper right corner, lower left corner, lower center, and lower right corner.  The center is always the title of the handout.
+    - `\boxedheader`, which takes 6 mandatory arguments which populate, respectively, upper left corner, upper center, upper right corner, lower left corner, lower center, and lower right corner.  There is also an optional argument which controls the center, which defaults to the title of the handout (specifically, `\TitleFont\strut\FancyTitle\strut`.
+
     - `\tcboxedheader`, which has the same interface as `\boxedheader` but a slightly more fun appearance (rounded corners, box extends slightly into the margin).
-    - `\twopartheaderpic`, which puts a picture on the left, then divides the remainder of the space into two sections.  The rightmost is sized to its natural size, and the center one takes up the remaining space.  All of them have the height of the image in the leftmost part.  It takes 5 mandatory arguments:
-      1. the image
-      2. the vertical alignment of the middle section (`t`, `b`, or `c`)
-      3. the content of the middle section
-      4. the vertical alignment of the rightmost section
-      5. the content of the rightmost section
+
+    - `\**header` where  `**` is one of `LS`, `SL`, or `LL`.  These are fairly minimal headings which divide the space into two sections. `S` creates a short section whose width is only as wide as the contents require, and `L` creates a long section, which fills the remaining space.  The `LL` combination has each take the full width of the page, so the two sections can overlap (equivalent to `\LSheader*` and `\SLheader*`).  In each case, the command takes two mandatory arguments, containing the contents of the two sections.
+
+    - `\***header` where `***` is one of `PLS`, `PSL`, `PLL`, `LSP`, `SLP`, `LLP`, or `LPL`. These headers have three parts: a picture and two text boxes which are the same height as the picture.  They appear in the order specified: `P` for picture, `S` for a text box that is fit to its content, `L` for a text box that takes up the remaining space. The text boxes in `PLL` and `LLP` each take up all of the space left after the image, and so overlap.  In `LPL`, the picture is centered and the text boxes fill the space on either side.
+
+      For each, there are five mandatory arguments, one for the picture and two for each text box, which are given in the order in which those elements appear.  The two arguments for each text box are first the vertical alignment of the text (`t`, `c`, or `b`), then the contents.
+
+    - `\teeheader` is a header with a centered title and a vertical line drawn underneath and the text of your choice on either side of it.  This header takes two mandatory arguments, for the text on the left and right respectively, and one optional argument to overwrite the centered text (which defaults to `\TitleFont\FancyTitle`).
 
   - You may `\renewcommand` any of the following to customize the look of your heading:
     - `\SheetNumberPrefix`: text prepended to the `\SheetNumber`, if it exists. By default, this is `\S`, but maybe you'd like `Handout~` or similar.
-    - `\SheetNumberPostfix`: test that is appended to the `\SheetNumber`, it if exists, to separate it from the `\Title`.  By default, this is just a space, but maybe you'd want a colon or some such
+    - `\SheetNumberPostfix`: text that is appended to the `\SheetNumber`, it if exists, to separate it from the `\Title`.  By default, this is just a space, but maybe you'd want a colon or some such
     - `\NameLineText`: the text prepended to the line where students will write their name.  By default, `Name:~`.
     - `\NameLineLength`: is the length of the line where they'd write their name.  If there is a date line, it is likely of the same length.  This is a length, so you should set it with `\setlength`, not `\renewcommand`.
     - `\TitleFont`: the font used for the `\Title` of the handout.  By default, `\large\bfseries\boldmath`
     - `\SchoolNameFont`: the font used for the school name.  By default, `\scshape`.
-    - `\CourseNameFont`: the font used for the `\CourseName`.  By default, `\large`.
+    - `\CourseNameFont`: the font used for the `\CourseName`.  By default, this command is empty.
 
   - If you define your own custom header, the following macros are available to you:
 
@@ -173,33 +184,38 @@ The problem environment recognizes the following options (in square brackets aft
     - `\UnitName`
     - `\UnitNumber`
     - `\WeekNumber`
+    - `\Date`
     - `\SheetNumber`
     - `\Title`
     - `\FancyTitle`, which contains the title, prepended with the unit number and sheet number (if present)
-    - `NameLine`
+    - `\NameLine`
+    - `\NameSpace`
     
   - For example, Mia's boxed headings can be achieved by placing the following in the preamble (or, preferably, in a shared `CourseInfo.tex` file).
 
     ```latex
-    \renewcommand{\CourseNameFont}{}
     \renewcommand{\SheetNumberPrefix}{Handout~}
     \renewcommand{\SheetNumberPostfix}{:\ }
     \renewcommand{\SchoolNameFont}{}
     \renewcommand{\TitleFont}{\Large}
     \renewcommand{\FirstPageHeader}{\boxedheader{\CourseNameFont\CourseName}{}{Teacher: \InstructorName}{Week \WeekNumber}{}{{\SchoolNameFont\SchoolName} \SchoolYear}}
     ```
+    
 
-    Or, if you like shortcuts, this is all bundled into the macro `\HeaderStyleMS`.
+  Or, if you like shortcuts, this is all bundled into the macro `\HeaderStyleMS`.
 
 - If you have a header that you like, let me know and we can make sure that it is implemented and easily choose-able!
 
 ### Odds and Ends
 
-- `\blank`, `\blank*`: the mandatory argument is the length of the blank, the optional argument is typeset if solutions are displayed.  Normally that solution is `\smash`ed so that the blank will have same vertical position whether or not solutions are displayed (even if the solution is tall, or has descenders); the starred variant does not `\smash` the solution, which is useful sometimes!
-- `\smartoverline`: I think that `\overline`s look bad for some letters, because it is computed based on the bounding box and so can extend far from the top of the letter.  This tries to fix that by starting the overline a little further to the left than in normally would be (based on what the first letter is).
+- `\blank`, `\blank*`: Leaves a blank that students can fill in.  One mandatory argument sets the length of the blank, one optional argument is for a solution.  In the starred variant, the blank is `\smash`ed so that very large solutions won't throw off the vertical spacing.
+- `\smartoverline`: I think that `\overline`s look bad for some letters, because it is computed based on the bounding box and so can extend pretty far from the top of the letter.  This tries to fix that by starting the overline a little further to the left than in normally would be (based on what the first letter is).
 - `\spoilerbreak`: displays the message: "*Spoilers ahead! Proceed with caution...*" in the bottom left corner of the page, then inserts a page break.  An optional argument lets you use a different message.  You can also `\renewcommand` the following:
   - `\SpoilerFont`: the font used, by default `\itshape`.
   - `\DefaultSpoilerText`: the default text used.  By default, as stated above, `Spoilers ahead! Proceed with caution\ldots`.
+  
+- `\scratchpage` makes a new page with *Scratch work* centered at the top.
+
 - Fancy theorems!  Puts your theorems and definitions and such in fancy boxes!  Currently the following are defined, but you can make more if you want.
   - `theorem`/`theorem*`
   - `lemma`/`lemma*`
@@ -209,6 +225,20 @@ The problem environment recognizes the following options (in square brackets aft
   - `proposition`/`proposition*`
   - `definition`/`definition*`
   - `example`/`example*`
-- `\squircle` makes a small squircle!  The qed symbol at the end of a proof has been replaced by a squircle.
+  - `remark`/`remark*`
+- Squircles!
+  - `\squircle` makes a small squircle!  The qed symbol at the end of a proof defaults to this symbol.
+  - `\Squircle` makes a big squircle.  It takes two mandatory arguments, first the size, then the style (this can be any style that Ti*k*Z will recognize in a `\draw` command—notably, the name of a color).
+  
+  There are also some fun variants.  For each, the first mandatory argument controls the size of the squircle.  Further options are demonstrated in the file SampleSquircles.tex
+  
+  - `\SquircleRainbow` 
+  - `\SquircleFadeIn`
+  - `\SquircleFadeOut`
+  - `\SquircleSoft`
+  - `\SquircleOuterLine`
+  - `\SquircleInnerLine`
+  - `\SquircleShakyLine`
+  - `\SquircleCrazyLine`
 - `\ifsoln` typesets its mandatory argument if solutions are displayed, and its optional argument otherwise.
 
