@@ -303,8 +303,8 @@
 
 \newlist{prob}{enumerate}{3}
 \setlist[prob,1]{label={\arabic*.}, ref={\arabic*}}
-\setlist[prob,2]{label={\alph*)}, ref={\arabic{probi}\alph*}}
-\setlist[prob,3]{label={\roman*)}, ref={\alph{probii}\;\!\roman*)}}
+\setlist[prob,2]{label={\alph*)}, ref={\alph*}}
+\setlist[prob,3]{label={\roman*)}, ref={\roman*}}
 %\setlist[probs]{align=left, leftmargin=*, labelindent=0em, labelwidth=0em, itemindent=0em}
 \setlist[prob]{align=left, leftmargin=!, labelindent=0em, labelsep=.5em, labelwidth=1em}
 \if@checkboxes
