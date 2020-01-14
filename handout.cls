@@ -52,7 +52,6 @@
 \DeclareOption{checkboxes}{\@checkboxestrue}
 \DeclareOption{noprobnumbers}{\@numbernextprobfalse}
 
-
 \newif\if@loadparskip
 \@loadparskipfalse
 \DeclareOption{parskip}{\@loadparskiptrue}
@@ -491,6 +490,7 @@
 	\fi%
 }
 \AfterEndEnvironment{prob}{\global\@firstprobfalse\ignorespaces}
+\AfterEndEnvironment{prob*}{\global\@firstprobfalse\ignorespaces}
 
 
 
