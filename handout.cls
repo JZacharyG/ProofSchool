@@ -65,6 +65,7 @@
 \ProcessOptions\relax
 \LoadClass{article}
 
+\RequirePackage{xparse}
 
 \RequirePackage{tikz, tcolorbox}
 \usetikzlibrary{calc, shapes.callouts, shapes.geometric}
@@ -356,9 +357,9 @@
 \SetEnumitemKey{fix spaces}{fixspaces}
 
 \newlength{\ProbColSep}     \setlength{\ProbColSep}{0.5cm}
-\def\probcolsep{\ProbColSep}
+\def\probcolsep{\ProbColSep} % deprecated, only here for compatibility
 
-\newcommand{\ifsoln}[2][]{\ifshowsolutions{#2}\else{#1}\fi}
+\NewDocumentCommand{\ifsoln}{O{}m}{\ifshowsolutions#2\else#1\fi}
 
 \newcommand{\pointssymbol}{$^\text{p\!\underline{\,ts}}$}
 \newcommand{\pointsymbol}{$^\text{p\!\underline{\,t}}$}
@@ -528,11 +529,8 @@
 \newcommand{\TitleFont}{\large\bfseries\boldmath}
 \def\Title{}
 \def\ShortTitle{}
-\renewcommand{\title}[2][\@nil]{%
+\RenewDocumentCommand{\title}{O{#2}m}{%
 	\def\ShortTitle{#1}%
-	\ifx\ShortTitle\@nnil%
-		\def\ShortTitle{#2}%
-	\fi%
 	\def\Title{#2}%
 }
 
@@ -549,21 +547,15 @@
 \newcommand{\CourseNameFont}{}
 \def\CourseName{}
 \def\CourseShortName{}
-\newcommand{\course}[2][\@nil]{%
+\NewDocumentCommand{\course}{O{#2}m}{%
 	\def\CourseShortName{#1}%
-	\ifx\CourseShortName\@nnil%
-		\def\CourseShortName{#2}%
-	\fi%
 	\def\CourseName{#2}%
-}%\def\CourseName{#1}}
+}
 
 \def\InstructorName{}
 \def\InstructorFullName{}
-\newcommand{\instructor}[2][\@nil]{%
+\NewDocumentCommand{\instructor}{O{#2}m}{%
 	\def\InstructorFullName{#1}%
-	\ifx\InstructorFullName\@nnil%
-		\def\InstructorFullName{#2}%
-	\fi%
 	\def\InstructorName{#2}%
 }
 
@@ -601,15 +593,18 @@
 \newcommand{\@blankspacertext}{jgy}
 %\newcommand{\@blankspacertext}{$\tfrac11$}
 
-\newcommand{\blank}{\@ifstar\blank@starred\blank@unstarred}
-\newcommand{\blank@unstarred}[2][]{\filledblank@unstarred[#1]{}{#2}}
-\newcommand{\blank@starred}[2][]{\filledblank@starred[#1]{}{#2}}
-
-\newcommand{\filledblank}{\@ifstar\filledblank@starred\filledblank@unstarred}
-\newcommand{\filledblank@unstarred}[3][]{%
+\NewDocumentCommand{\blank}{sO{}m}{%
+	\IfBooleanTF{#1}% (if starred)
+		{\smash{\@blank{#2}{}{#3}}}%
+		{\@blank{#2}{}{#3}}}
+\NewDocumentCommand{\filledblank}{sO{#3}mm}{%
+	\IfBooleanTF{#1}% (if starred)
+		{\smash{\@blank{#2}{#3}{#4}}}%
+		{\@blank{#2}{#3}{#4}}}
+\newcommand{\@blank}[3]{%
 	\leavevmode%
 	\begingroup%
-		\savebox{\@blanktext}{\vphantom{\@blankspacertext}\ifsoln[#2]{#1}}%
+		\savebox{\@blanktext}{\vphantom{\@blankspacertext}\ifshowsolutions#1\else#2\fi}%
 		\fancysetlength{\@blanklength}{#3}%
 		\hspace*{\glueexpr \@blanklength/2}%
 		\makebox[0pt][c]{\usebox{\@blanktext}}%
@@ -617,8 +612,6 @@
 		\leaders\hrule height \dimexpr -\dp\@blanktext-1.2pt depth \dimexpr \dp\@blanktext+1.6pt\hskip \@blanklength\kern\z@%
 	\endgroup%
 }
-\newcommand{\filledblank@starred}[3][]{\smash{\filledblank@unstarred[{#1}]{#2}{#3}}}
-
 
 \let\oldS\S
 \def\S{{\fontfamily{cmr}\selectfont\oldS}} % I really don't like the bold section symbol that Latin Modern uses with T1 encoding... although their normal weight version is pretty decent.  The Computer Modern with T1 is my favorite combo, I think.
@@ -995,18 +988,16 @@
 %}
 % The optional argument, if present, is used in place of the required argument for the purpose of computing the initial offset.
 % useful if you want to put an overline over something set in \mathit, for example.
-\newcommand{\smartoverline}[2][\@nil]{%
-	{\def\tmp{#1}%
-	\ifx\tmp\@nnil%
-		\StrChar{#2}{1}[\tmp]%
-	\else%
+\NewDocumentCommand{\smartoverline}{O{#2}m}{%
+	{%
 		\StrChar{#1}{1}[\tmp]%
-	\fi%
-	\IfSubStr{Uacehikqtxy}{\tmp}{\def\tmp{0.04em}}{%
-	\IfSubStr{CGIOQdgjosz}{\tmp}{\def\tmp{0.1em}}{%
-	\IfSubStr{BDEFHJKLMNPRXZSf}{\tmp}{\def\tmp{0.16em}}{%
-	\IfSubStr{A}{\tmp}{\def\tmp{0.2em}}{\def\tmp{0em}}}}}%
-	\mathmakebox[0pt][l]{\hspace*{\tmp}\overline{\mathmakebox[\dimexpr \width-\tmp]{\phantom{#2}}}}}#2%
+		\IfSubStr{Uacehikqtxy}{\tmp}{\def\tmp{0.04em}}{%
+		\IfSubStr{CGIOQdgjosz}{\tmp}{\def\tmp{0.1em}}{%
+		\IfSubStr{BDEFHJKLMNPRXZSf}{\tmp}{\def\tmp{0.16em}}{%
+		\IfSubStr{A}{\tmp}{\def\tmp{0.2em}}{\def\tmp{0em}}}}}%
+		\mathmakebox[0pt][l]{\hspace*{\tmp}\overline{\mathmakebox[\dimexpr \width-\tmp]{\phantom{#2}}}}%
+	}%
+	#2%
 }
 
 \newcommand{\intersentencespace}{\spacefactor\sfcode`. \space}
