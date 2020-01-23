@@ -907,9 +907,21 @@
 
 
 
+%%%%%%%%%% Section Headings %%%%%%%%%%
+\usepackage[compact]{titlesec}
+\titleformat*{\section}{\Large\bfseries\boldmath}
+\titleformat*{\subsection}{\large\bfseries\boldmath}
+\titleformat*{\subsubsection}{\normalsize\bfseries\boldmath}
 
 
-%%%%%%%%%% Assorted %%%%%%%%%%
+
+
+
+
+
+
+
+%%%%%%%%%% Squircles %%%%%%%%%%
 \usetikzlibrary{decorations.pathmorphing}
 \newcommand{\Squircle}[2]{\resizebox{!}{#1}{\tikz{\draw[line width=.11cm,#2] (-.5, -.5) rectangle (.5, .5) (0,0) circle (.25);}}}
 
@@ -954,6 +966,16 @@
 \newcommand{\SquircleCrazyLine}[4][]{\SquircleInnerLine{#2}{#3}{line join=bevel, decorate, decoration={random steps, segment length=.02cm, amplitude=.04cm,#1},#4}}
 \newcommand{\squircle}[1][]{{\settoheight{\dimen255}{I}\Squircle{\dimen255}{line width=.1cm, #1}}}
 
+
+
+
+
+
+
+
+
+
+%%%%%%%%%% Assorted %%%%%%%%%%
 \renewcommand{\qedsymbol}{\squircle}
 
 \newcommand{\SpoilerFont}{\itshape}
@@ -965,7 +987,7 @@
 \newcommand{\DefaultScratchWorkText}{Scratch work}
 \newcommand{\scratchpage}[1][\DefaultScratchWorkText]{\newpage\begin{center}\ScratchWorkFont#1\end{center}}
 
-\newcommand{\bonus}{{\Large{$\star$}}}
+\newcommand{\bonus}{{\Large{$\star$}}}% depricated
 
 % I just think there is too much space around displayed equations?
 \apptocmd\normalsize{%
