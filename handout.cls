@@ -57,6 +57,10 @@
 \DeclareOption{parskip}{\@loadparskiptrue}
 \DeclareOption{parindent}{\@loadparskipfalse}
 
+\newif\if@xivpt
+\@xivptfalse
+\DeclareOption{14pt}{\@xivpttrue}
+
 \DeclareOption*{%
 	\PassOptionsToClass{\CurrentOption}{article}%
 }
@@ -64,6 +68,10 @@
 %\ExecuteOptions{12pt, twoside, letterpaper}
 \ProcessOptions\relax
 \LoadClass{article}
+
+\if@xivpt
+	\RequirePackage[14pt]{extsizes}
+\fi
 
 \RequirePackage{xparse}
 
