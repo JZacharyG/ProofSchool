@@ -1062,3 +1062,7 @@
 \newcommand{\aligntop}[2][\dimexpr\totalheight-\dimen255]{{\settoheight{\dimen255}{I}\raisebox{\dimexpr\dimen255-\height}[\dimen255][#1]{#2}}}
 
 
+\newcommand{\TermFont}{\bfseries\boldmath}
+\newcommand{\term}[1]{%
+	{\TermFont{#1}}%
+}
