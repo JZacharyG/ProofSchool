@@ -94,19 +94,14 @@
 \if@loadparskip
 	%\RequirePackage[parfill]{parskip}
 	\RequirePackage{parskip}
-	\xpatchcmd{\proof}{\topsep6\p@\@plus6\p@\relax}{}{}{}
-%	\def\thm@space@setup{%
-%		\thm@preskip=\parskip \thm@postskip=0pt%
-%	}
 \fi
 
 \RequirePackage[OT1,T1]{fontenc}
 \RequirePackage{lmodern}
 \RequirePackage{microtype}
 
-\newlength{\outsideparskip}
-\setlength{\outsideparskip}{\parskip}
-
+\newlength{\outsideparskip} % This length is set to parskip at \begin{document}, to reflect any changes that are made later in the preamble
+\newcommand{\restoreparskip}{\setlength{\parskip}{\outsideparskip}}
 
 
 
@@ -181,8 +176,8 @@
 	% #7: additional code
 	% #8: counter
 	\newcommand{\newPStcbPair}[8]{
-		\newPStcb{#1*}{#2}{#3}{#4}{#5}{#6}{before upper={\setlength{\parskip}{\outsideparskip}},#7}{}%
-		\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{before upper={\setlength{\parskip}{\outsideparskip}\addtocounter{#8}{-1}\refstepcounter{#8}},#7}{\stepcounter{#8}\ \csname the#8\endcsname}%
+		\newPStcb{#1*}{#2}{#3}{#4}{#5}{#6}{before upper={\restoreparskip},#7}{}%
+		\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{before upper={\restoreparskip\addtocounter{#8}{-1}\refstepcounter{#8}},#7}{\stepcounter{#8}\ \csname the#8\endcsname}%
 	}
 	% #1: command
 	% #2: Category (as it is to be displayed)
@@ -392,7 +387,7 @@
 			\else%
 				\minipage[t]{\linewidth}%
 			\fi%
-			\setlength{\parskip}{\outsideparskip}%
+			\restoreparskip%
 			{\SolutionPrefixFont\SolutionPrefix}%
 			\ignorespaces%
 	}%
@@ -420,7 +415,7 @@
 		\@inacolumntrue%
 		\pgfmathparse{(\linewidth-((\@numcolumns)-1)*\ProbColSep)/(\@numcolumns)}%
 		\minipage[t]{\pgfmathresult pt}%
-		\setlength{\parskip}{\outsideparskip}%
+		\restoreparskip%
 	\fi%
 	\@probsincolumnsfalse%
 	\@usenaturalheightfalse%
@@ -897,9 +892,6 @@
 	\vspace{-\parskip}%
 	% FIX ME: \noindent for first line of text after heading?
 }}
-\if@showtitle
-	\AtBeginDocument{\maketitle}
-\fi
 
 
 
@@ -973,6 +965,25 @@
 
 
 
+%%%%%%%%%% Hooks %%%%%%%%%%
+\AtBeginDocument{%
+	\setlength{\outsideparskip}{\parskip}%
+	\ifdim\parskip>0pt%
+		\xpatchcmd{\proof}{\topsep6\p@\@plus6\p@\relax}{}{}{}%
+		%\def\thm@space@setup{%
+		%	\thm@preskip=\parskip \thm@postskip=0pt%
+		%}
+	\fi%
+	\if@showtitle%
+		\maketitle%
+	\fi%
+}
+
+
+
+
+
+
 
 
 %%%%%%%%%% Assorted %%%%%%%%%%
@@ -1033,7 +1044,7 @@
 \newcommand{\intersentencespace}{\spacefactor\sfcode`. \space}
 
 \newtcolorbox{centeredframe}[1][0pt]{
-	before upper={\setlength{\parskip}{\outsideparskip}},
+	before upper={\restoreparskip},
 	enhanced,
 	empty,
 	boxrule=0mm,
@@ -1046,7 +1057,7 @@
 }
 
 \newtcolorbox{partialframe}[1][0pt]{
-	before upper={\setlength{\parskip}{\outsideparskip}},
+	before upper={\restoreparskip},
 	enhanced,
 	empty,
 	boxrule=0mm,
