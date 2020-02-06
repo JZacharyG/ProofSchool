@@ -52,6 +52,7 @@ The following options are recognized:
 - `probnumbers` (default)/`checkboxes`/`noprobnumbers`: whether and how to display problem numbers.  `checkboxes` replaces the problem numbers with checkboxes, `noprobnumbers` removes the problem numbers.  In either of the latter two options, subproblems are still numbered.
 - `boxedtheorems`(default)/`noboxedtheorems`: switches between having a frame around theorems and such and a more traditional style.
 - `sharednumbers`(default)/`differentnumbers`: whether to use the same counter for theorems, definitions, et cetera or a separate one for each ("Theorem 1, Lemma 2, Theorem 3" vs "Theorem 1, Lemma 1, Theorem 2")
+- `14pt` to set the base font size to 14pt, complementing the options `10pt`, `11pt`, and `12pt`, provided by the `article` class.
 - Anything that you can do for the `article` document class.  Notably,
   - `10pt`/`11pt`/`12pt`
   - `oneside`/`twoside`
@@ -69,7 +70,7 @@ You can add problem using the `prob` environment:
 \end{prob}
 ```
 
-You can add parts/subproblems by nesting these environments up to three levels deep.  The first level is labeled with Arabic numerals, the second with lowercase letters, the third with lowercase roman numerals.
+You can add parts/subproblems by nesting these environments up to three levels deep.  The first level is labeled with numbers, the second with lowercase letters, the third with lowercase roman numerals.
 
 The `prob*` environment creates an unnumbered problem, which has all of the features of a problem (including easy control of spacing and the ability to add solutions) in a format that looks more or less like a normal block of text!  Unless explicitly suppressed, subproblems will still be numbered as usual.
 
@@ -77,7 +78,9 @@ The `prob*` environment creates an unnumbered problem, which has all of the feat
 
 If `\solution` or `\solution*` appears inside a problem environment, then everything that follows will only by typeset if solutions are shown (with the option `solutions`).
 
-Importantly, the solution is placed in the space below the problem, but (if using `\solution`) it does not add any additional space, so the layout of the handout will be identical whether or not you show solutions.  This unfortunately means that the solution can spill over into the next problem, or off the end of the page, if you are not careful.  The starred version instead has the solution replace the space that would otherwise have been left.
+Importantly, the solution is placed in the space below the problem, but (if using `\solution`, not `\solution*`) it does not add any additional space, so the layout of the handout will be identical whether or not you show solutions.  This unfortunately means that the solution can spill over into the next problem, or off the end of the page, if you are not careful.  
+
+The starred version instead has the solution replace the space that would otherwise have been left.
 
 If typeset, the solution will be prepended with the contents of `\SolutionPrefixFont\SolutionPrefix`, which default to `\bfseries` and `SOLUTION:` respectively , but you can `\renewcommand` either of them if you’d like.
 #### Problems in Columns/Grids
@@ -148,23 +151,15 @@ The problem environment recognizes the following options (in square brackets aft
   I would suggest making a file named `CourseInfo.tex`, and then `\input`ing it in the preamble of every handout.  It would contain the first four (for math classes) or three (for morning classes) of these commands, which would be common to all handouts for a given class.  You can also include any custom macros or other definitions that you want for this class, and all of your handouts will automatically see them!
   
 - A heading is automatically placed at the top of the first page (unless the `notitle` option is given to the document class).  There are a few that are pre-defined, and you can fairly easily make your own!
-
   - You can use `\renewcommand{\FirstPageHeader}{...}` to use a different header.  This is *also* the sort of thing that I'd recommend putting in `CourseInfo.tex`.
-
   - So far, the predefined headers are
-
     - `\boxedheader`, which takes 6 mandatory arguments which populate, respectively, upper left corner, upper center, upper right corner, lower left corner, lower center, and lower right corner.  There is also an optional argument which controls the center, which defaults to the title of the handout (specifically, `\TitleFont\strut\FancyTitle\strut`.
-
     - `\tcboxedheader`, which has the same interface as `\boxedheader` but a slightly more fun appearance (rounded corners, box extends slightly into the margin).
-
     - `\**header` where  `**` is one of `LS`, `SL`, or `LL`.  These are fairly minimal headings which divide the space into two sections. `S` creates a short section whose width is only as wide as the contents require, and `L` creates a long section, which fills the remaining space.  The `LL` combination has each take the full width of the page, so the two sections can overlap (equivalent to `\LSheader*` and `\SLheader*`).  In each case, the command takes two mandatory arguments, containing the contents of the two sections.
-
     - `\***header` where `***` is one of `PLS`, `PSL`, `PLL`, `LSP`, `SLP`, `LLP`, or `LPL`. These headers have three parts: a picture and two text boxes which are the same height as the picture.  They appear in the order specified: `P` for picture, `S` for a text box that is fit to its content, `L` for a text box that takes up the remaining space. The text boxes in `PLL` and `LLP` each take up all of the space left after the image, and so overlap.  In `LPL`, the picture is centered and the text boxes fill the space on either side.
 
       For each, there are five mandatory arguments, one for the picture and two for each text box, which are given in the order in which those elements appear.  The two arguments for each text box are first the vertical alignment of the text (`t`, `c`, or `b`), then the contents.
-
     - `\teeheader` is a header with a centered title and a vertical line drawn underneath and the text of your choice on either side of it.  This header takes two mandatory arguments, for the text on the left and right respectively, and one optional argument to overwrite the centered text (which defaults to `\TitleFont\FancyTitle`).
-
   - You may `\renewcommand` any of the following to customize the look of your heading:
     - `\SheetNumberPrefix`: text prepended to the `\SheetNumber`, if it exists. By default, this is `\S`, but maybe you'd like `Handout~` or similar.
     - `\SheetNumberPostfix`: text that is appended to the `\SheetNumber`, it if exists, to separate it from the `\Title`.  By default, this is just a space, but maybe you'd want a colon or some such
@@ -173,9 +168,7 @@ The problem environment recognizes the following options (in square brackets aft
     - `\TitleFont`: the font used for the `\Title` of the handout.  By default, `\large\bfseries\boldmath`
     - `\SchoolNameFont`: the font used for the school name.  By default, `\scshape`.
     - `\CourseNameFont`: the font used for the `\CourseName`.  By default, this command is empty.
-
   - If you define your own custom header, the following macros are available to you:
-
     - `\CourseName`
     - `\InstructorName`
     - `\SchoolName`
@@ -190,9 +183,7 @@ The problem environment recognizes the following options (in square brackets aft
     - `\FancyTitle`, which contains the title, prepended with the unit number and sheet number (if present)
     - `\NameLine`
     - `\NameSpace`
-    
   - For example, Mia's boxed headings can be achieved by placing the following in the preamble (or, preferably, in a shared `CourseInfo.tex` file).
-
     ```latex
     \renewcommand{\SheetNumberPrefix}{Handout~}
     \renewcommand{\SheetNumberPostfix}{:\ }
@@ -200,10 +191,7 @@ The problem environment recognizes the following options (in square brackets aft
     \renewcommand{\TitleFont}{\Large}
     \renewcommand{\FirstPageHeader}{\boxedheader{\CourseNameFont\CourseName}{}{Teacher: \InstructorName}{Week \WeekNumber}{}{{\SchoolNameFont\SchoolName} \SchoolYear}}
     ```
-    
-
   Or, if you like shortcuts, this is all bundled into the macro `\HeaderStyleMS`.
-
 - If you have a header that you like, let me know and we can make sure that it is implemented and easily choose-able!
 
 ### Odds and Ends
@@ -213,10 +201,10 @@ The problem environment recognizes the following options (in square brackets aft
 - `\spoilerbreak`: displays the message: "*Spoilers ahead! Proceed with caution...*" in the bottom left corner of the page, then inserts a page break.  An optional argument lets you use a different message.  You can also `\renewcommand` the following:
   - `\SpoilerFont`: the font used, by default `\itshape`.
   - `\DefaultSpoilerText`: the default text used.  By default, as stated above, `Spoilers ahead! Proceed with caution\ldots`.
-  
-- `\scratchpage` makes a new page with *Scratch work* centered at the top.
-
-- Fancy theorems!  Puts your theorems and definitions and such in fancy boxes!  Currently the following are defined, but you can make more if you want.
+- `\scratchpage`: makes a new page with *Scratch work* centered at the top.  You can also `\renewcommand` the following:
+  - `\ScratchWorkFont`: the font used, by default `\itshape`.
+  - `\DefaultScratchWorkText`: the default text used.  By default `Scratch work`.
+- Theorems!  If you have passed the `noboxedtheorems` option to the document class, these are in the style of the `amsthm` package.  Otherwise, classes up your theorems and definitions and such in fancy boxes!  Either way, the following are defined, but you can make more if you want.
   - `theorem`/`theorem*`
   - `lemma`/`lemma*`
   - `corollary`/`corollary*`
@@ -231,7 +219,6 @@ The problem environment recognizes the following options (in square brackets aft
   - `\Squircle` makes a big squircle.  It takes two mandatory arguments, first the size, then the style (this can be any style that Ti*k*Z will recognize in a `\draw` command—notably, the name of a color).
   
   There are also some fun variants.  For each, the first mandatory argument controls the size of the squircle.  Further options are demonstrated in the file SampleSquircles.tex
-  
   - `\SquircleRainbow` 
   - `\SquircleFadeIn`
   - `\SquircleFadeOut`
@@ -242,3 +229,42 @@ The problem environment recognizes the following options (in square brackets aft
   - `\SquircleCrazyLine`
 - `\ifsoln` typesets its mandatory argument if solutions are displayed, and its optional argument otherwise.
 
+## Change Log
+
+### v1.3
+
+- Added an option for 14pt font.
+- References to subproblems now only include the letter for that subproblem (so problem "1a" would be referenced as "a", not "a)" or "1a" or "1a)").
+- The section, subsection, and subsubsection headings are somewhat less intrusive, with less vertical space.  They also now make math in the section heading bold, to match the surrounding text.
+- Added a `\term` command to semantically style new terms when you introduce them.
+- Some commands have been rewritten using the `xparse` package, so that (matched) square brackets in optional arguments don't need to be protected.
+- Corrections (including fixing the spacing above a `proof`) are now based on a nonzero `\parskip`, determined at the start of the document, instead of only being applied if the `parskip` option is given to the document class.
+
+  In particular, this means that the corrections will still be applied if you load the package yourself.  This is necessary if you like the `parfill` option, in which case you should *not* use the `parskip` option and should instead call `\usepackage[parfill]{parskip}` in the preamble.
+
+### v1.2
+
+- Added an option to leave a blank for the student's name on only the first page (`name`) or on every page (`runningname`).
+- Added an option to put a box around solutions (`boxedsolutions`).
+- Added an option to use separate counters for theorems, lemmas, definitions, et cetera (`differentnumbers`).
+- Added `prob*` environment for unnumbered problem.  This has all the features of a problem, but should otherwise blend in with the surrounding text.
+- Added an option to have no problem numbers (`noprobnumbers`) or to use a check box instead of the problem number (`checkboxes`).  In each case, this applies only to top level problems, and any of their subproblems will still be numbered.
+- Added an option to use amsthm-style theorems (`noboxedtheorems`) instead of having a partial frame around them.
+- Reduced excess spacing above proofs when `\parskip` is nonzero.
+- Added more space between problem numbers and any picture that is placed next to it.
+- Added more pictures which can be used to decorate problems (`check` and `attention`).
+- Added length `\ProbColSep` to control the space between columns of problems.
+- Added keyword `spaces` to `prob` environment to control the default space left for its subproblems.
+- Changed the default `\CourseNameFont` from `\large` to no default.
+- Added `\date` command to let you specify the date of a handout (though you'll need to make sure the header displays this information).
+- Lowered the line in `\blank`s so that it can fit normal descenders like j, g, and y.
+- Changed the behavior of `\blank` and `\blank*`.  Now, the line is always lowered to fit the content (when displaying the solution), but if the starred version is given, the entire blank is `\smash`ed so that it does not change other formatting on the page.
+- Added command `\NameSpace` which looks the same as `\NameLine`, just without the line.
+- Added a more rich collection of headers to replace `\twopartheader` and `twopartheaderpic`, which are now deprecated.  The equivalent commands are `\LSheader` and `PLSheader`, respectively.
+- All headers are now set with `\onehalfspacing` by default.
+- Lots of new squircles!
+- A fix for a bug(?) in LaTeX which results in sometimes quirky spacing around `\left` and `\right`.
+
+### v1.1
+
+- Fixed a bug preventing the `bonus` keyword to the `prob` environment from working.

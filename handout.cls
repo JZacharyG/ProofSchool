@@ -1,6 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{handout}[2020/01/01 A document class for Proof School handouts]
-\newcommand{\AnswerKeyName}{Answer Key}
+\ProvidesClass{handout}[2020/02/06 A document class for Proof School handouts]
 
 \newif\ifshowname
 \shownametrue
@@ -10,6 +9,7 @@
 \DeclareOption{runningname}{\shownametrue\runningnametrue}
 \DeclareOption{noname}{\shownamefalse\runningnamefalse}
 
+\newcommand{\AnswerKeyName}{Answer Key}
 \newif\ifshowsolutions
 \newif\if@boxsolutions
 \showsolutionsfalse
@@ -309,7 +309,7 @@
 \setlist[prob,1]{label={\arabic*.}, ref={\arabic*}}
 \setlist[prob,2]{label={\alph*)}, ref={\alph*}}
 \setlist[prob,3]{label={\roman*)}, ref={\roman*}}
-%\setlist[probs]{align=left, leftmargin=*, labelindent=0em, labelwidth=0em, itemindent=0em}
+%\setlist[prob]{align=left, leftmargin=*, labelindent=0em, labelwidth=0em, itemindent=0em}
 \setlist[prob]{align=left, leftmargin=!, labelindent=0em, labelsep=.5em, labelwidth=1em}
 \if@checkboxes
 	\setlist[prob,1]{labelwidth=1.25em, label={{\noexpand\checkbox}}, ref={}}
