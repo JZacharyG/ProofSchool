@@ -44,6 +44,10 @@
 \DeclareOption{sharednumbers}{\@sharedtheoremnumstrue}
 \DeclareOption{differentnumbers}{\@sharedtheoremnumsfalse}
 
+\newif\if@empty
+\@emptyfalse
+\DeclareOption{empty}{\@emptytrue}
+
 \newif\if@numbernextprob
 \@numbernextprobtrue
 \newif\if@checkboxes
@@ -515,19 +519,22 @@
 
 \pagestyle{fancy}
 \fancyhf{}% clear default for head and foot
-\if@showpagenums
-	\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
-\fi
 \fancyfoot[L]{{\SpoilerFont\@spoilertext}}
 \fancyhead[L]{\FancyShortTitle}
-\ifrunningname
-	\fancyhead[RO]{\NameSpace}
-	\fancyhead[RE]{\CourseShortName}
+\if@empty
+	\renewcommand{\headrule}{}
 \else
-	\fancyhead[R]{\CourseShortName}
+	\if@showpagenums
+		\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
+	\fi
+	\ifrunningname
+		\fancyhead[RO]{\NameSpace}
+		\fancyhead[RE]{\CourseShortName}
+	\else
+		\fancyhead[R]{\CourseShortName}
+	\fi
+	\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5\height}{\squircle}\quad\hrulefill}
 \fi
-
-\renewcommand\headrule{\vskip-.7\baselineskip\hrulefill\quad\raisebox{-.5\height}{\squircle}\quad\hrulefill}
 
 \newcommand{\TitleFont}{\large\bfseries\boldmath}
 \def\Title{}
