@@ -43,9 +43,9 @@ They are all drawing their content from the commands:
 \newpage
 
 \begingroup
-\HeaderStyleZGpic{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}
+\HeaderStyleZGpic{\Squircle{1in}{cyan}}
 \maketitle
-\verb|\HeaderStyleZGpic{\resizebox{!}{\HeaderHeight}{\squircle[cyan]}}|
+\verb|\HeaderStyleZGpic{\Squircle{1in}{cyan}}|
 \endgroup
 
 \newpage
@@ -56,7 +56,7 @@ They are all drawing their content from the commands:
 \renewcommand{\SheetNumberPrefix}{}
 \renewcommand{\FirstPageHeader}{%
 	\PLSheader%
-	{\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
+	{\protrude{.25in}{.25in}{\SquircleRainbow[-1]{1in}}}%
 	{b}{{\TitleFont\FancyTitle}}%
 	{t}{\ifshowname\NameLine\\\fi\makebox[\NameLineLength]{{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}%
 \maketitle
@@ -67,7 +67,7 @@ They are all drawing their content from the commands:
 \renewcommand{\SheetNumberPrefix}{}
 \renewcommand{\FirstPageHeader}{%
     \PLSheader%
-    {\protrude{.25in}{.25in}{\resizebox{!}{1in}{\squircle[cyan]}}}%
+    {\protrude{.25in}{.25in}{\SquircleRainbow[-1]{1in}}}%
     {b}{{\TitleFont\FancyTitle}}%
     {t}{\ifshowname\NameLine\\\fi\makebox[\NameLineLength]
       {{\CourseNameFont\CourseName}\hfill\squircle\hfill\SchoolYear}}}
@@ -170,18 +170,16 @@ which is defined as
 \begingroup
 \renewcommand{\Title}{A very very very long title indeed!}
 \renewcommand{\TitleFont}{\huge}
-\renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{\PSLheader*%
-	{\resizebox{!}{1in}{\squircle[cyan]}}%
+	{\SquircleInnerLine{1in}{}{}}%
 	{b}{\singlespacing\SchoolYear\\{\CourseNameFont\CourseName}\\{\SchoolNameFont\SchoolName}}%
 	{t}{{\TitleFont\FancyTitle}\\[\fill]\NameLine}}
 \maketitle
 \singlespacing
 \begin{verbatim}
 \renewcommand{\TitleFont}{\huge}
-\renewcommand{\CourseNameFont}{}
 \renewcommand{\FirstPageHeader}{\PSLheader*%
-    {\resizebox{!}{1in}{\squircle[cyan]}}%
+    {\SquircleInnerLine{1in}{}{} }%
     {b}{\singlespacing\SchoolYear\\{\CourseNameFont\CourseName}\\
       {\SchoolNameFont\SchoolName}}%
     {t}{{\TitleFont\FancyTitle}\\[\fill]\NameLine}}
