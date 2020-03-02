@@ -319,25 +319,66 @@
 	\setlist[prob,1]{labelwidth=1.25em, label={{\noexpand\checkbox}}, ref={}}
 \fi
 \newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\,}}
+\newcommand{\DeclareProbPic}[2]{\SetEnumitemKey{#1}{format={\placeprobpic{#2}}}}
 %\newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\hspace{0.5pt}}}
-\SetEnumitemKey{check}{format={\placeprobpic{\checkbox\,}}}
-\SetEnumitemKey{bonus}{format={\placeprobpic{$\star$}}}
-\SetEnumitemKey{discuss}{format={\placeprobpic{\tikz{
-	\node[draw, ellipse callout, callout pointer arc=30, callout relative pointer={(0.3ex, -0.5ex)}, minimum width=1.25ex, minimum height=.8ex, inner sep=0pt, outer sep=2pt] at (.3ex, -.4ex){};
-	\node[draw, fill=white, ellipse callout, callout pointer arc=30, callout relative pointer={(-0.3ex, -0.6ex)}, minimum width=1.25ex, minimum height=.8ex, inner sep=0pt, outer sep=2pt] {};
-}}}}
-\SetEnumitemKey{stop}{format={\placeprobpic{\tikz[baseline=(sign.south)]{\node[draw, regular polygon, regular polygon sides=8, minimum width=.8em, inner sep=0pt] (sign){\makebox[0pt][c]{\resizebox{.65em}{.25em}{\textsf{STOP}}}};}}}}
-\SetEnumitemKey{exciting}{format={\placeprobpic{\textit{\makebox[2pt][l]{\raisebox{0.5pt}{\small!}}!}}}}
-\SetEnumitemKey{surprising}{format={\placeprobpic{\textit{\textinterrobang}}}}
-\SetEnumitemKey{play}{format={\placeprobpic{\raisebox{-2pt}[0pt][0pt]{\tikz[scale=.18]{
-	\draw (0,0) circle (1);
-	\draw[fill=gray, rotate=25] (0,1) arc (90:-90:0.75 and 1) arc (-90:90:0.15 and 1);
-	\draw[fill=lightgray, rotate=25] (0,1) arc (90:270:0.6 and 1) arc (270:90:1);
-}}}}}
-\SetEnumitemKey{calculator}{format={\placeprobpic{\raisebox{-1.5pt}[0pt][0pt]{\resizebox{.9em}{!}{\tikz{\node[draw,rounded corners=3pt, inner sep=1pt]{$\kern-.2em\begin{smallmatrix}+-\\\times\div\end{smallmatrix}\kern-.2em$}}}}}}}
-%\SetEnumitemKey{surprising}{format={\placeprobpic{\tikz[baseline=(txt.base)]{\node[inner xsep=0pt, xshift=.6pt] (txt1){\phantom{?}};\clip (txt1.south west) rectangle (txt1.north east);\node[xslant=-.23](txt){\textit{\textinterrobang}};}}}}
-\RequirePackage{marvosym}
-\SetEnumitemKey{attention}{format={\placeprobpic{\scalebox{1.35}{\Pointinghand}}}}
+\DeclareProbPic{check}{\checkbox\,}
+\DeclareProbPic{bonus}{$\star$}
+\DeclareProbPic{discuss}{%
+	\tikz{
+		\node[draw, ellipse callout, callout pointer arc=30, callout relative pointer={(0.3ex, -0.5ex)}, minimum width=1.25ex, minimum height=.8ex, inner sep=0pt, outer sep=2pt] at (.3ex, -.4ex) {};
+		\node[draw, fill=white, ellipse callout, callout pointer arc=30, callout relative pointer={(-0.3ex, -0.6ex)}, minimum width=1.25ex, minimum height=.8ex, inner sep=0pt, outer sep=2pt] {};
+	}}
+\DeclareProbPic{stop}{\tikz[baseline=(sign.south)]{\node[draw, regular polygon, regular polygon sides=8, minimum width=.8em, inner sep=0pt] (sign){\makebox[0pt][c]{\resizebox{.65em}{.25em}{\textsf{STOP}}}};}}
+\DeclareProbPic{exciting}{\textit{\makebox[2pt][l]{\raisebox{0.5pt}{\small!}}!}}
+\DeclareProbPic{surprising}{\textit{\textinterrobang}}
+\DeclareProbPic{play}{\raisebox{-2pt}[0pt][0pt]{%
+	\tikz[scale=.18]{
+		\draw (0,0) circle (1);
+		\draw[fill=gray, rotate=25] (0,1) arc (90:-90:0.75 and 1) arc (-90:90:0.15 and 1);
+		\draw[fill=lightgray, rotate=25] (0,1) arc (90:270:0.6 and 1) arc (270:90:1);
+	}}}
+\DeclareProbPic{calculator}{\raisebox{-1.5pt}[0pt][0pt]{\resizebox{.9em}{!}{%
+	\tikz{
+		\node[draw,rounded corners=3pt, inner sep=1pt]{$\kern-.2em\begin{smallmatrix}+-\\\times\div\end{smallmatrix}\kern-.2em$};
+	}}}}
+\DeclareProbPic{attention}{%
+	\tikz[thin, line cap=round, scale=1.8]{
+		\draw
+			(-.08, .05)
+				.. controls +(-15:.02) and +(190:.03).. (-.01, .075)
+				.. controls +(10:.02) and +(90:.01).. (.045, .025)
+				.. controls +(-90:.01) and +(-45:.055).. (-.016, .038)
+			(.009, .07)
+				.. controls +(0:.05) and +(175:.013).. (.1, .07)
+				.. controls +(-5:.055) and +(0:.06).. (.1, .033)
+				.. controls +(180:.04) and +(4:.015).. (.043, .031)
+			(.054, .031)
+				.. controls +(-42:.02) and +(20:.065).. (.02, -.015)
+				.. controls +(200:.04) and +(-150:.035).. (.005, .02)
+			(.06, .004)
+				.. controls +(-10:.02) and +(20:.035).. (.05, -.034)
+				.. controls +(-160:.025) and +(-110:.025).. (.007, -.02)
+			(.07, -.024)
+				.. controls +(-30:.01) and +(20:.035).. (.058, -.058)
+				.. controls +(-160:.025) and +(-110:.025).. (.02, -.04)
+			(.018, -.052)
+				.. controls +(183:.075) and +(0:.035).. (-.08, -.029);
+	}}
+
+
+\DeclareProbPic{pencil}{%
+	\tikz[scale=.65, rotate=25, very thin, baseline={(0,.2)}]{
+		\draw (-.1,1) -- (-.1, .25) -- (0,0) -- (.1, .25) -- (.1,1);
+		\fill (0,0) -- (-.03, .075) arc (180:360:.03 and .0075) -- cycle;
+		\draw (0,.8) -- (0,.225);
+		\draw (0,1) circle (.1 and .025);
+		\draw (-.1,.9) arc (180:360:.1 and .025);
+		\draw (-.1,.825) arc (180:360:.1 and .025);
+		\foreach \ang in {15,30,...,170}
+			\draw[ultra thin] (0,.8825)++(-\ang:.1 and .025) -- +(0,-.04);
+		\draw (0,.225) .. controls +(0:.02) and +(190:.03) .. (.05,.2) .. controls +(10:.02) and +(220:.015) .. (.1,.25);
+		\draw (0,.225) .. controls +(180:.02) and +(-10:.03) .. (-.05,.2) .. controls +(170:.02) and +(-40:.015) .. (-.1,.25);
+	}}
 
 
 \newif\if@showpoints        \@showpointsfalse
