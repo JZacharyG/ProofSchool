@@ -180,8 +180,10 @@
 	% #7: additional code
 	% #8: counter
 	\newcommand{\newPStcbPair}[8]{
-		\newPStcb{#1*}{#2}{#3}{#4}{#5}{#6}{before upper={\restoreparskip},#7}{}%
-		\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{before upper={\restoreparskip\addtocounter{#8}{-1}\refstepcounter{#8}},#7}{\stepcounter{#8}\ \csname the#8\endcsname}%
+		\newPStcb{#1*}{#2}{#3}{#4}{#5}{#6}{#7}{}%
+		\newPStcb{#1}{#2}{#3}{#4}{#5}{#6}{#7}{\ \csname the#8\endcsname}%
+		\BeforeBeginEnvironment{#1}{\begingroup\refstepcounter{#8}}
+		\AfterEndEnvironment{#1}{\endgroup}
 	}
 	% #1: command
 	% #2: Category (as it is to be displayed)
@@ -214,6 +216,9 @@
 				top=0mm,
 				bottom=1.5mm,
 			},
+			% With numbered environments with a label after the begin tag, I was getting an extra parskip and/or an extra space.  I refuse to use the tcolorbox label mechanism, because I want labeling these to be exactly the same as labeling a normal theorem or section.  The following seems to work, but I'm not sure if there are any unintended consequences.  I should probably do something similar for other tcolorboxes used.  Also, I wrap them in a group and do the refstepcount outside of the box, because the having it in before upper was throwing of the spacing as described above and having it in phantom puts it in a group so that it isn't seen inside upper. 
+			parbox=false,
+			before upper={\par\vskip-\parskip\@afterindentfalse\@afterheading},
 			frame code={#6},
 			#7
 		}
