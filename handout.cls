@@ -384,6 +384,17 @@
 		\draw (0,.225) .. controls +(0:.02) and +(190:.03) .. (.05,.2) .. controls +(10:.02) and +(220:.015) .. (.1,.25);
 		\draw (0,.225) .. controls +(180:.02) and +(-10:.03) .. (-.05,.2) .. controls +(170:.02) and +(-40:.015) .. (-.1,.25);
 	}}
+\DeclareProbPic{dessert}{%
+	\tikz[very thin, line cap=round, line join=round, baseline={(0,-.1)}]{
+	\draw[fill=black!40] (-.22,.15) -- (0, 0) -- (-.43,-.01) to[bend left=15] cycle;
+	\draw[fill=black!20] (0, 0) -- (0,-.09) -- (-.345,-.10) -- (-.43,-.01) -- cycle;
+	\draw (0,-.09) -- (0,-.11) -- (-.355,-.12) -- (-.455,-.01)
+		.. controls +(180:.07) and +(155:.07) .. (175:.43)
+		.. controls +(175:.07) and +(135:.07) .. (169:.4)
+		.. controls +(165:.07) and +(125:.07) .. (162:.365)
+		.. controls +(155:.07) and +(120:.07) .. (154:.335)
+		.. controls +(145:.07) and +(120:.07) .. (146:.29) -- (-.22,.15);
+	}}
 
 
 \newif\if@showpoints        \@showpointsfalse
