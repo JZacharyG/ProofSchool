@@ -129,7 +129,10 @@ The problem environment recognizes the following options (in square brackets aft
 - `spaces`/`nospaces` sets the default space for this problem and its subproblems (can still be explicitly overwritten by use `space` on the subproblem).
 - `points=n` displays the number of points that the question is worth at the beginning of the problem.
 - `columns=n`: typesets any subproblems of this problem in a grid with n columns.
-- `bonus`/`exciting`/`surprising`/`play`/`stop`/`discuss`/`calculator`/`attention`/`check`: displays a little picture to the left of the problem number, to communicate in some way with the student.  This picture is, respectively: a star, a pair of exclamation marks, an interrobang, a beach ball, a stop sign, a pair of speech bubbles, an array of arithmetic operations, a pointing hand, and a checkbox.  I'd love to add more, or give them different names, if it would be helpful to you.
+- `bonus`/`exciting`/`surprising`/`play`/`stop`/`discuss`/`calculator`/`attention`/`check`/`pencil` displays a little picture to the left of the problem number, to communicate in some way with the student.  This picture is, respectively: a star, a pair of exclamation marks, an interrobang, a beach ball, a stop sign, a pair of speech bubbles, an array of arithmetic operations, a pointing hand, a checkbox, and a pencil.  I'd love to add more, or give them different names, if it would be helpful to you.
+
+  There is an interface to declaring more of these, `\DeclareProbPic{name}{picture}`, and you can change the distance away from the problem number by changing the length `\ProbPicSep`.
+
 - This environment is implemented as a enumerate-like environment using the `enumitem` package; any other options are just passed along to the underlying list (so for example, you can pass in  `start=23` to begin counting at 23).
 
 ### Headings

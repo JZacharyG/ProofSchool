@@ -323,7 +323,9 @@
 \if@checkboxes
 	\setlist[prob,1]{labelwidth=1.25em, label={{\noexpand\checkbox}}, ref={}}
 \fi
-\newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\,}}
+\newlength{\ProbPicSep}
+\setlength{\ProbPicSep}{.75mm}
+\newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\hspace{\ProbPicSep}}}
 \newcommand{\DeclareProbPic}[2]{\SetEnumitemKey{#1}{format={\placeprobpic{#2}}}}
 %\newcommand{\placeprobpic}[1]{\makebox[0pt][r]{#1\hspace{0.5pt}}}
 \DeclareProbPic{check}{\checkbox\,}
@@ -344,7 +346,7 @@
 	}}}
 \DeclareProbPic{calculator}{\raisebox{-1.5pt}[0pt][0pt]{\resizebox{.9em}{!}{%
 	\tikz{
-		\node[draw,rounded corners=3pt, inner sep=1pt]{$\kern-.2em\begin{smallmatrix}+-\\\times\div\end{smallmatrix}\kern-.2em$};
+		\node[draw, rounded corners=3pt, inner sep=1pt]{$\kern-.2em\begin{smallmatrix}+-\\\times\div\end{smallmatrix}\kern-.2em$};
 	}}}}
 \DeclareProbPic{attention}{%
 	\tikz[thin, line cap=round, scale=1.8]{
@@ -387,7 +389,7 @@
 \DeclareProbPic{dessert}{%
 	\tikz[very thin, line cap=round, line join=round, baseline={(0,-.1)}]{
 	\draw[fill=black!40] (-.22,.15) -- (0, 0) -- (-.43,-.01) to[bend left=15] cycle;
-	\draw[fill=black!20] (0, 0) -- (0,-.09) -- (-.345,-.10) -- (-.43,-.01) -- cycle;
+	\draw[fill=black!25] (0, 0) -- (0,-.09) -- (-.345,-.10) -- (-.43,-.01) -- cycle;
 	\draw (0,-.09) -- (0,-.11) -- (-.355,-.12) -- (-.455,-.01)
 		.. controls +(180:.07) and +(155:.07) .. (175:.43)
 		.. controls +(175:.07) and +(135:.07) .. (169:.4)
