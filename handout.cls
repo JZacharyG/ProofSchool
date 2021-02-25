@@ -402,7 +402,7 @@
 \newif\if@showpoints        \@showpointsfalse
 \newif\if@usedefaultspace   \@usedefaultspacetrue
 \newif\if@probsincolumns    \@probsincolumnsfalse
-\newif\if@inacolumn         \@inacolumnfalse
+\newif\if@inabox            \@inaboxfalse
 \newif\if@usenaturalheight
 \newif\if@insolution        \@insolutionfalse
 \newif\if@firstprob         \@firstprobtrue
@@ -412,6 +412,7 @@
 \newcommand{\ProbsInColumns}[1]{\ifnum#1=0 \@probsincolumnsfalse\def\@numcolumns{1}\else\@probsincolumnstrue\def\@numcolumns{#1}\fi}
 \newcommand{\ProbsNotInColumns}{\ProbsInColumns{0}}
 \enitkv@key{}{columns}[3]{\ProbsInColumns{#1}}
+\enitkv@key{}{width}{\if@inabox\else\@inaboxtrue\minipage[t]{#1}\restoreparskip\fi}
 \enitkv@key{}{points}{\@showpointstrue\def\@numpoints{#1}}
 \enitkv@key{}{space}[1]{\set@solutionspace{#1}\@usedefaultspacefalse}
 \SetEnumitemKey{nospace}{space=0pt}
@@ -475,10 +476,12 @@
 
 \renewcommand{\prob}[1][]{%
 	\if@probsincolumns%
-		\@inacolumntrue%
+		\@inaboxtrue%
 		\pgfmathparse{(\linewidth-((\@numcolumns)-1)*\ProbColSep)/(\@numcolumns)}%
 		\minipage[t]{\pgfmathresult pt}%
 		\restoreparskip%
+	\else%
+		\@inaboxfalse%
 	\fi%
 	\@probsincolumnsfalse%
 	\@usenaturalheightfalse%
@@ -546,12 +549,14 @@
 	\if@cancelspace%
 		\def\@solutionspace{0pt}%
 	\fi%
-	\if@inacolumn%
+	\if@inabox%
 		\global\let\tmp@solutionspace\@solutionspace%
 		\endminipage%
 		\vspace*{\tmp@solutionspace}%
 		\global\let\tmp@solutionspace\undefined%	
-		\hfill%
+		\if@probsincolumns%
+			\hfill%
+		\fi%
 	\else%
 		\vspace*{\@solutionspace}%
 	\fi%

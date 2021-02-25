@@ -128,9 +128,15 @@ The space between columns is controlled by the length `\ProbColSep`, which is in
 The problem environment recognizes the following options (in square brackets after the `\begin{prob}`):
 
 - `space`/`nospace` will determine how much space is left after a problem.  `space` can be passed a length (e.g., `space=2in`), which will leave that much space below the problem for students to write their solution, or it may be passed a number (e.g., `space=2`), which will fill the available space on the page, in proportion to the numbers given (so if one problem is given `space=1` and another `space=2`, then the latter will be given twice as much space as the former).  `space` is equivalent to `space=1`, `nospace` is equivalent to `space=0pt`, and if neither is present, then a sensible default is used (equivalent to `nospace` if this problem contains subparts and `space` if not).
+
 - `spaces`/`nospaces` sets the default space for this problem and its subproblems (can still be explicitly overwritten by use `space` on the subproblem).
+
 - `points=n` displays the number of points that the question is worth at the beginning of the problem.
+
 - `columns=n` typesets any subproblems of this problem in a grid with n columns.
+
+- `width` forces the problem to be the specified width by wrapping it in a (top-aligned) minipage.  You could have wrapped it in a minipage yourself, mind you, and you may still want to if you need more control.  **One unfortunate side effect** of this is that any subproblems will not be able to automatically fill the remaining space, so you must use absolute lengths, rather than relative proportions, when specifying the spaces left by subproblems.
+
 - `bonus`/`exciting`/`surprising`/`play`/`stop`/`discuss`/`calculator`/`attention`/`check`/`pencil` displays a little picture to the left of the problem number, to communicate in some way with the student.  This picture is, respectively: a star, a pair of exclamation marks, an interrobang, a beach ball, a stop sign, a pair of speech bubbles, an array of arithmetic operations, a pointing hand, a checkbox, and a pencil.  I'd love to add more, or give them different names, if it would be helpful to you.
 
   There is an interface to declaring more of these, `\DeclareProbPic{name}{picture}`, and you can change the distance away from the problem number by changing the length `\ProbPicSep`.
