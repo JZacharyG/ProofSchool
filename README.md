@@ -44,7 +44,7 @@ To begin, use the document class `handout`.  My typical usage looks like this:
 The following options are recognized:
 
 -  `solutions`/`boxedsolutions`/`nosolutions` (default): whether and how to typeset the solutions to problems.  (It basically just sets `\showsolutiontrue`, if you are familiar with TeX's ifs.)  If `boxedsolutions` is given, then solutions are typeset and are put in in `\fbox`es.
-- `spaces` (default)/`nospaces`: whether or not to leave the specified space after problems.  The `nospaces` option is useful for answer keys if you don't care about preserving formatting and for drafting problem sets, when you want to see as many problems at a time as possible.  Honestly, I don't use this it that often. 
+- `spaces` (default)/`nospaces`: whether or not to leave the specified space after problems.  The `nospaces` option is useful for answer keys if you don't care about preserving formatting and for drafting problem sets, when you want to see as many problems at a time as possible.  Honestly, I don't use it that often. 
 - `parskip`/`parindent` (default): parskip loads the parskip library, which I think looks great.
 - `name` (default)/`runningname`/`noname`: whether and how to leave a space for the students' names.  It is up to the heading to respect this option (by consulting `\ifshowname`).  If `runningname` is given, then the name is additionally printed in the header of every page (`oneside`) or every odd page (`twoside`).
 - `title` (default)/`notitle`: whether or not to automatically call `\maketitle` at the start of the document, which typesets the heading for the first page.
@@ -60,7 +60,7 @@ The following options are recognized:
 
 ### Problem Environment
 
-You can add problem using the `prob` environment:
+You can add a problem using the `prob` environment:
 
 ``` latex
 \begin{prob}[points=5]
@@ -72,18 +72,20 @@ You can add problem using the `prob` environment:
 
 You can add parts/subproblems by nesting these environments up to three levels deep.  The first level is labeled with numbers, the second with lowercase letters, the third with lowercase roman numerals.
 
-The `prob*` environment creates an unnumbered problem, which has all of the features of a problem (including easy control of spacing and the ability to add solutions) in a format that looks more or less like a normal block of text!  Unless explicitly suppressed, subproblems will still be numbered as usual.
+The `prob*` environment creates an unnumbered problem, which has all of the features of a problem (including easy control of spacing and the ability to add solutions) in a format that looks more or less like a normal block of text!  Subproblems will still be numbered as usual.
 
 #### Solutions
 
 If `\solution` or `\solution*` appears inside a problem environment, then everything that follows will only by typeset if solutions are shown (with the option `solutions`).
 
-Importantly, the solution is placed in the space below the problem, but (if using `\solution`, not `\solution*`) it does not add any additional space, so the layout of the handout will be identical whether or not you show solutions.  This unfortunately means that the solution can spill over into the next problem, or off the end of the page, if you are not careful.  
+With `\solution`, the solution is placed in the space below the problem, but it does not add any additional space (so the layout of the handout will be approximately identical whether or not you show solutions).  **This unfortunately means that the solution can spill over into the next problem, or off the end of the page, if you are not careful.**
 
-The starred version instead has the solution replace the space that would otherwise have been left.
+With `\solution*`, the solution replaces the space that would otherwise have been left.
 
 If typeset, the solution will be prepended with the contents of `\SolutionPrefixFont\SolutionPrefix`, which default to `\bfseries` and `SOLUTION:` respectively , but you can `\renewcommand` either of them if you’d like.
+
 #### Problems in Columns/Grids
+
 Problems can be placed in a grid (numbered across the row, instead of down the column).  This can be achieved with the `columns` option described below, or by issuing the command `\ProbsInColumns{n}`, where n is the desired number of columns. `\ProbsNotInColumns` is equivalent to `\ProbsInColumns{0}`, and causes subsequent problems to be typeset in the usual way.  This command is useful (in comparison to corresponding option to the `prob` environment) if you want to change the number of columns part way through a grid, or if you want to use columns for the top level of problems instead of just for subproblems.
 
 You do not need to add explicit linebreaks, but any linebreaks that you do add will be respected.  The first problem in a grid should be preceeded by a blank line.
@@ -128,7 +130,7 @@ The problem environment recognizes the following options (in square brackets aft
 - `space`/`nospace` will determine how much space is left after a problem.  `space` can be passed a length (e.g., `space=2in`), which will leave that much space below the problem for students to write their solution, or it may be passed a number (e.g., `space=2`), which will fill the available space on the page, in proportion to the numbers given (so if one problem is given `space=1` and another `space=2`, then the latter will be given twice as much space as the former).  `space` is equivalent to `space=1`, `nospace` is equivalent to `space=0pt`, and if neither is present, then a sensible default is used (equivalent to `nospace` if this problem contains subparts and `space` if not).
 - `spaces`/`nospaces` sets the default space for this problem and its subproblems (can still be explicitly overwritten by use `space` on the subproblem).
 - `points=n` displays the number of points that the question is worth at the beginning of the problem.
-- `columns=n`: typesets any subproblems of this problem in a grid with n columns.
+- `columns=n` typesets any subproblems of this problem in a grid with n columns.
 - `bonus`/`exciting`/`surprising`/`play`/`stop`/`discuss`/`calculator`/`attention`/`check`/`pencil` displays a little picture to the left of the problem number, to communicate in some way with the student.  This picture is, respectively: a star, a pair of exclamation marks, an interrobang, a beach ball, a stop sign, a pair of speech bubbles, an array of arithmetic operations, a pointing hand, a checkbox, and a pencil.  I'd love to add more, or give them different names, if it would be helpful to you.
 
   There is an interface to declaring more of these, `\DeclareProbPic{name}{picture}`, and you can change the distance away from the problem number by changing the length `\ProbPicSep`.
