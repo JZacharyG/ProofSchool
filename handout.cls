@@ -33,11 +33,14 @@
 \DeclareOption{pagenums}{\@showpagenumstrue}
 \DeclareOption{nopagenums}{\@showpagenumsfalse}
 
+\newif\if@declaretheorems
+\@declaretheoremstrue
 \newif\if@boxedtheorems
 \@boxedtheoremstrue
 \DeclareOption{boxedtheorems}{\@boxedtheoremstrue}
 \DeclareOption{noboxedtheorems}{\@boxedtheoremsfalse}
 \DeclareOption{boringtheorems}{\@boxedtheoremsfalse}
+\DeclareOption{notheorems}{\@declaretheoremsfalse}
 
 \newif\if@sharedtheoremnums
 \@sharedtheoremnumstrue
@@ -223,66 +226,70 @@
 			#7
 		}
 	}
-	\newcounter{psh@thmcount}\setcounter{psh@thmcount}{0}
-	\newPStheorem{theorem}{Theorem}{psh@thmcount}
-	
-	\if@sharedtheoremnums
-		\newPStheorem{lemma}{Lemma}{psh@thmcount}
-		\newPStheorem{corollary}{Corollary}{psh@thmcount}
-		\newPStheorem{claim}{Claim}{psh@thmcount}
-		\newPStheorem{conjecture}{Conjecture}{psh@thmcount}
-		\newPStheorem{proposition}{Proposition}{psh@thmcount}
-		\newPSdefinition{definition}{Definition}{psh@thmcount}
-		\newPSexample{example}{Example}{psh@thmcount}
-		\newPSexample{remark}{Remark}{psh@thmcount}
-	\else
-		\newcounter{psh@lemcount}\setcounter{psh@lemcount}{0}
-		\newPStheorem{lemma}{Lemma}{psh@lemcount}
+	\if@declaretheorems
+		\newcounter{psh@thmcount}\setcounter{psh@thmcount}{0}
+		\newPStheorem{theorem}{Theorem}{psh@thmcount}
 		
-		\newcounter{psh@corcount}\setcounter{psh@corcount}{0}
-		\newPStheorem{corollary}{Corollary}{psh@corcount}
-		
-		\newcounter{psh@claimcount}\setcounter{psh@claimcount}{0}
-		\newPStheorem{claim}{Claim}{psh@claimcount}
-		
-		\newcounter{psh@conjcount}\setcounter{psh@conjcount}{0}
-		\newPStheorem{conjecture}{Conjecture}{psh@conjcount}
-		
-		\newcounter{psh@propcount}\setcounter{psh@propcount}{0}
-		\newPStheorem{proposition}{Proposition}{psh@propcount}
-		
-		\newcounter{psh@defcount}\setcounter{psh@defcount}{0}
-		\newPSdefinition{definition}{Definition}{psh@defcount}
-		
-		\newcounter{psh@examplecount}\setcounter{psh@examplecount}{0}
-		\newPSexample{example}{Example}{psh@examplecount}
-		
-		\newcounter{psh@remcount}\setcounter{psh@remcount}{0}
-		\newPSexample{remark}{Remark}{psh@remcount}
+		\if@sharedtheoremnums
+			\newPStheorem{lemma}{Lemma}{psh@thmcount}
+			\newPStheorem{corollary}{Corollary}{psh@thmcount}
+			\newPStheorem{claim}{Claim}{psh@thmcount}
+			\newPStheorem{conjecture}{Conjecture}{psh@thmcount}
+			\newPStheorem{proposition}{Proposition}{psh@thmcount}
+			\newPSdefinition{definition}{Definition}{psh@thmcount}
+			\newPSexample{example}{Example}{psh@thmcount}
+			\newPSexample{remark}{Remark}{psh@thmcount}
+		\else
+			\newcounter{psh@lemcount}\setcounter{psh@lemcount}{0}
+			\newPStheorem{lemma}{Lemma}{psh@lemcount}
+			
+			\newcounter{psh@corcount}\setcounter{psh@corcount}{0}
+			\newPStheorem{corollary}{Corollary}{psh@corcount}
+			
+			\newcounter{psh@claimcount}\setcounter{psh@claimcount}{0}
+			\newPStheorem{claim}{Claim}{psh@claimcount}
+			
+			\newcounter{psh@conjcount}\setcounter{psh@conjcount}{0}
+			\newPStheorem{conjecture}{Conjecture}{psh@conjcount}
+			
+			\newcounter{psh@propcount}\setcounter{psh@propcount}{0}
+			\newPStheorem{proposition}{Proposition}{psh@propcount}
+			
+			\newcounter{psh@defcount}\setcounter{psh@defcount}{0}
+			\newPSdefinition{definition}{Definition}{psh@defcount}
+			
+			\newcounter{psh@examplecount}\setcounter{psh@examplecount}{0}
+			\newPSexample{example}{Example}{psh@examplecount}
+			
+			\newcounter{psh@remcount}\setcounter{psh@remcount}{0}
+			\newPSexample{remark}{Remark}{psh@remcount}
+		\fi
 	\fi
 \else
-	\if@sharedtheoremnums
-		\newtheorem{theorem}{Theorem}                  \newtheorem*{theorem*}{Theorem}
-		\newtheorem{lemma}[theorem]{Lemma}             \newtheorem*{lemma*}{Lemma}
-		\newtheorem{corollary}[theorem]{Corollary}     \newtheorem*{corollary*}{Corollary}
-		\newtheorem{claim}[theorem]{Claim}             \newtheorem*{claim*}{Claim}
-		\newtheorem{conjecture}[theorem]{Conjecture}   \newtheorem*{conjecture*}{Conjecture}
-		\newtheorem{proposition}[theorem]{Proposition} \newtheorem*{proposition*}{Proposition}
-		\theoremstyle{definition}
-		\newtheorem{definition}[theorem]{Definition}   \newtheorem*{definition*}{Definition}
-		\newtheorem{example}[theorem]{Example}         \newtheorem*{example*}{Example}
-		\newtheorem{remark}[theorem]{Remark}         \newtheorem*{remark*}{Remark}
-	\else
-		\newtheorem{theorem}{Theorem}         \newtheorem*{theorem*}{Theorem}
-		\newtheorem{lemma}{Lemma}             \newtheorem*{lemma*}{Lemma}
-		\newtheorem{corollary}{Corollary}     \newtheorem*{corollary*}{Corollary}
-		\newtheorem{claim}{Claim}             \newtheorem*{claim*}{Claim}
-		\newtheorem{conjecture}{Conjecture}   \newtheorem*{conjecture*}{Conjecture}
-		\newtheorem{proposition}{Proposition} \newtheorem*{proposition*}{Proposition}
-		\theoremstyle{definition}
-		\newtheorem{definition}{Definition}   \newtheorem*{definition*}{Definition}
-		\newtheorem{example}{Example}         \newtheorem*{example*}{Example}
-		\newtheorem{remark}{Remark}           \newtheorem*{remark*}{Remark}
+	\if@declaretheorems
+		\if@sharedtheoremnums
+			\newtheorem{theorem}{Theorem}                  \newtheorem*{theorem*}{Theorem}
+			\newtheorem{lemma}[theorem]{Lemma}             \newtheorem*{lemma*}{Lemma}
+			\newtheorem{corollary}[theorem]{Corollary}     \newtheorem*{corollary*}{Corollary}
+			\newtheorem{claim}[theorem]{Claim}             \newtheorem*{claim*}{Claim}
+			\newtheorem{conjecture}[theorem]{Conjecture}   \newtheorem*{conjecture*}{Conjecture}
+			\newtheorem{proposition}[theorem]{Proposition} \newtheorem*{proposition*}{Proposition}
+			\theoremstyle{definition}
+			\newtheorem{definition}[theorem]{Definition}   \newtheorem*{definition*}{Definition}
+			\newtheorem{example}[theorem]{Example}         \newtheorem*{example*}{Example}
+			\newtheorem{remark}[theorem]{Remark}         \newtheorem*{remark*}{Remark}
+		\else
+			\newtheorem{theorem}{Theorem}         \newtheorem*{theorem*}{Theorem}
+			\newtheorem{lemma}{Lemma}             \newtheorem*{lemma*}{Lemma}
+			\newtheorem{corollary}{Corollary}     \newtheorem*{corollary*}{Corollary}
+			\newtheorem{claim}{Claim}             \newtheorem*{claim*}{Claim}
+			\newtheorem{conjecture}{Conjecture}   \newtheorem*{conjecture*}{Conjecture}
+			\newtheorem{proposition}{Proposition} \newtheorem*{proposition*}{Proposition}
+			\theoremstyle{definition}
+			\newtheorem{definition}{Definition}   \newtheorem*{definition*}{Definition}
+			\newtheorem{example}{Example}         \newtheorem*{example*}{Example}
+			\newtheorem{remark}{Remark}           \newtheorem*{remark*}{Remark}
+		\fi
 	\fi
 \fi
 
