@@ -395,16 +395,42 @@
 	}}
 \DeclareProbPic{dessert}{%
 	\tikz[very thin, line cap=round, line join=round, baseline={(0,-.1)}]{
-	\draw[fill=black!40] (-.22,.15) -- (0, 0) -- (-.43,-.01) to[bend left=15] cycle;
-	\draw[fill=black!25] (0, 0) -- (0,-.09) -- (-.345,-.10) -- (-.43,-.01) -- cycle;
-	\draw (0,-.09) -- (0,-.11) -- (-.355,-.12) -- (-.455,-.01)
-		.. controls +(180:.07) and +(155:.07) .. (175:.43)
-		.. controls +(175:.07) and +(135:.07) .. (169:.4)
-		.. controls +(165:.07) and +(125:.07) .. (162:.365)
-		.. controls +(155:.07) and +(120:.07) .. (154:.335)
-		.. controls +(145:.07) and +(120:.07) .. (146:.29) -- (-.22,.15);
+		\draw[fill=black!40] (-.22,.15) -- (0, 0) -- (-.43,-.01) to[bend left=15] cycle;
+		\draw[fill=black!25] (0, 0) -- (0,-.09) -- (-.345,-.10) -- (-.43,-.01) -- cycle;
+		\draw (0,-.09) -- (0,-.11) -- (-.355,-.12) -- (-.455,-.01)
+			.. controls +(180:.07) and +(155:.07) .. (175:.43)
+			.. controls +(175:.07) and +(135:.07) .. (169:.4)
+			.. controls +(165:.07) and +(125:.07) .. (162:.365)
+			.. controls +(155:.07) and +(120:.07) .. (154:.335)
+			.. controls +(145:.07) and +(120:.07) .. (146:.29) -- (-.22,.15);
 	}}
-
+\DeclareProbPic{eyes}{%
+	\tikz[baseline={(0,-.15)}]{
+		\clip (-.232,-.187) rectangle (.232,.296);
+		\draw
+			(.114,0) circle (.102 and .167)
+			+(.002,-.003) circle (.106 and .177)
+			(-.114,0) circle (.102 and .167)
+			+(.002,-.003) circle (.106 and .177);
+		\fill[even odd rule]
+			(.114,0)
+			++(.042, .007) circle (.053 and .075)
+			+(.024,.012) circle (.0125 and .015);
+		\fill[even odd rule]
+			(-.114,0)
+			++(.042, .007) circle (.053 and .075)
+			+(.024,.012) circle (.0125 and .015);
+		\fill
+			(.114,0)
+			++(.116,.17) to[out=80, in=60, in looseness=1.625, out looseness=1.35] +(-.192, .07)
+			arc (150:320:.017)
+			to[out=50, in=105, out looseness=1.3] cycle;
+		\fill
+			(-.114,0)
+			++(-.116,.17) to[out=100, in=120, in looseness=1.625, out looseness=1.35] +(.192, .07)
+			arc (30:-140:.017)
+			to[out=130, in=75, out looseness=1.3] cycle;
+	}}
 
 \newif\if@showpoints        \@showpointsfalse
 \newif\if@usedefaultspace   \@usedefaultspacetrue
