@@ -94,7 +94,7 @@
 \RequirePackage{setspace}
 \onehalfspacing
 
-\RequirePackage[margin=.75in, headsep=.5\baselineskip, headheight=14.5 pt, footskip=\baselineskip]{geometry}
+\RequirePackage[margin=.75in, headsep=.5\baselineskip, headheight=14.5 pt, footskip=1.25\baselineskip]{geometry}
 \RequirePackage{fancyhdr}
 \RequirePackage{lastpage}
 \RequirePackage{mathtools,amsthm,amssymb}
@@ -533,7 +533,7 @@
 		\@numbernextprobtrue%
 	\fi%
 	\@firstprobtrue%
-	\item \if@showpoints(\@numpoints\if\@numpoints1\relax\:\!\pointsymbol\else\,\pointssymbol\fi)\fi%
+	\item \if@showpoints(\@numpoints\ifnum\@numpoints=1\relax\:\!\pointsymbol\else\,\pointssymbol\fi)\fi%
 }
 
 \renewcommand{\endprob}{%
@@ -617,10 +617,10 @@
 \pagestyle{fancy}
 \fancyhf{}% clear default for head and foot
 \fancyfoot[L]{{\SpoilerFont\@spoilertext}}
-\fancyhead[L]{\FancyShortTitle}
 \if@empty
 	\renewcommand{\headrule}{}
 \else
+	\fancyhead[L]{\FancyShortTitle}
 	\if@showpagenums
 		\fancyfoot[R]{Page \thepage\ of \pageref{LastPage}}
 	\fi
